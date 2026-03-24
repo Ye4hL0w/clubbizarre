@@ -250,7 +250,8 @@ h2.section-title::after {
 }
 
 .hero-title {
-    font-size: 5rem;
+    font-size: clamp(1.8rem, 12vw, 5rem);
+    white-space: nowrap;
     margin-bottom: 0.5rem;
     background: linear-gradient(135deg, #fff 0%, #aaa 100%);
     -webkit-background-clip: text;
@@ -402,7 +403,8 @@ section {
 }
 
 .member-name {
-    font-size: 2rem;
+    font-size: clamp(1rem, 8vw, 2rem);
+    white-space: nowrap;
     font-weight: 800;
     font-family: var(--font-heading);
     color: var(--text-primary);
