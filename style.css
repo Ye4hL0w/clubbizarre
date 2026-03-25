@@ -5,7 +5,7 @@
     --text-secondary: #aaaaaa;
     --accent-gold: #D4AF37;
     --accent-red: #A50000;
-    --font-heading: 'Syne', sans-serif;
+    --font-heading: 'Syncopate', sans-serif;
     --font-body: 'Outfit', sans-serif;
     --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
@@ -52,7 +52,7 @@ h2.section-title {
     position: relative;
     display: inline-block;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scaleX(1.2);
     letter-spacing: 2px;
 }
 
@@ -96,6 +96,9 @@ h2.section-title::after {
     color: var(--text-primary);
     text-decoration: none;
     cursor: pointer;
+    display: inline-block;
+    transform: scaleX(1.3);
+    transform-origin: left;
 }
 
 .nav-links {
@@ -258,7 +261,8 @@ h2.section-title::after {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: 5px;
-    letter-spacing: 5px;
+    display: inline-block;
+    transform: scaleX(1.25);
 }
 
 .hero-subtitle {
@@ -413,6 +417,8 @@ section {
     letter-spacing: 2px;
     transition: var(--transition);
     text-decoration: none;
+    display: inline-block;
+    transform: scaleX(1.15);
 }
 
 .team-member:hover .member-name {
