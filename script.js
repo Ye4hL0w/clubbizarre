@@ -1,4 +1,43 @@
+/* ============================================================
+   VIDEO INTRO OVERLAY
+   ============================================================ */
+(function () {
+    const overlay = document.getElementById('intro-overlay');
+    const video   = document.getElementById('intro-video');
+    const skipBtn = document.getElementById('skip-intro');
+
+    if (!overlay || !video) return;
+
+    function dismissIntro() {
+        overlay.classList.add('fade-out');
+        document.body.classList.remove('no-scroll');
+
+        // Remove overlay from DOM after transition ends
+        overlay.addEventListener('transitionend', () => {
+            overlay.remove();
+        }, { once: true });
+    }
+
+    // Auto-dismiss when the video finishes
+    video.addEventListener('ended', dismissIntro);
+
+    // Skip button
+    if (skipBtn) {
+        skipBtn.addEventListener('click', dismissIntro);
+    }
+
+    // If autoplay is blocked by the browser, dismiss immediately
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            // Autoplay was prevented — skip intro silently
+            dismissIntro();
+        });
+    }
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
+
     // 1. Smooth Scrolling for Anchor Links (Handles cross-page correctly)
     document.querySelectorAll('.nav-links a, a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {

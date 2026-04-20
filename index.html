@@ -15,7 +15,15 @@
     <link rel="icon" type="image/png" href="logo.png">
 </head>
 
-<body>
+<body class="no-scroll">
+
+    <!-- Video Intro Splash Screen -->
+    <div id="intro-overlay" class="intro-overlay">
+        <video id="intro-video" class="intro-video" autoplay muted playsinline>
+            <source src="Logo_Reveal_Liquid_gold_drips_and_flows_across_a_dark_marble_04tGjFtP.mp4" type="video/mp4">
+        </video>
+        <button id="skip-intro" class="skip-btn" aria-label="Passer l'intro">PASSER ›</button>
+    </div>
     <nav class="navbar">
         <a href="#" class="nav-logo">CLUB BIZARRE</a>
         <ul class="nav-links">
