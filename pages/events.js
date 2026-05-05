@@ -22,7 +22,16 @@ async function fetchEvents() {
 
         const data = await response.json();
         
-        const events = data.data || [];
+        let events = data.data || [];
+
+        // Filtrer uniquement les événements privés
+        events = events.filter(event => {
+            // Exclure les événements privés
+            if (event.visibility === 'private' || event.status === 'private' || event.isPrivate === true) {
+                return false;
+            }
+            return true;
+        });
 
         if (events.length === 0) {
             container.innerHTML = `
@@ -65,6 +74,7 @@ function renderEvents(events, container) {
         const genres = event.genres ? event.genres.map(g => g.name) : [];
         const artists = event.artists ? event.artists.map(a => a.name).join(', ') : '';
         const ticketsLeft = event.leftTicketsCount !== undefined ? event.leftTicketsCount : null;
+        const isCancelled = !!(event.cancelledAt || event.canceledAt);
         
         let lowestPrice = null;
         if (event.deals && event.deals.length > 0) {
@@ -83,7 +93,8 @@ function renderEvents(events, container) {
             genres,
             artists,
             ticketsLeft,
-            lowestPrice
+            lowestPrice,
+            isCancelled
         });
     });
 
@@ -143,7 +154,7 @@ function renderMockEvents(container) {
     container.innerHTML = html;
 }
 
-function createEventCardHtml({ title, date, location, imageUrl, shotgunUrl, genres, artists, ticketsLeft, lowestPrice }) {
+function createEventCardHtml({ title, date, location, imageUrl, shotgunUrl, genres, artists, ticketsLeft, lowestPrice, isCancelled }) {
     let tagsHtml = '';
     if (genres && genres.length > 0) {
         tagsHtml = '<div class="event-tags">' + genres.map(g => `<span class="event-tag">${g}</span>`).join('') + '</div>';
@@ -155,7 +166,13 @@ function createEventCardHtml({ title, date, location, imageUrl, shotgunUrl, genr
     }
 
     let infoRowHtml = '';
-    if (lowestPrice !== null || ticketsLeft !== null) {
+    if (isCancelled) {
+        infoRowHtml = `
+            <div class="event-info-row">
+                <span style="color: var(--accent-red); font-weight: bold; text-transform: uppercase;">Événement Annulé</span>
+            </div>
+        `;
+    } else if (lowestPrice !== null || ticketsLeft !== null) {
         let priceStr = lowestPrice !== null ? `À partir de ${lowestPrice}€` : '';
         let ticketsStr = '';
         
@@ -173,8 +190,12 @@ function createEventCardHtml({ title, date, location, imageUrl, shotgunUrl, genr
         `;
     }
 
+    let buttonText = 'Prendre sa place';
+    if (isCancelled) buttonText = 'Annulé';
+    else if (ticketsLeft === 0) buttonText = 'Liste d\'attente';
+
     return `
-        <div class="event-card">
+        <div class="event-card ${isCancelled ? 'cancelled-event' : ''}" style="${isCancelled ? 'opacity: 0.7;' : ''}">
             <img src="${imageUrl}" alt="${title}" class="event-image" onerror="this.src='../logo.png'">
             <div class="event-content">
                 ${tagsHtml}
@@ -190,8 +211,8 @@ function createEventCardHtml({ title, date, location, imageUrl, shotgunUrl, genr
                 </div>
                 ${infoRowHtml}
                 <div class="event-footer">
-                    <a href="${shotgunUrl}" target="_blank" rel="noopener noreferrer" class="buy-btn">
-                        ${ticketsLeft === 0 ? 'Liste d\'attente' : 'Prendre sa place'}
+                    <a href="${shotgunUrl}" target="_blank" rel="noopener noreferrer" class="buy-btn" ${isCancelled ? 'style="background: #333; color: #888; cursor: not-allowed;" onclick="event.preventDefault();"' : ''}>
+                        ${buttonText}
                     </a>
                 </div>
             </div>
