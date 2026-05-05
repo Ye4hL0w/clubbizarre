@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Events | Club Bizarre</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/png" href="../logo.png">
+    <style>
+        .events-hero {
+            min-height: 40vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top, rgba(212, 175, 55, 0.1) 0%, var(--bg-primary) 70%);
+            padding-top: 100px;
+            text-align: center;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .event-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: #111;
+        }
+
+        .event-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .event-date {
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .event-title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .event-location {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .event-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .event-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-tag {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--accent-gold);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .event-artists {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .event-info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .event-price {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .event-tickets {
+            color: var(--accent-red);
+            font-weight: 600;
+        }
+
+        .buy-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 4px;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.85rem;
+        }
+
+        .buy-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+        }
+        
+        .loading-spinner::after {
+            content: "";
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(212, 175, 55, 0.2);
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spinner 1s linear infinite;
+        }
+        
+        @keyframes spinner {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: var(--accent-red);
+            text-align: center;
+            padding: 2rem;
+            background: rgba(165, 0, 0, 0.1);
+            border: 1px solid rgba(165, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="../index.html" class="nav-logo">CLUB BIZARRE</a>
+        <ul class="nav-links">
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../index.html#team">Team</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="../index.html#media">Media</a></li>
+            <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <main>
+        <section class="events-hero fade-in-section">
+            <div class="container">
+                <h1 class="hero-title" style="font-size: clamp(2rem, 8vw, 4rem);">BILLETS & EVENTS</h1>
+                <p class="hero-subtitle" style="font-size: 1.2rem; margin-top: 1rem;">SHOTGUN OFFICIEL</p>
+            </div>
+        </section>
+
+        <section class="fade-in-section" style="padding-top: 2rem;">
+            <div class="container">
+                <div id="events-container">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Club Bizarre. All rights reserved.</p>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script src="events.js"></script>
+</body>
+
+</html>
