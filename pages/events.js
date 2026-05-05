@@ -24,10 +24,10 @@ async function fetchEvents() {
         
         let events = data.data || [];
 
-        // Filtrer uniquement les événements privés
+        // Filtrer uniquement les événements privés/cachés
         events = events.filter(event => {
-            // Exclure les événements privés
-            if (event.visibility === 'private' || event.status === 'private' || event.isPrivate === true) {
+            // Exclure les événements privés ou cachés
+            if (event.visibility === 'private' || event.visibility === 'hidden' || event.status === 'private' || event.isPrivate === true) {
                 return false;
             }
             return true;
