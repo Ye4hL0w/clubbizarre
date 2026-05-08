@@ -1,0 +1,12 @@
+# Robots.txt - Club Bizarre
+# Autorise tous les robots de recherche à indexer le site
+
+User-agent: *
+Allow: /
+
+# Bloque les fichiers inutiles
+Disallow: /.git/
+Disallow: /.DS_Store
+
+# Lien vers le sitemap
+Sitemap: https://clubbizarre.vercel.app/sitemap.xml
