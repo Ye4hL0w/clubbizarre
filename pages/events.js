@@ -80,7 +80,8 @@ function renderEvents(events, container) {
         if (event.deals && event.deals.length > 0) {
             const prices = event.deals.map(d => d.price).filter(p => p !== undefined && p !== null);
             if (prices.length > 0) {
-                lowestPrice = Math.min(...prices);
+                // On s'assure d'un prix minimum de 5€ à l'affichage
+                lowestPrice = Math.max(Math.min(...prices), 5);
             }
         }
 
