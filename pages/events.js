@@ -80,8 +80,8 @@ function renderEvents(events, container) {
         if (event.deals && event.deals.length > 0) {
             const prices = event.deals.map(d => d.price).filter(p => p !== undefined && p !== null);
             if (prices.length > 0) {
-                // On s'assure d'un prix minimum de 5€ à l'affichage
-                lowestPrice = Math.max(Math.min(...prices), 5);
+                // Minimum 5.99€
+                lowestPrice = Math.max(Math.min(...prices), 5.99);
             }
         }
 
@@ -174,7 +174,7 @@ function createEventCardHtml({ title, date, location, imageUrl, shotgunUrl, genr
             </div>
         `;
     } else if (lowestPrice !== null || ticketsLeft !== null) {
-        let priceStr = lowestPrice !== null ? `À partir de ${lowestPrice}€` : '';
+        let priceStr = lowestPrice !== null ? `À partir de ${lowestPrice.toString().replace('.', ',')}€` : '';
         let ticketsStr = '';
         
         if (ticketsLeft !== null) {
