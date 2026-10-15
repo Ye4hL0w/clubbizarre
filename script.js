@@ -98,51 +98,91 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     });
 
-    // 3. Instagram Local Media Integration with content
-    const instaPosts = [
-        { url: "media/post_1.jpg", text: "Latest event recap! What a night at the factory. 💥", link: "https://instagram.com/clubbizarre06" },
-        { url: "media/post_2.jpg", text: "New track release by jerem.wav, check the link in bio.", link: "https://instagram.com/clubbizarre06" },
-        { url: "media/post_3.jpg", text: "Studio sessions with the team. Big things coming.", link: "https://instagram.com/clubbizarre06" },
-        { url: "media/post_4.jpg", text: "Visual arts meets minimal techno.", link: "https://instagram.com/clubbizarre06" },
-        { url: "media/post_5.jpg", text: "Thank you for the energy last weekend!", link: "https://instagram.com/clubbizarre06" },
-        { url: "media/post_6.jpg", text: "HELANOVA dropping bombs as usual.", link: "https://instagram.com/clubbizarre06" },
-        { url: "media/post_7.jpg", text: "Behind the scenes with our visual crew.", link: "https://instagram.com/clubbizarre06" },
-        { url: "media/post_8.jpg", text: "Next stop: Secret Location.", link: "https://instagram.com/clubbizarre06" },
-        { url: "media/post_9.jpg", text: "Join the bizarre family. 🏴‍☠️", link: "https://instagram.com/clubbizarre06" }
-    ];
-
+    // 3. Instagram Media Integration (Dynamic API)
     const instaFeedContainer = document.getElementById('insta-feed');
 
     if (instaFeedContainer) {
-        instaPosts.forEach(post => {
-            const wrapper = document.createElement('a'); // Make it a link wrapper
-            wrapper.href = post.link;
-            wrapper.target = "_blank";
-            wrapper.className = 'insta-wrapper';
+        // ⚠️ REMPLACE 'VOTRE_TOKEN_ICI' PAR LE TOKEN GÉNÉRÉ DEPUIS LE PORTAIL META DEVELOPER
+        const INSTAGRAM_TOKEN = 'VOTRE_TOKEN_ICI'; 
+        const INSTAGRAM_API_URL = `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink&access_token=${INSTAGRAM_TOKEN}`;
+        
+        const POSTS_LIMIT = 100; // Nombre de posts à afficher
 
-            const img = document.createElement('img');
-            img.src = post.url;
-            img.alt = "Club Bizarre Instagram Post";
-            img.loading = "lazy";
+        // Posts de secours si l'URL est invalide
+        const fallbackPosts = [
+            { url: "media/post_1.jpg", text: "Latest event recap! What a night at the factory. 💥", link: "https://instagram.com/clubbizarre06" },
+            { url: "media/post_2.jpg", text: "New track release by jerem.wav, check the link in bio.", link: "https://instagram.com/clubbizarre06" },
+            { url: "media/post_3.jpg", text: "Studio sessions with the team. Big things coming.", link: "https://instagram.com/clubbizarre06" },
+            { url: "media/post_4.jpg", text: "Visual arts meets minimal techno.", link: "https://instagram.com/clubbizarre06" },
+            { url: "media/post_5.jpg", text: "Thank you for the energy last weekend!", link: "https://instagram.com/clubbizarre06" },
+            { url: "media/post_6.jpg", text: "HELANOVA dropping bombs as usual.", link: "https://instagram.com/clubbizarre06" },
+            { url: "media/post_7.jpg", text: "Behind the scenes with our visual crew.", link: "https://instagram.com/clubbizarre06" },
+            { url: "media/post_8.jpg", text: "Next stop: Secret Location.", link: "https://instagram.com/clubbizarre06" },
+            { url: "media/post_9.jpg", text: "Join the bizarre family. 🏴‍☠️", link: "https://instagram.com/clubbizarre06" }
+        ];
 
-            const overlay = document.createElement('div');
-            overlay.className = 'insta-overlay';
+        function renderPosts(posts) {
+            instaFeedContainer.innerHTML = ''; // Vider le conteneur
             
-            const text = document.createElement('p');
-            text.className = 'insta-text';
-            text.textContent = post.text;
+            posts.slice(0, POSTS_LIMIT).forEach(post => {
+                const wrapper = document.createElement('a');
+                wrapper.href = post.link || post.permalink;
+                wrapper.target = "_blank";
+                wrapper.className = 'insta-wrapper';
 
-            const icon = document.createElement('div');
-            icon.className = 'insta-icon';
-            icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>';
+                const img = document.createElement('img');
+                // Si c'est une vidéo, l'API fournit thumbnail_url, sinon media_url
+                img.src = post.thumbnail_url || post.media_url || post.url;
+                img.alt = "Club Bizarre Instagram Post";
+                img.loading = "lazy";
 
-            overlay.appendChild(text);
-            overlay.appendChild(icon);
+                const overlay = document.createElement('div');
+                overlay.className = 'insta-overlay';
+                
+                const text = document.createElement('p');
+                text.className = 'insta-text';
+                let caption = post.caption || post.text || '';
+                // Couper le texte s'il est trop long
+                if (caption.length > 80) caption = caption.substring(0, 80) + '...';
+                text.textContent = caption;
 
-            wrapper.appendChild(img);
-            wrapper.appendChild(overlay);
-            instaFeedContainer.appendChild(wrapper);
-        });
+                const icon = document.createElement('div');
+                icon.className = 'insta-icon';
+                icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>';
+
+                overlay.appendChild(text);
+                overlay.appendChild(icon);
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(overlay);
+                instaFeedContainer.appendChild(wrapper);
+            });
+        }
+
+        async function fetchInstagramPosts() {
+            if (INSTAGRAM_TOKEN === 'VOTRE_TOKEN_ICI') {
+                console.warn("Token Instagram non configuré. Affichage des images de secours.");
+                renderPosts(fallbackPosts);
+                return;
+            }
+
+            try {
+                const response = await fetch(INSTAGRAM_API_URL);
+                if (!response.ok) throw new Error('Erreur de connexion API Instagram');
+                const data = await response.json();
+                
+                if (data && data.data && data.data.length > 0) {
+                    renderPosts(data.data);
+                } else {
+                    renderPosts(fallbackPosts);
+                }
+            } catch (error) {
+                console.error("Erreur de récupération du flux Instagram :", error);
+                renderPosts(fallbackPosts);
+            }
+        }
+
+        fetchInstagramPosts();
     }
 
     // 4. Navbar Background on Scroll & Mobile Menu
@@ -166,4 +206,61 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger.classList.toggle('active');
         navLinks.classList.toggle('active');
     });
+
+    // 5. Team Marquee Auto-Scroll and Wheel Support
+    const marqueeContainer = document.querySelector('.team-marquee-container');
+    const marquee = document.querySelector('.team-marquee');
+    
+    if (marqueeContainer && marquee) {
+        let xOffset = 0;
+        let isPaused = false;
+        let lastTime = 0;
+        let halfWidth = 0;
+        
+        function updateHalfWidth() {
+            halfWidth = marquee.scrollWidth / 2;
+        }
+        
+        // Wait for layout/images to update
+        window.addEventListener('load', updateHalfWidth);
+        window.addEventListener('resize', updateHalfWidth);
+        setTimeout(updateHalfWidth, 100);
+
+        const bubbles = document.querySelectorAll('.team-bubble');
+        bubbles.forEach(bubble => {
+            bubble.addEventListener('mouseenter', () => isPaused = true);
+            bubble.addEventListener('mouseleave', () => isPaused = false);
+        });
+
+        marqueeContainer.addEventListener('wheel', (e) => {
+            if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                e.preventDefault();
+                xOffset -= e.deltaX;
+            }
+        }, { passive: false });
+
+        function animateMarquee(time) {
+            if (!lastTime) lastTime = time;
+            const delta = time - lastTime;
+            lastTime = time;
+
+            if (halfWidth > 0) {
+                if (!isPaused) {
+                    xOffset -= delta * 0.05; // Adjust speed here
+                }
+
+                if (xOffset <= -halfWidth) {
+                    xOffset += halfWidth;
+                } else if (xOffset > 0) {
+                    xOffset -= halfWidth;
+                }
+
+                marquee.style.transform = `translateX(${xOffset}px)`;
+            }
+
+            requestAnimationFrame(animateMarquee);
+        }
+
+        requestAnimationFrame(animateMarquee);
+    }
 });
