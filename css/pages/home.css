@@ -1,0 +1,147 @@
+/* ============================================================
+   ACCUEIL — hero WebGL, titre découpé, indicateur de scroll
+   ============================================================ */
+
+/* ── Fond WebGL ────────────────────────────────────────────── */
+/* Sans WebGL, le fond CSS d'origine (dégradé rouge + grille) reste affiché. */
+.hero-gl {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    display: block;
+    pointer-events: none;
+}
+
+/* Le canvas couvre le fond CSS : on coupe la grille pour éviter tout débordement. */
+.hero.has-gl::before {
+    display: none;
+}
+
+.hero.has-gl {
+    background: var(--color-bg);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    will-change: transform, opacity;
+}
+
+/* ── Titre découpé (js/pages/home/hero-title.js) ───────────── */
+.hero-title.is-split {
+    position: relative;
+    /* Le dégradé est porté par chaque lettre, plus par le titre. */
+    background: none;
+    -webkit-text-fill-color: currentColor;
+}
+
+.hero-title .word {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Masque : la lettre monte depuis sous la ligne de base */
+.hero-title .char-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    /* Marge de sécurité pour ne pas rogner les lettres */
+    padding: 0.1em 0.02em;
+    margin: -0.1em -0.02em;
+}
+
+.hero-title .char {
+    display: inline-block;
+    will-change: transform;
+    /* Lueur dorée qui suit la souris, par-dessus le dégradé blanc → gris d'origine.
+       Les deux fonds ont la taille du titre et sont décalés de la position de la lettre. */
+    background-image:
+        radial-gradient(circle var(--light-r, 140px) at var(--mx, -999px) var(--my, -999px),
+            rgba(var(--color-gold-rgb), 1) 0%,
+            rgba(var(--color-gold-rgb), 0.55) 35%,
+            rgba(var(--color-gold-rgb), 0) 100%),
+        linear-gradient(135deg, var(--color-text) 0%, var(--color-text-muted) 100%);
+    background-size: var(--tw, 100%) var(--th, 100%);
+    background-position: calc(var(--cx, 0px) * -1) calc(var(--cy, 0px) * -1);
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+/* ── Indicateur de scroll ──────────────────────────────────── */
+.scroll-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    text-decoration: none;
+    color: var(--color-text-muted);
+}
+
+.scroll-indicator__label {
+    font-family: var(--font-display);
+    font-size: 0.55rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    /* compense l'espacement final pour un centrage optique */
+    margin-right: -0.4em;
+    transition: color var(--dur-fast) var(--ease-out-quart);
+}
+
+.scroll-indicator:hover .scroll-indicator__label,
+.scroll-indicator:focus-visible .scroll-indicator__label {
+    color: var(--color-gold);
+}
+
+.scroll-indicator__line {
+    position: relative;
+    width: 1px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+
+/* Goutte d'or qui coule le long du filet */
+.scroll-indicator__drop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 45%;
+    background: linear-gradient(to bottom, rgba(var(--color-gold-rgb), 0), var(--color-gold));
+    transform: translateY(-100%);
+    animation: scroll-drop 2.4s var(--ease-in-out-quart) infinite;
+}
+
+@keyframes scroll-drop {
+    0%   { transform: translateY(-100%); }
+    60%  { transform: translateY(230%); }
+    100% { transform: translateY(230%); }
+}
+
+/* Paysage très bas (téléphone couché) : pas de place pour l'indicateur. */
+@media (max-height: 500px) and (orientation: landscape) {
+    .scroll-indicator {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .scroll-indicator__line {
+        height: 40px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-indicator__drop {
+        animation: none;
+        transform: none;
+        height: 100%;
+        opacity: 0.4;
+    }
+}
+

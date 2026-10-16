@@ -48,6 +48,30 @@ export const MOTION = {
         lerp: 0.15,
     },
 
+    // Fond WebGL du hero (marbre veiné d'or)
+    heroGL: {
+        // Vitesse de dérive du marbre (1 = défaut, 0 = figé).
+        speed: 1,
+        // Intensité des veines dorées (0–1.5).
+        veinIntensity: 1,
+        // Force de la distorsion "liquide" au curseur (0 = aucune).
+        distortion: 1,
+        // Inertie de la souris (0–1) : plus bas = traînée plus longue.
+        mouseLerp: 0.06,
+        // Résolution de rendu sur mobile / appareils faibles (0.5 = moitié).
+        lowResolution: 0.6,
+    },
+
+    // Titre du hero
+    heroTitle: {
+        // Rayon de la lumière dorée qui suit la souris (px).
+        lightRadius: 140,
+        // Soulèvement max des lettres proches du curseur (px).
+        lift: 6,
+        // Distance d'influence du curseur sur les lettres (px).
+        influence: 160,
+    },
+
     // Transitions de pages (rideau "liquid gold")
     transition: {
         // Durée de la couverture à la sortie (s).

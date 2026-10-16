@@ -1,44 +1,118 @@
 /* ============================================================
-   ACCUEIL — entrée du hero, une fois l'intro terminée.
+   ACCUEIL — chorégraphie du hero
+
+   0.0 s  le marbre WebGL sort du noir, le logo se dé-floute
+   0.35 s les lettres de "CLUB BIZARRE" montent de leurs masques,
+          du centre vers les bords
+   1.0 s  la tagline s'ouvre depuis le centre
+   1.8 s  l'indicateur de scroll apparaît
+   Puis : lumière dorée au curseur sur le titre, parallax au scroll.
    ============================================================ */
 
 import { introDone } from '../core/intro.js';
 import { pageEntered } from '../core/transitions.js';
-import { prefersReducedMotion } from '../core/utils.js';
+import { prefersReducedMotion, supportsWebGL } from '../core/utils.js';
+import { splitTitle, initTitleHover } from './home/hero-title.js';
 
 const root = document.documentElement;
-const { gsap } = window;
+const { gsap, ScrollTrigger } = window;
+const reduced = prefersReducedMotion();
 
-const reveal = () => {
-    const logo = document.querySelector('.hero-logo-container');
-    const title = document.querySelector('.hero-title');
-    const subtitle = document.querySelector('.hero-subtitle');
-    const indicator = document.querySelector('.scroll-indicator');
+const hero = document.querySelector('.hero');
+const content = hero?.querySelector('.hero-content');
+const logo = hero?.querySelector('.hero-logo-container');
+const title = hero?.querySelector('.hero-title');
+const subtitle = hero?.querySelector('.hero-subtitle');
+const indicator = hero?.querySelector('.scroll-indicator');
 
-    if (!gsap || prefersReducedMotion()) {
+// Découpe immédiate : le titre est encore masqué par .hero-pending.
+const chars = title ? splitTitle(title) : [];
+
+// Le fond WebGL (et Three.js) se charge pendant l'intro, en parallèle.
+const glReady = hero && supportsWebGL()
+    ? import('./home/hero-gl.js')
+        .then((m) => m.createHeroGL(hero))
+        .catch((err) => {
+            console.warn('[CB] Fond WebGL indisponible, fond CSS conservé.', err);
+            return null;
+        })
+    : Promise.resolve(null);
+
+Promise.all([introDone, pageEntered]).then(async () => {
+    // On n'attend pas indéfiniment Three.js : au pire le marbre arrive après le titre.
+    const gl = await Promise.race([glReady, new Promise((r) => setTimeout(r, 1500, null))]);
+    revealHero();
+    if (gl) gl.reveal();
+    else glReady.then((late) => late && late.reveal());
+    glReady.then((g) => g && bindScroll(g));
+});
+
+/* ── Entrée ─────────────────────────────────────────────────── */
+
+function revealHero() {
+    if (!hero) return;
+
+    if (!gsap || reduced) {
         root.classList.remove('hero-pending');
         return;
     }
 
-    // Les états de départ sont posés avant de lever .hero-pending : pas de flash.
-    gsap.set([logo, title, subtitle], { autoAlpha: 0 });
-    gsap.set(indicator, { autoAlpha: 0 });
+    // États de départ posés avant de lever .hero-pending : aucun flash.
+    gsap.set([logo, subtitle, indicator], { autoAlpha: 0 });
+    gsap.set(chars, { yPercent: 115 });
     root.classList.remove('hero-pending');
 
     gsap.timeline({ defaults: { ease: 'expo.out' } })
         .fromTo(logo,
-            { y: 40, scale: 0.92, filter: 'blur(12px)' },
-            { autoAlpha: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 2 })
-        .fromTo(title,
-            { y: 30, filter: 'blur(10px)' },
-            { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 1.8 }, 0.25)
+            { y: 30, scale: 0.9, filter: 'blur(14px)' },
+            { autoAlpha: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 2.2 }, 0)
+        .to(chars, {
+            yPercent: 0,
+            duration: 1.6,
+            stagger: { each: 0.06, from: 'center' },
+        }, 0.35)
         .fromTo(subtitle,
-            { y: 16 },
-            { autoAlpha: 1, y: 0, duration: 1.6 }, 0.55)
-        .to(indicator, { autoAlpha: 1, duration: 1.2, ease: 'power2.out' }, 1.1)
-        // Nettoie les styles inline pour rendre la main au CSS (responsive, :hover).
-        .add(() => gsap.set([logo, title, subtitle], { clearProps: 'filter,transform' }));
-};
+            { clipPath: 'inset(0% 50% 0% 50%)' },
+            { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 1.8, ease: 'expo.inOut' }, 1.0)
+        .to(indicator, { autoAlpha: 1, duration: 1.2, ease: 'power2.out' }, 1.8)
+        .add(() => {
+            // Rend la main au CSS (responsive, :hover) une fois l'entrée jouée.
+            gsap.set([logo, subtitle], { clearProps: 'filter,transform,clipPath' });
+            gsap.set(chars, { clearProps: 'transform' });
+            initTitleHover(title, chars);
+        });
 
-// Le hero attend la fin de l'intro ET la fin du rideau d'entrée.
-Promise.all([introDone, pageEntered]).then(reveal);
+    bindContentParallax();
+}
+
+/* ── Scroll ─────────────────────────────────────────────────── */
+
+/** Le contenu du hero remonte et s'efface doucement quand on descend. */
+function bindContentParallax() {
+    if (!ScrollTrigger || reduced) return;
+
+    gsap.to(content, {
+        y: () => -window.innerHeight * 0.18,
+        autoAlpha: 0.15,
+        ease: 'none',
+        scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
+    });
+
+    gsap.to(indicator, {
+        autoAlpha: 0,
+        ease: 'none',
+        immediateRender: false,
+        scrollTrigger: { trigger: hero, start: 'top top', end: '+=180', scrub: true },
+    });
+}
+
+/** Transmet la progression du scroll au marbre (léger décalage + assombrissement). */
+function bindScroll(gl) {
+    if (!ScrollTrigger) return;
+    ScrollTrigger.create({
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        onUpdate: (self) => gl.setScroll(self.progress),
+    });
+}

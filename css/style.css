@@ -283,40 +283,6 @@ h2.section-title::after {
     z-index: 2;
 }
 
-.mouse {
-    width: 26px;
-    height: 42px;
-    border: 2px solid var(--text-secondary);
-    border-radius: 20px;
-    position: relative;
-    opacity: 0.7;
-}
-
-.mouse::before {
-    content: '';
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 8px;
-    background-color: var(--accent-gold);
-    border-radius: 2px;
-    animation: scroll 2s infinite cubic-bezier(0.15, 0.41, 0.69, 0.94);
-}
-
-@keyframes scroll {
-    0% {
-        transform: translate(-50%, 0);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translate(-50%, 15px);
-        opacity: 0;
-    }
-}
-
 /* Base sections style */
 section {
     padding: 8rem 0;
