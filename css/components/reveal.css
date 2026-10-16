@@ -1,0 +1,46 @@
+/* ============================================================
+   REVEALS (js/core/reveal.js) + texte découpé (js/core/split.js)
+   ============================================================ */
+
+/* Le système GSAP prend le relais de l'ancien fondu de script.js */
+html.has-reveal .fade-in-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+}
+
+/* ── Texte découpé en lettres ──────────────────────────────── */
+.word {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Masque : la lettre monte depuis sous la ligne de base */
+.char-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    /* Marge de sécurité pour ne pas rogner les lettres */
+    padding: 0.1em 0.02em;
+    margin: -0.1em -0.02em;
+}
+
+.char {
+    display: inline-block;
+    will-change: transform;
+}
+
+/* ── Titres de section : le filet se dessine après les lettres ── */
+html.has-reveal h2.section-title::after {
+    transform: translateX(-50%) scaleX(0);
+    transition: transform var(--dur-slow) var(--ease-out-expo) 0.35s;
+}
+
+html.has-reveal h2.section-title.is-revealed::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+/* ── Texte révélé mot par mot ──────────────────────────────── */
+.reveal-word {
+    will-change: opacity;
+}

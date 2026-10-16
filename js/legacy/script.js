@@ -186,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (marqueeContainer && marquee) {
         let xOffset = 0;
         let isPaused = false;
+        let speedFactor = 1;
         let lastTime = 0;
         let halfWidth = 0;
         
@@ -217,9 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
             lastTime = time;
 
             if (halfWidth > 0) {
-                if (!isPaused) {
-                    xOffset -= delta * 0.05; // Adjust speed here
-                }
+                // Au survol, le défilement ralentit progressivement jusqu'à l'arrêt
+                // (et repart en douceur), au lieu de se figer d'un coup.
+                speedFactor += ((isPaused ? 0 : 1) - speedFactor) * Math.min(1, delta / 350); // ~0,35 s de ralentissement
+                xOffset -= delta * 0.05 * speedFactor; // Adjust speed here
 
                 if (xOffset <= -halfWidth) {
                     xOffset += halfWidth;

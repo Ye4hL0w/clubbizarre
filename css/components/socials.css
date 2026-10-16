@@ -1,0 +1,53 @@
+/* ============================================================
+   ICÔNES SOCIALES — micro-animations (toutes les pages)
+   ============================================================ */
+
+.socials a {
+    position: relative;
+}
+
+/* L'icône pivote légèrement et grossit au survol */
+.socials a svg,
+.socials a i {
+    transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.socials a:hover svg,
+.socials a:hover i,
+.socials a:focus-visible svg,
+.socials a:focus-visible i {
+    transform: scale(1.12) rotate(-8deg);
+}
+
+/* Onde dorée qui s'échappe du cercle à l'entrée du survol */
+.socials a::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    border: 1px solid var(--color-gold);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.socials a:hover::after,
+.socials a:focus-visible::after {
+    animation: social-ripple var(--dur-base) var(--ease-out-expo);
+}
+
+@keyframes social-ripple {
+    from {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(1.55);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .socials a::after {
+        animation: none !important;
+    }
+}

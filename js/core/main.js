@@ -10,6 +10,7 @@ import { initIntro } from './intro.js';
 import { initTransitions } from './transitions.js';
 import { initCursor } from './cursor.js';
 import { initMagnetic, refreshMagnetic } from './magnetic.js';
+import { initReveals } from './reveal.js';
 
 const { gsap, ScrollTrigger } = window;
 
@@ -31,6 +32,7 @@ safely('transitions', initTransitions);
 safely('intro', initIntro);
 safely('cursor', initCursor);
 safely('magnetic', initMagnetic);
+safely('reveal', initReveals);
 
 // API minimale exposée aux scripts non-module (js/legacy/script.js, events.js).
 window.CB = { gsap, ScrollTrigger, scrollTo, getLenis, refreshMagnetic };

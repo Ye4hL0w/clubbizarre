@@ -58,6 +58,8 @@
     <link rel="stylesheet" href="css/components/intro.css">
     <link rel="stylesheet" href="css/components/transition.css">
     <link rel="stylesheet" href="css/components/cursor.css">
+    <link rel="stylesheet" href="css/components/reveal.css">
+    <link rel="stylesheet" href="css/components/socials.css">
     <link rel="stylesheet" href="css/pages/home.css">
     <link rel="icon" type="image/png" href="logo.png">
     <!-- Font Awesome (for SoundCloud icon) -->
@@ -137,19 +139,31 @@
         </section>
 
         <section id="about" class="about fade-in-section">
+            <!-- Grand mot-clé décoratif qui défile lentement en arrière-plan -->
+            <div class="about-bg-word" aria-hidden="true">BIZARRE</div>
             <div class="container">
                 <h2 class="section-title">WHO WE ARE</h2>
                 <div class="about-content">
-                    <p>Nous sommes <span class="highlight">Club Bizarre</span>, un collectif musical dédié à repousser
+                    <p data-reveal="words">Nous sommes <span class="highlight">Club Bizarre</span>, un collectif musical dédié à repousser
                         les limites de la musique électronique. Minimalistes, originaux et toujours en mouvement.</p>
                 </div>
+            </div>
+        </section>
+
+        <!-- Bandeau géant : vitesse et sens suivent le scroll (js/pages/home/marquee.js) -->
+        <section class="marquee-band" aria-label="Bizarre is the new standard">
+            <div class="marquee-band__track" aria-hidden="true">
+                <span class="marquee-band__item">Bizarre is the new standard</span>
+                <span class="marquee-band__dot"></span>
+                <span class="marquee-band__item marquee-band__item--outline">Bizarre is the new standard</span>
+                <span class="marquee-band__dot"></span>
             </div>
         </section>
 
         <section id="team" class="team fade-in-section">
             <div class="container">
                 <h2 class="section-title">THE TEAM</h2>
-                <div class="team-marquee-container">
+                <div class="team-marquee-container" data-reveal="custom">
                     <div class="team-marquee">
                         <!-- Premier jeu d'artistes -->
                         <a href="pages/jerem_wav.html" class="team-bubble" data-cursor="VOIR">
@@ -276,9 +290,9 @@
             <div class="container">
                 <h2 class="section-title">CONTACT</h2>
                 <div class="contact-content">
-                    <p class="contact-subtitle">Booking & Inquiries</p>
-                    <a href="mailto:clubbizarre06@gmail.com" class="contact-email" data-cursor="ÉCRIRE">clubbizarre06@gmail.com</a>
-                    <div class="socials">
+                    <p class="contact-subtitle" data-reveal="up">Booking & Inquiries</p>
+                    <a href="mailto:clubbizarre06@gmail.com" class="contact-email" data-cursor="ÉCRIRE" data-reveal="up">clubbizarre06@gmail.com</a>
+                    <div class="socials" data-reveal="stagger">
                         <!-- Instagram -->
                         <a href="https://www.instagram.com/clubbizarre06/" target="_blank" rel="noopener noreferrer"
                             class="social-icon" title="Instagram">

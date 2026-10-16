@@ -37,21 +37,7 @@
     -webkit-text-fill-color: currentColor;
 }
 
-.hero-title .word {
-    display: inline-block;
-    white-space: nowrap;
-}
-
-/* Masque : la lettre monte depuis sous la ligne de base */
-.hero-title .char-mask {
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: top;
-    /* Marge de sécurité pour ne pas rogner les lettres */
-    padding: 0.1em 0.02em;
-    margin: -0.1em -0.02em;
-}
-
+/* Lettres et masques : voir css/components/reveal.css */
 .hero-title .char {
     display: inline-block;
     will-change: transform;
@@ -145,3 +131,119 @@
     }
 }
 
+/* ── About : mot-clé géant en arrière-plan ─────────────────── */
+.about {
+    overflow: hidden;
+}
+
+.about .container {
+    position: relative;
+    z-index: 1;
+}
+
+.about-bg-word {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: clamp(8rem, 26vw, 24rem);
+    line-height: 1;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.04);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+}
+
+/* Mots du texte About (révélés au scroll) : la couleur reste celle du CSS d'origine */
+.about-content .reveal-word {
+    display: inline;
+}
+
+/* ── Bandeau géant ─────────────────────────────────────────── */
+.marquee-band {
+    padding: var(--space-lg) 0;
+    overflow: hidden;
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-line);
+}
+
+.marquee-band__track {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    width: max-content;
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: clamp(2.5rem, 8vw, 7rem);
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    will-change: transform;
+    padding-right: 0.6em; /* même écart à la jonction des deux copies */
+}
+
+.marquee-band__item {
+    color: var(--color-text);
+}
+
+.marquee-band__item--outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.45);
+}
+
+.marquee-band__dot {
+    flex: none;
+    width: 0.22em;
+    height: 0.22em;
+    border-radius: 50%;
+    background: var(--color-gold);
+}
+
+/* ── Team : la carte survolée ressort, les autres s'atténuent ── */
+/* (la carte survolée garde son effet d'origine : élévation + zoom photo + halo doré) */
+@media (hover: hover) and (pointer: fine) {
+    .team-marquee:has(.team-bubble:hover) .team-bubble:not(:hover) {
+        opacity: 0.55;
+    }
+}
+
+/* ── Contact : l'email roule lettre par lettre au survol ───── */
+.contact-email.is-split:hover {
+    /* la copie dorée remplace l'ancien changement de couleur global */
+    color: var(--color-text);
+    text-shadow: none;
+}
+
+.email-char {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    line-height: 1.15;
+}
+
+.email-char__inner {
+    position: relative;
+    display: inline-block;
+    transition: transform var(--dur-base) var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 12ms);
+}
+
+/* Copie dorée placée juste sous chaque lettre */
+.email-char__inner::after {
+    content: attr(data-char);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    color: var(--color-gold);
+}
+
+.contact-email.is-split:hover .email-char__inner,
+.contact-email.is-split:focus-visible .email-char__inner {
+    transform: translateY(-100%);
+}

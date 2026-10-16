@@ -13,32 +13,12 @@
    ============================================================ */
 
 import { MOTION } from '../../core/config.js';
+import { splitChars } from '../../core/split.js';
 import { frameFactor, hasFinePointer, lerp, prefersReducedMotion } from '../../core/utils.js';
 
 /** Découpe le titre. Renvoie la liste des lettres (.char). */
 export function splitTitle(title) {
-    const text = title.textContent.trim();
-    title.setAttribute('aria-label', text);
-    title.textContent = '';
-
-    const chars = [];
-    text.split(/\s+/).forEach((word, i) => {
-        if (i > 0) title.append(' '); // espace normal : le retour à la ligne mobile reste possible
-        const wordEl = document.createElement('span');
-        wordEl.className = 'word';
-        wordEl.setAttribute('aria-hidden', 'true');
-        [...word].forEach((letter) => {
-            const mask = document.createElement('span');
-            mask.className = 'char-mask';
-            const char = document.createElement('span');
-            char.className = 'char';
-            char.textContent = letter;
-            mask.appendChild(char);
-            wordEl.appendChild(mask);
-            chars.push(char);
-        });
-        title.appendChild(wordEl);
-    });
+    const chars = splitChars(title);
 
     title.classList.add('is-split');
     layoutGradient(title, chars);

@@ -72,6 +72,35 @@ export const MOTION = {
         influence: 160,
     },
 
+    // Reveals au scroll — même vocabulaire sur tout le site
+    reveal: {
+        // Durée et easing communs à toutes les apparitions.
+        duration: 1.2,
+        ease: 'expo.out',
+        // Décalage vertical de départ des blocs (px).
+        distance: 40,
+        // Écart entre deux éléments d'un même groupe (s).
+        stagger: 0.08,
+        // Écart entre deux lettres d'un titre (s).
+        charStagger: 0.035,
+        // Déclenchement : quand le haut de l'élément atteint 85 % de la hauteur d'écran.
+        start: 'top 85%',
+        // Opacité de départ des mots du texte About (révélés au fil du scroll).
+        wordDim: 0.15,
+    },
+
+    // Bandeau géant "BIZARRE IS THE NEW STANDARD"
+    marquee: {
+        // Vitesse de croisière (px/s).
+        speed: 60,
+        // Accélération apportée par la vitesse de scroll.
+        velocityFactor: 900,
+        // Vitesse additionnelle max (px/s).
+        maxBoost: 1400,
+        // Inclinaison max liée à la vitesse (degrés, 0 = aucune).
+        maxSkew: 6,
+    },
+
     // Transitions de pages (rideau "liquid gold")
     transition: {
         // Durée de la couverture à la sortie (s).
