@@ -19,9 +19,20 @@
     <title>Datseven | Club Bizarre</title>
     <meta name="description" content="Datseven (DJ) — artiste du collectif de musique électronique niçois Club Bizarre.">
     <link rel="canonical" href="https://clubbizarre.vercel.app/pages/datseven.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://clubbizarre.vercel.app/pages/datseven.html">
+    <meta property="og:title" content="Datseven | Club Bizarre">
+    <meta property="og:description" content="Datseven (DJ) — artiste du collectif de musique électronique niçois Club Bizarre.">
+    <meta property="og:image" content="https://clubbizarre.vercel.app/assets/artistes/datseven/_web/datseven.jpg">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="Club Bizarre">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Datseven | Club Bizarre">
+    <meta name="twitter:description" content="Datseven (DJ) — artiste du collectif de musique électronique niçois Club Bizarre.">
+    <meta name="twitter:image" content="https://clubbizarre.vercel.app/assets/artistes/datseven/_web/datseven.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/tokens.css">
     <link rel="stylesheet" href="../css/core.css">
     <link rel="stylesheet" href="../css/style.css">
@@ -31,8 +42,11 @@
     <link rel="stylesheet" href="../css/components/reveal.css">
     <link rel="stylesheet" href="../css/components/socials.css">
     <link rel="stylesheet" href="../css/components/roll.css">
+    <link rel="stylesheet" href="../css/components/a11y.css">
+    <link rel="stylesheet" href="../css/components/lightbox.css">
     <link rel="stylesheet" href="../css/pages/artist.css">
-    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="../favicon.png">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
     <!-- Three.js : déclaré ici, chargé uniquement quand un module l'importe -->
     <script type="importmap">
     {
@@ -44,20 +58,21 @@
     </script>
 </head>
 <body data-artist="datseven">
+    <a class="skip-link" href="#main">Aller au contenu</a>
     <nav class="navbar">
         <a href="../index.html" class="nav-logo" data-cursor="RETOUR">CLUB BIZARRE</a>
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-links">
             <li><a href="../index.html#about">About</a></li>
             <li><a href="../index.html#team">Team</a></li>
             <li><a href="events.html">Events</a></li>
             <li><a href="media.html">Media</a></li>
             <li><a href="../index.html#contact">Contact</a></li>
         </ul>
-        <div class="hamburger">
+        <button class="hamburger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-links">
             <span></span><span></span><span></span>
-        </div>
+        </button>
     </nav>
-    <main class="artist">
+    <main id="main" class="artist">
         <!-- Hero : nom et rôle en dur (référencement) ; le reste de la page est
              construit par js/pages/artist.js à partir de js/data/. -->
         <section class="artist-hero">

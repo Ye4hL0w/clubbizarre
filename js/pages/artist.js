@@ -13,7 +13,7 @@
 import { ARTISTS, COLLECTIVE } from '../data/artists.js';
 import { PHOTOS } from '../data/artist-photos.js';
 import { ICONS } from './artist/icons.js';
-import { createLightbox } from './artist/lightbox.js';
+import { createLightbox } from '../core/lightbox.js';
 import { pageEntered } from '../core/transitions.js';
 import { introDone } from '../core/intro.js';
 import { revealIn } from '../core/reveal.js';

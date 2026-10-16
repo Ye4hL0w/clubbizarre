@@ -16,40 +16,31 @@
     })(document.documentElement);
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Club Bizarre | Collectif Musical Électronique</title>
-    <meta name="description"
-        content="Club Bizarre – Collectif musical électronique niçois. DJs 90Cynomen, Førn, Datseven, Jerem.wav, HelΛnova. Événements, soirées, booking.">
+    <title>Media | Club Bizarre</title>
+    <meta name="description" content="Photos et vidéos des soirées et du collectif Club Bizarre, musique électronique à Nice.">
+    <link rel="canonical" href="https://clubbizarre.vercel.app/pages/media.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://clubbizarre.vercel.app/pages/media.html">
+    <meta property="og:title" content="Media | Club Bizarre">
+    <meta property="og:description" content="Photos et vidéos des soirées et du collectif Club Bizarre, musique électronique à Nice.">
+    <meta property="og:image" content="https://clubbizarre.vercel.app/logo.png">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="Club Bizarre">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Media | Club Bizarre">
+    <meta name="twitter:description" content="Photos et vidéos des soirées et du collectif Club Bizarre, musique électronique à Nice.">
+    <meta name="twitter:image" content="https://clubbizarre.vercel.app/logo.png">
     <meta name="keywords"
         content="Club Bizarre, collectif musical, musique électronique, DJ, Nice, soirée, techno, événement, clubbizarre06">
     <meta name="author" content="Club Bizarre">
     <meta name="robots" content="index, follow">
     <meta name="google-site-verification" content="aHaUgcgE1cne9HO0uvNZi-pZpaX44KCPdhT2IWDj8ME" />
 
-    <!-- URL canonique -->
-    <link rel="canonical" href="https://clubbizarre.vercel.app/">
-
-    <!-- Open Graph (partage Facebook, WhatsApp, etc.) -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://clubbizarre.vercel.app/">
-    <meta property="og:title" content="Club Bizarre | Collectif Musical Électronique">
-    <meta property="og:description"
-        content="Club Bizarre – Collectif musical électronique niçois. DJs 90Cynomen, Førn, Datseven, Jerem.wav, HelΛnova. Événements, soirées, booking.">
-    <meta property="og:image" content="https://clubbizarre.vercel.app/logo.png">
-    <meta property="og:locale" content="fr_FR">
-    <meta property="og:site_name" content="Club Bizarre">
-
-    <!-- Twitter Card (partage Twitter/X) -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Club Bizarre | Collectif Musical Électronique">
-    <meta name="twitter:description"
-        content="Club Bizarre – Collectif musical électronique niçois. Événements, soirées, booking.">
-    <meta name="twitter:image" content="https://clubbizarre.vercel.app/logo.png">
-
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&family=Syne:wght@400;600;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../css/tokens.css">
     <link rel="stylesheet" href="../css/core.css">
@@ -60,10 +51,11 @@
     <link rel="stylesheet" href="../css/components/reveal.css">
     <link rel="stylesheet" href="../css/components/socials.css">
     <link rel="stylesheet" href="../css/components/roll.css">
-    <link rel="icon" type="image/png" href="../logo.png">
-    <!-- Font Awesome (for SoundCloud icon) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/components/a11y.css">
+    <link rel="stylesheet" href="../css/components/lightbox.css">
+    <link rel="stylesheet" href="../css/pages/media.css">
+    <link rel="icon" type="image/png" sizes="64x64" href="../favicon.png">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
     <style>
         .media {
             padding-top: 150px;
@@ -104,29 +96,30 @@
 </head>
 
 <body class="no-scroll">
+    <a class="skip-link" href="#main">Aller au contenu</a>
 
     <!-- Video Intro Splash Screen -->
     <div id="intro-overlay" class="intro-overlay">
-        <video id="intro-video" class="intro-video" muted playsinline preload="auto">
+        <video id="intro-video" class="intro-video" muted playsinline preload="none">
             <source src="../Logo_Reveal_Liquid_gold_drips_and_flows_across_a_dark_marble_04tGjFtP.mp4" type="video/mp4">
         </video>
         <button id="skip-intro" class="skip-btn" aria-label="Passer l'intro">PASSER ›</button>
     </div>
     <nav class="navbar">
         <a href="../index.html" class="nav-logo" data-cursor="RETOUR">CLUB BIZARRE</a>
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-links">
             <li><a href="../index.html#about">About</a></li>
             <li><a href="../index.html#team">Team</a></li>
             <li><a href="events.html">Events</a></li>
             <li><a href="media.html">Media</a></li>
             <li><a href="../index.html#contact">Contact</a></li>
         </ul>
-        <div class="hamburger">
+        <button class="hamburger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-links">
             <span></span><span></span><span></span>
-        </div>
+        </button>
     </nav>
 
-    <main>
+    <main id="main">
         
 
         
@@ -135,9 +128,10 @@
 
         <section id="media" class="media fade-in-section">
             <div class="container">
+                <h1 class="sr-only">Media — photos et vidéos de Club Bizarre</h1>
                 <h2 class="section-title">LATEST VIBES</h2>
-                <div class="instagram-grid" id="insta-feed">
-                    <!-- Instagram embeds injected by JS -->
+                <div class="media-grid" id="media-grid" data-reveal="custom">
+                    <!-- Contenu : js/data/media.js -->
                 </div>
                 <div class="social-link-wrapper">
                     <a href="https://www.instagram.com/clubbizarre06/" target="_blank" rel="noopener noreferrer"
@@ -163,6 +157,7 @@
         integrity="sha384-kdY9hFBPoAPpxcrLihsO3APivFOxtQwSeYdzFD5CIIfLurwhdMrEHhkQxZJDkxgk" crossorigin="anonymous" defer></script>
     <script src="../js/legacy/script.js"></script>
     <script type="module" src="../js/core/main.js"></script>
+    <script type="module" src="../js/pages/media.js"></script>
 </body>
 
 </html>

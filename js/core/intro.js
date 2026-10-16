@@ -29,6 +29,10 @@ export function initIntro() {
 
     session.set(STORAGE_KEYS.introSeen, '1');
     video.pause();
+    // La vidéo n'est téléchargée que si l'intro est réellement jouée
+    // (preload="none" dans le HTML : rien n'est chargé pour les visites suivantes).
+    video.preload = 'auto';
+    video.load();
 
     const loader = createLoader(overlay);
     const skipBtn = document.getElementById('skip-intro');

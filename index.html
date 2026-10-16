@@ -50,7 +50,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&family=Syne:wght@400;600;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/core.css">
@@ -61,11 +61,13 @@
     <link rel="stylesheet" href="css/components/reveal.css">
     <link rel="stylesheet" href="css/components/socials.css">
     <link rel="stylesheet" href="css/components/roll.css">
+    <link rel="stylesheet" href="css/components/a11y.css">
     <link rel="stylesheet" href="css/pages/home.css">
-    <link rel="icon" type="image/png" href="logo.png">
     <!-- Font Awesome (for SoundCloud icon) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         crossorigin="anonymous">
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
     <!-- Données structurées JSON-LD (Google Rich Results) -->
     <script type="application/ld+json">
@@ -101,29 +103,30 @@
 </head>
 
 <body class="no-scroll">
+    <a class="skip-link" href="#main">Aller au contenu</a>
 
     <!-- Video Intro Splash Screen -->
     <div id="intro-overlay" class="intro-overlay">
-        <video id="intro-video" class="intro-video" muted playsinline preload="auto">
+        <video id="intro-video" class="intro-video" muted playsinline preload="none">
             <source src="Logo_Reveal_Liquid_gold_drips_and_flows_across_a_dark_marble_04tGjFtP.mp4" type="video/mp4">
         </video>
         <button id="skip-intro" class="skip-btn" aria-label="Passer l'intro">PASSER ›</button>
     </div>
     <nav class="navbar">
         <a href="#" class="nav-logo">CLUB BIZARRE</a>
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-links">
             <li><a href="index.html#about">About</a></li>
             <li><a href="index.html#team">Team</a></li>
             <li><a href="pages/events.html">Events</a></li>
             <li><a href="pages/media.html">Media</a></li>
             <li><a href="index.html#contact">Contact</a></li>
         </ul>
-        <div class="hamburger">
+        <button class="hamburger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-links">
             <span></span><span></span><span></span>
-        </div>
+        </button>
     </nav>
 
-    <main>
+    <main id="main">
         <section id="hero" class="hero fade-in-section">
             <div class="hero-content">
                 <div class="hero-logo-container">
@@ -224,56 +227,56 @@
                             <span class="bubble-role">DJ Soon</span>
                         </a> -->
                         <!-- Deuxième jeu (Duplication pour l'effet de défilement infini) -->
-                        <a href="pages/jerem_wav.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
+                        <a href="pages/jerem_wav.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true" tabindex="-1">
                             <div class="bubble-img">
                                 <img src="media/team/jeremwav.png" alt="JEREM.WAV">
                             </div>
                             <span class="bubble-name">JEREM.WAV</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/helanova.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
+                        <a href="pages/helanova.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true" tabindex="-1">
                             <div class="bubble-img">
                                 <img src="media/team/helanova.png" alt="HELΛNOVA">
                             </div>
                             <span class="bubble-name">HELΛNOVA</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/datseven.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
+                        <a href="pages/datseven.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true" tabindex="-1">
                             <div class="bubble-img">
                                 <img src="media/team/datseven.png" alt="Datseven">
                             </div>
                             <span class="bubble-name">Datseven</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/forn.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
+                        <a href="pages/forn.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true" tabindex="-1">
                             <div class="bubble-img">
                                 <img src="media/team/forn.png" alt="FØRN">
                             </div>
                             <span class="bubble-name">FØRN</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/90cynomen.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
+                        <a href="pages/90cynomen.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true" tabindex="-1">
                             <div class="bubble-img">
                                 <img src="media/team/90cynomen.png" alt="90CYNOMEN">
                             </div>
                             <span class="bubble-name">90CYNOMEN</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/bastoune_bellon.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
+                        <a href="pages/bastoune_bellon.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true" tabindex="-1">
                             <div class="bubble-img">
                                 <img src="media/team/bastoune.bellon.png" alt="BASTOUNE BELLON">
                             </div>
                             <span class="bubble-name">BASTOUNE</span>
                             <span class="bubble-role">Light + DJ</span>
                         </a>
-                        <a href="pages/mariam.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
+                        <a href="pages/mariam.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true" tabindex="-1">
                             <div class="bubble-img">
                                 <img src="media/team/mariam.png" alt="MARIAM">
                             </div>
                             <span class="bubble-name">MARIAM</span>
                             <span class="bubble-role">CM</span>
                         </a>
-                        <!-- <a href="pages/capolami.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
+                        <!-- <a href="pages/capolami.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true" tabindex="-1">
                             <div class="bubble-img">
                                 <img src="media/team/capo.png" alt="CAPOLAMI">
                             </div>
@@ -296,7 +299,7 @@
                     <div class="socials" data-reveal="stagger">
                         <!-- Instagram -->
                         <a href="https://www.instagram.com/clubbizarre06/" target="_blank" rel="noopener noreferrer"
-                            class="social-icon" title="Instagram">
+                            class="social-icon" title="Instagram" aria-label="Instagram">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -307,7 +310,7 @@
                         </a>
                         <!-- TikTok -->
                         <a href="https://www.tiktok.com/@clubbizarre06" target="_blank" rel="noopener noreferrer"
-                            class="social-icon" title="TikTok">
+                            class="social-icon" title="TikTok" aria-label="TikTok">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="currentColor">
                                 <path
@@ -316,7 +319,7 @@
                         </a>
                         <!-- Facebook -->
                         <a href="https://m.facebook.com/clubbizarre06" target="_blank" rel="noopener noreferrer"
-                            class="social-icon" title="Facebook">
+                            class="social-icon" title="Facebook" aria-label="Facebook">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -325,12 +328,12 @@
                         </a>
                         <!-- SoundCloud -->
                         <a href="https://soundcloud.com/clubbizarre06" target="_blank" rel="noopener noreferrer"
-                            class="social-icon" title="SoundCloud" data-cursor="ÉCOUTER">
+                            class="social-icon" title="SoundCloud" aria-label="SoundCloud" data-cursor="ÉCOUTER">
                             <i class="fa-brands fa-soundcloud" style="font-size: 24px;"></i>
                         </a>
                         <!-- YouTube -->
                         <a href="https://www.youtube.com/channel/UC1VJ7-PTaAsYsLicFTLFEPQ" target="_blank"
-                            rel="noopener noreferrer" class="social-icon" title="YouTube" data-cursor="ÉCOUTER">
+                            rel="noopener noreferrer" class="social-icon" title="YouTube" aria-label="YouTube" data-cursor="ÉCOUTER">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -341,7 +344,7 @@
                         </a>
                         <!-- Shotgun -->
                         <a href="https://shotgun.live/fr/venues/clubbizarre" target="_blank" rel="noopener noreferrer"
-                            class="social-icon" title="Shotgun">
+                            class="social-icon" title="Shotgun" aria-label="Shotgun">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">

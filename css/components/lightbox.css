@@ -1,0 +1,129 @@
+/* ============================================================
+   LIGHTBOX (js/core/lightbox.js) — galeries artistes et page Media
+   ============================================================ */
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+    overflow: hidden;
+}
+
+.lightbox::backdrop {
+    background: transparent;
+}
+
+.lightbox__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(var(--color-bg-rgb), 0.94);
+    backdrop-filter: blur(8px);
+}
+
+.lightbox__figure {
+    position: absolute;
+    inset: 6vh 8vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* un clic hors de l'image ferme la lightbox */
+}
+
+.lightbox__img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+    pointer-events: auto;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
+}
+
+.lightbox__counter {
+    position: absolute;
+    left: 50%;
+    bottom: calc(1.5rem + var(--safe-bottom, 0px));
+    transform: translateX(-50%);
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--color-gold);
+}
+
+.lightbox__btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--color-line-strong);
+    background: rgba(var(--color-bg-rgb), 0.6);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: border-color var(--dur-fast), color var(--dur-fast);
+}
+
+.lightbox__btn:hover,
+.lightbox__btn:focus-visible {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+}
+
+.lightbox__close {
+    top: calc(1.5rem + var(--safe-top, 0px));
+    right: 1.5rem;
+}
+
+.lightbox__prev,
+.lightbox__next {
+    top: 50%;
+    margin-top: -26px;
+}
+
+.lightbox__prev {
+    left: 1.5rem;
+}
+
+.lightbox__prev svg {
+    transform: rotate(180deg);
+}
+
+.lightbox__next {
+    right: 1.5rem;
+}
+
+
+.lightbox__img[hidden] {
+    display: none;
+}
+
+.lightbox__video {
+    background: var(--color-black);
+}
+
+@media (max-width: 768px) {
+    .lightbox__figure {
+        inset: 10vh 4vw 14vh;
+    }
+
+    .lightbox__prev,
+    .lightbox__next {
+        top: auto;
+        bottom: calc(1rem + var(--safe-bottom, 0px));
+        margin-top: 0;
+    }
+
+    .lightbox__counter {
+        bottom: calc(2.4rem + var(--safe-bottom, 0px));
+    }
+}

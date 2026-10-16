@@ -1,0 +1,114 @@
+/* ============================================================
+   PAGE MEDIA — galerie masonry (js/pages/media.js)
+   ============================================================ */
+
+.media .container {
+    max-width: 1320px;
+}
+
+.media-grid {
+    columns: 3 300px;
+    column-gap: var(--space-md);
+}
+
+.media-item {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    break-inside: avoid;
+    background: var(--color-bg-alt);
+    cursor: zoom-in;
+}
+
+.media-item img,
+.media-item video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.06);
+    transition:
+        opacity var(--dur-slow) var(--ease-out-quart),
+        transform var(--dur-xslow) var(--ease-out-expo);
+}
+
+.media-item.is-loaded img,
+.media-item.is-loaded video {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@media (hover: hover) {
+    .media-item.is-loaded:hover img,
+    .media-item.is-loaded:hover video {
+        transform: scale(1.05);
+    }
+}
+
+.media-item:focus-visible {
+    outline: 1px solid var(--color-gold);
+    outline-offset: 4px;
+}
+
+/* Légende : au survol sur ordinateur, toujours visible sur tactile */
+.media-item__caption {
+    position: absolute;
+    inset: auto 0 0;
+    padding: var(--space-lg) var(--space-sm) var(--space-sm);
+    background: linear-gradient(to top, rgba(var(--color-bg-rgb), 0.9), transparent);
+    color: var(--color-text);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+        opacity var(--dur-fast) var(--ease-out-quart),
+        transform var(--dur-base) var(--ease-out-expo);
+}
+
+.media-item:hover .media-item__caption,
+.media-item:focus-visible .media-item__caption {
+    opacity: 1;
+    transform: none;
+}
+
+@media (hover: none) {
+    .media-item__caption {
+        opacity: 1;
+        transform: none;
+        font-size: 0.75rem;
+    }
+}
+
+/* Pastille "vidéo" */
+.media-item__badge {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(var(--color-bg-rgb), 0.6);
+    color: var(--color-gold);
+    border: 1px solid rgba(var(--color-gold-rgb), 0.4);
+}
+
+@media (max-width: 768px) {
+    .media-grid {
+        columns: 2 140px;
+        column-gap: var(--space-sm);
+    }
+
+    .media-item {
+        margin-bottom: var(--space-sm);
+    }
+}

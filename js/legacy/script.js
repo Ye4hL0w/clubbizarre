@@ -44,6 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (navLinks && navLinks.classList.contains('active')) {
                 navLinks.classList.remove('active');
                 hamburger.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                hamburger.setAttribute('aria-label', 'Ouvrir le menu');
             }
         });
     });
@@ -69,93 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     });
 
-    // 3. Instagram Media Integration (Dynamic API)
-    const instaFeedContainer = document.getElementById('insta-feed');
-
-    if (instaFeedContainer) {
-        // ⚠️ REMPLACE 'VOTRE_TOKEN_ICI' PAR LE TOKEN GÉNÉRÉ DEPUIS LE PORTAIL META DEVELOPER
-        const INSTAGRAM_TOKEN = 'VOTRE_TOKEN_ICI'; 
-        const INSTAGRAM_API_URL = `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink&access_token=${INSTAGRAM_TOKEN}`;
-        
-        const POSTS_LIMIT = 100; // Nombre de posts à afficher
-
-        // Posts de secours si l'URL est invalide
-        const fallbackPosts = [
-            { url: "media/post_1.jpg", text: "Latest event recap! What a night at the factory. 💥", link: "https://instagram.com/clubbizarre06" },
-            { url: "media/post_2.jpg", text: "New track release by jerem.wav, check the link in bio.", link: "https://instagram.com/clubbizarre06" },
-            { url: "media/post_3.jpg", text: "Studio sessions with the team. Big things coming.", link: "https://instagram.com/clubbizarre06" },
-            { url: "media/post_4.jpg", text: "Visual arts meets minimal techno.", link: "https://instagram.com/clubbizarre06" },
-            { url: "media/post_5.jpg", text: "Thank you for the energy last weekend!", link: "https://instagram.com/clubbizarre06" },
-            { url: "media/post_6.jpg", text: "HELANOVA dropping bombs as usual.", link: "https://instagram.com/clubbizarre06" },
-            { url: "media/post_7.jpg", text: "Behind the scenes with our visual crew.", link: "https://instagram.com/clubbizarre06" },
-            { url: "media/post_8.jpg", text: "Next stop: Secret Location.", link: "https://instagram.com/clubbizarre06" },
-            { url: "media/post_9.jpg", text: "Join the bizarre family. 🏴‍☠️", link: "https://instagram.com/clubbizarre06" }
-        ];
-
-        function renderPosts(posts) {
-            instaFeedContainer.innerHTML = ''; // Vider le conteneur
-            
-            posts.slice(0, POSTS_LIMIT).forEach(post => {
-                const wrapper = document.createElement('a');
-                wrapper.href = post.link || post.permalink;
-                wrapper.target = "_blank";
-                wrapper.className = 'insta-wrapper';
-                wrapper.dataset.cursor = 'VOIR';
-
-                const img = document.createElement('img');
-                // Si c'est une vidéo, l'API fournit thumbnail_url, sinon media_url
-                img.src = post.thumbnail_url || post.media_url || post.url;
-                img.alt = "Club Bizarre Instagram Post";
-                img.loading = "lazy";
-
-                const overlay = document.createElement('div');
-                overlay.className = 'insta-overlay';
-                
-                const text = document.createElement('p');
-                text.className = 'insta-text';
-                let caption = post.caption || post.text || '';
-                // Couper le texte s'il est trop long
-                if (caption.length > 80) caption = caption.substring(0, 80) + '...';
-                text.textContent = caption;
-
-                const icon = document.createElement('div');
-                icon.className = 'insta-icon';
-                icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>';
-
-                overlay.appendChild(text);
-                overlay.appendChild(icon);
-
-                wrapper.appendChild(img);
-                wrapper.appendChild(overlay);
-                instaFeedContainer.appendChild(wrapper);
-            });
-        }
-
-        async function fetchInstagramPosts() {
-            if (INSTAGRAM_TOKEN === 'VOTRE_TOKEN_ICI') {
-                console.warn("Token Instagram non configuré. Affichage des images de secours.");
-                renderPosts(fallbackPosts);
-                return;
-            }
-
-            try {
-                const response = await fetch(INSTAGRAM_API_URL);
-                if (!response.ok) throw new Error('Erreur de connexion API Instagram');
-                const data = await response.json();
-                
-                if (data && data.data && data.data.length > 0) {
-                    renderPosts(data.data);
-                } else {
-                    renderPosts(fallbackPosts);
-                }
-            } catch (error) {
-                console.error("Erreur de récupération du flux Instagram :", error);
-                renderPosts(fallbackPosts);
-            }
-        }
-
-        fetchInstagramPosts();
-    }
+    // 3. (Page Media : voir js/pages/media.js et js/data/media.js)
 
     // 4. Navbar Background on Scroll & Mobile Menu
     const navbar = document.querySelector('.navbar');
@@ -174,16 +90,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Menu mobile : état annoncé aux lecteurs d'écran, fermeture avec Échap
+    function setMenu(open) {
+        hamburger.classList.toggle('active', open);
+        navLinks.classList.toggle('active', open);
+        hamburger.setAttribute('aria-expanded', String(open));
+        hamburger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    }
+
     hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('active');
+        setMenu(!navLinks.classList.contains('active'));
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+            setMenu(false);
+            hamburger.focus();
+        }
     });
 
     // 5. Team Marquee Auto-Scroll and Wheel Support
     const marqueeContainer = document.querySelector('.team-marquee-container');
     const marquee = document.querySelector('.team-marquee');
     
-    if (marqueeContainer && marquee) {
+    // Animations réduites : pas de défilement automatique, le carrousel
+    // se fait glisser à la main (voir css/components/a11y.css).
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (marqueeContainer && marquee && !reduceMotion) {
         let xOffset = 0;
         let isPaused = false;
         let speedFactor = 1;

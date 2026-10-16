@@ -9,6 +9,14 @@
     <priority>1.0</priority>
   </url>
 
+  <!-- Media -->
+  <url>
+    <loc>https://clubbizarre.vercel.app/pages/media.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Events -->
   <url>
     <loc>https://clubbizarre.vercel.app/pages/events.html</loc>
@@ -68,7 +76,7 @@
   </url>
 
   <url>
-    <loc>https://www.clubbizarre.fr/pages/capolami.html</loc>
+    <loc>https://clubbizarre.vercel.app/pages/capolami.html</loc>
     <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -76,7 +84,7 @@
 
   <!-- Mentions légales -->
   <url>
-    <loc>https://www.clubbizarre.fr/pages/mentions-legales.html</loc>
+    <loc>https://clubbizarre.vercel.app/pages/mentions-legales.html</loc>
     <lastmod>2026-05-08</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

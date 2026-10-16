@@ -1,5 +1,6 @@
 /* ============================================================
-   LIGHTBOX — agrandissement des photos de galerie
+   LIGHTBOX — agrandissement des photos et vidéos
+   (galeries artistes, page Media)
 
    - L'image part de la vignette cliquée et s'agrandit jusqu'au
      centre (technique FLIP), puis y retourne à la fermeture.
@@ -8,11 +9,15 @@
    - <dialog> natif : focus piégé et Échap gérés par le navigateur.
    ============================================================ */
 
-import { ICONS } from './icons.js';
-import { prefersReducedMotion } from '../../core/utils.js';
+import { prefersReducedMotion } from './utils.js';
+
+const ICON = {
+    arrow: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    close: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+};
 
 export function createLightbox(items) {
-    // items : [{ thumb: HTMLElement, src, w, h, alt }]
+    // items : [{ thumb: HTMLElement, src, w, h, alt, type?: 'image' | 'video', poster? }]
     const { gsap } = window;
     const animated = Boolean(gsap) && !prefersReducedMotion();
 
@@ -24,14 +29,17 @@ export function createLightbox(items) {
         <div class="lightbox__backdrop"></div>
         <figure class="lightbox__figure">
             <img class="lightbox__img" alt="">
+            <video class="lightbox__img lightbox__video" controls playsinline hidden></video>
         </figure>
         <p class="lightbox__counter" aria-live="polite"></p>
-        <button class="lightbox__btn lightbox__close" type="button" aria-label="Fermer" data-cursor="FERMER">${ICONS.close}</button>
-        <button class="lightbox__btn lightbox__prev" type="button" aria-label="Photo précédente">${ICONS.arrow}</button>
-        <button class="lightbox__btn lightbox__next" type="button" aria-label="Photo suivante">${ICONS.arrow}</button>`;
+        <button class="lightbox__btn lightbox__close" type="button" aria-label="Fermer" data-cursor="FERMER">${ICON.close}</button>
+        <button class="lightbox__btn lightbox__prev" type="button" aria-label="Précédent">${ICON.arrow}</button>
+        <button class="lightbox__btn lightbox__next" type="button" aria-label="Suivant">${ICON.arrow}</button>`;
     document.body.appendChild(dialog);
 
-    const img = dialog.querySelector('.lightbox__img');
+    const photo = dialog.querySelector('img.lightbox__img');
+    const video = dialog.querySelector('video.lightbox__video');
+    let img = photo; // élément affiché (photo ou vidéo), animé par le FLIP
     const backdrop = dialog.querySelector('.lightbox__backdrop');
     const counter = dialog.querySelector('.lightbox__counter');
     const controls = dialog.querySelectorAll('.lightbox__btn, .lightbox__counter');
@@ -46,8 +54,20 @@ export function createLightbox(items) {
     const show = (i) => {
         index = (i + items.length) % items.length;
         const item = items[index];
-        img.src = item.src;
-        img.alt = item.alt;
+        const isVideo = item.type === 'video';
+        video.pause();
+        photo.hidden = isVideo;
+        video.hidden = !isVideo;
+        img = isVideo ? video : photo;
+        if (isVideo) {
+            video.poster = item.poster || '';
+            video.src = item.src;
+            video.setAttribute('aria-label', item.alt);
+            if (!prefersReducedMotion()) video.play().catch(() => {});
+        } else {
+            photo.src = item.src;
+            photo.alt = item.alt;
+        }
         if (item.w && item.h) {
             img.width = item.w;
             img.height = item.h;
@@ -84,8 +104,9 @@ export function createLightbox(items) {
     const close = () => {
         if (busy || !dialog.open) return;
         const finish = () => {
+            video.pause();
             dialog.close();
-            gsap?.set([img, backdrop, controls], { clearProps: 'all' });
+            gsap?.set([photo, video, backdrop, controls], { clearProps: 'transform,opacity,visibility' });
             busy = false;
             if (!document.body.classList.contains('no-scroll')) window.CB?.getLenis?.()?.start();
         };
@@ -103,10 +124,17 @@ export function createLightbox(items) {
         if (busy || items.length < 2) return;
         if (!animated) return show(index + dir);
         busy = true;
-        gsap.timeline({ onComplete: () => { busy = false; } })
-            .to(img, { x: -60 * dir, autoAlpha: 0, duration: 0.3, ease: 'power2.in' })
-            .add(() => show(index + dir))
-            .fromTo(img, { x: 60 * dir }, { x: 0, autoAlpha: 1, duration: 0.6, ease: 'expo.out' });
+        gsap.to(img, {
+            x: -60 * dir, autoAlpha: 0, duration: 0.3, ease: 'power2.in',
+            onComplete: () => {
+                gsap.set(img, { clearProps: 'transform,opacity,visibility' });
+                show(index + dir); // peut passer d'une photo à une vidéo : on anime le nouvel élément
+                gsap.fromTo(img, { x: 60 * dir, autoAlpha: 0 }, {
+                    x: 0, autoAlpha: 1, duration: 0.6, ease: 'expo.out',
+                    onComplete: () => { busy = false; },
+                });
+            },
+        });
     };
 
     /* ── Interactions ──────────────────────────────────────── */

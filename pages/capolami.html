@@ -17,9 +17,22 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>CAPOLAMI | Club Bizarre</title>
+    <meta name="description" content="CAPOLAMI — artiste du collectif de musique électronique niçois Club Bizarre.">
+    <link rel="canonical" href="https://clubbizarre.vercel.app/pages/capolami.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://clubbizarre.vercel.app/pages/capolami.html">
+    <meta property="og:title" content="CAPOLAMI | Club Bizarre">
+    <meta property="og:description" content="CAPOLAMI — artiste du collectif de musique électronique niçois Club Bizarre.">
+    <meta property="og:image" content="https://clubbizarre.vercel.app/logo.png">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="Club Bizarre">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CAPOLAMI | Club Bizarre">
+    <meta name="twitter:description" content="CAPOLAMI — artiste du collectif de musique électronique niçois Club Bizarre.">
+    <meta name="twitter:image" content="https://clubbizarre.vercel.app/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/tokens.css">
     <link rel="stylesheet" href="../css/core.css">
     <link rel="stylesheet" href="../css/style.css">
@@ -29,7 +42,9 @@
     <link rel="stylesheet" href="../css/components/reveal.css">
     <link rel="stylesheet" href="../css/components/socials.css">
     <link rel="stylesheet" href="../css/components/roll.css">
-    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../css/components/a11y.css">
+    <link rel="icon" type="image/png" sizes="64x64" href="../favicon.png">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
     <!-- Three.js : déclaré ici, chargé uniquement quand un module l'importe -->
     <script type="importmap">
     {
@@ -42,19 +57,20 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#main">Aller au contenu</a>
     <nav class="navbar">
         <a href="../index.html" class="nav-logo" data-cursor="RETOUR">CLUB BIZARRE</a>
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-links">
             <li><a href="../index.html#about">About</a></li>
             <li><a href="../index.html#team">Team</a></li>
             <li><a href="media.html">Media</a></li>
             <li><a href="../index.html#contact">Contact</a></li>
         </ul>
-        <div class="hamburger">
+        <button class="hamburger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-links">
             <span></span><span></span><span></span>
-        </div>
+        </button>
     </nav>
-    <main>
+    <main id="main">
         <section class="member-profile fade-in-section">
             <div class="container">
                 <div class="profile-header">

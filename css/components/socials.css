@@ -46,6 +46,39 @@
     }
 }
 
+/* Mobile : les icônes restent rondes (elles se tassaient en ovales),
+   écart réduit pour qu'elles tiennent toutes sur une ligne */
+@media (max-width: 768px) {
+    .socials {
+        gap: 0.7rem;
+        flex-wrap: wrap;
+    }
+
+    .socials a {
+        flex: 0 0 auto;
+        width: 46px;
+        height: 46px;
+    }
+}
+
+@media (max-width: 360px) {
+    .socials {
+        gap: 0.45rem;
+    }
+
+    .socials a {
+        width: 40px;
+        height: 40px;
+    }
+
+    .socials a svg,
+    .socials a i {
+        width: 20px;
+        height: 20px;
+        font-size: 20px !important;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .socials a::after {
         animation: none !important;

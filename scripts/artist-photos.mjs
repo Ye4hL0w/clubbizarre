@@ -17,6 +17,7 @@
 import { readdirSync, readFileSync, writeFileSync, statSync, mkdirSync, existsSync } from 'node:fs';
 import { join, extname, basename, dirname } from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { inflateSync } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -33,11 +34,9 @@ const HAS_SIPS = (() => {
 /* ── Dimensions sans dépendance (PNG, JPEG, WebP) ──────────── */
 function readImageInfo(file) {
     const buf = readFileSync(file);
-    // PNG : IHDR
+    // PNG : IHDR (+ vérification réelle de la transparence)
     if (buf.readUInt32BE(0) === 0x89504e47) {
-        const colorType = buf[25];
-        const hasAlpha = colorType === 4 || colorType === 6 || buf.includes(Buffer.from('tRNS'));
-        return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20), hasAlpha };
+        return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20), hasAlpha: pngIsTransparent(buf) };
     }
     // JPEG : segments SOFn
     if (buf[0] === 0xff && buf[1] === 0xd8) {
@@ -67,6 +66,63 @@ function readImageInfo(file) {
         }
     }
     return null; // format non lu (ex. AVIF) : la page utilisera un ratio par défaut
+}
+
+/**
+ * Beaucoup de PNG ont un canal alpha… entièrement opaque. On décode les
+ * pixels pour savoir si la transparence est réellement utilisée : si non,
+ * la photo peut passer en JPEG (bien plus léger) sans rien perdre.
+ */
+function pngIsTransparent(buf) {
+    const width = buf.readUInt32BE(16);
+    const bitDepth = buf[24];
+    const colorType = buf[25];
+    const interlace = buf[28];
+    if (colorType !== 4 && colorType !== 6) {
+        // Pas de canal alpha : transparence possible seulement via tRNS
+        return buf.includes(Buffer.from('tRNS'));
+    }
+    if (bitDepth !== 8 || interlace !== 0) return true; // cas rares : prudence, on garde le PNG
+
+    const chunks = [];
+    for (let i = 8; i < buf.length;) {
+        const len = buf.readUInt32BE(i);
+        const type = buf.toString('ascii', i + 4, i + 8);
+        if (type === 'IDAT') chunks.push(buf.subarray(i + 8, i + 8 + len));
+        if (type === 'IEND') break;
+        i += 12 + len;
+    }
+    const data = inflateSync(Buffer.concat(chunks));
+    const bpp = colorType === 6 ? 4 : 2;           // octets par pixel
+    const stride = width * bpp;
+    let prev = Buffer.alloc(stride);
+    let row = Buffer.alloc(stride);
+    for (let y = 0, o = 0; o < data.length; y++) {
+        const filter = data[o++];
+        for (let x = 0; x < stride; x++) {
+            const raw = data[o++];
+            const a = x >= bpp ? row[x - bpp] : 0;
+            const b = prev[x];
+            const c = x >= bpp ? prev[x - bpp] : 0;
+            let v;
+            switch (filter) {
+                case 1: v = raw + a; break;
+                case 2: v = raw + b; break;
+                case 3: v = raw + ((a + b) >> 1); break;
+                case 4: {
+                    const p = a + b - c;
+                    const pa = Math.abs(p - a), pb = Math.abs(p - b), pc = Math.abs(p - c);
+                    v = raw + (pa <= pb && pa <= pc ? a : pb <= pc ? b : c);
+                    break;
+                }
+                default: v = raw;
+            }
+            row[x] = v & 255;
+        }
+        for (let x = bpp - 1; x < stride; x += bpp) if (row[x] < 250) return true;
+        [prev, row] = [row, prev];
+    }
+    return false;
 }
 
 /* ── Version web (Mac uniquement, via sips intégré à macOS) ── */

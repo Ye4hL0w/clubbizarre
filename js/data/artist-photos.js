@@ -15,7 +15,7 @@ export const PHOTOS = {
     ],
     "bastoune_bellon": [
         {
-            "src": "bastoune.bellon.png",
+            "src": "_web/bastoune.bellon.jpg",
             "w": 1024,
             "h": 1024
         }
@@ -36,7 +36,7 @@ export const PHOTOS = {
     ],
     "helanova": [
         {
-            "src": "helanova.png",
+            "src": "_web/helanova.jpg",
             "w": 1024,
             "h": 1024
         }

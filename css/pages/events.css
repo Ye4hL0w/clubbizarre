@@ -1,0 +1,361 @@
+/* ============================================================
+   PAGE EVENTS — tracklist (js/pages/events.js)
+   ============================================================ */
+
+.events-hero {
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top, rgba(var(--color-gold-rgb), 0.1) 0%, var(--color-bg) 70%);
+    padding-top: 100px;
+    text-align: center;
+}
+
+.events-hero .hero-title {
+    font-size: clamp(2rem, 8vw, 4rem);
+}
+
+.events-hero .hero-subtitle {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+}
+
+.events-list {
+    padding-top: var(--space-md);
+}
+
+/* ── Tracklist ─────────────────────────────────────────────── */
+.tracklist {
+    list-style: none;
+    border-top: 1px solid var(--color-line-strong);
+}
+
+.track {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.5rem 8rem clamp(150px, 16vw, 230px) minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-xs);
+    border-bottom: 1px solid var(--color-line-strong);
+    color: var(--color-text);
+    text-decoration: none;
+    transition:
+        transform var(--dur-base) var(--ease-out-expo),
+        background-color var(--dur-fast) var(--ease-out-quart);
+}
+
+/* Filet doré qui se dessine sous la ligne survolée */
+.track::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+a.track:hover,
+a.track:focus-visible {
+    transform: translateX(14px);
+    background: rgba(var(--color-gold-rgb), 0.03);
+}
+
+a.track:hover::after,
+a.track:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.track__index {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.2em;
+}
+
+/* Grande date */
+.track__date {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.6rem;
+    align-items: end;
+    line-height: 1;
+}
+
+.track__day {
+    grid-row: span 2;
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    color: var(--color-gold);
+    letter-spacing: -0.02em;
+}
+
+.track__month {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.track__when {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.track__main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.track__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    transition: color var(--dur-fast) var(--ease-out-quart);
+}
+
+a.track:hover .track__title,
+a.track:focus-visible .track__title {
+    color: var(--color-gold);
+}
+
+.track__lineup {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    opacity: 0.85;
+}
+
+.track__place {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.track__side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.track__price {
+    font-weight: var(--fw-semibold);
+}
+
+.track__status {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.track__status--hot,
+.track__status--off {
+    color: var(--color-red);
+}
+
+/* Lien billets : pastille dorée, mise en avant */
+.track__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+    background: var(--color-gold);
+    color: var(--color-bg);
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.track__cta svg {
+    transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+a.track:hover .track__cta svg {
+    transform: translate(3px, -3px);
+}
+
+.track--off {
+    opacity: 0.5;
+}
+
+.track--off .track__cta {
+    background: transparent;
+    border: 1px solid var(--color-line-strong);
+    color: var(--color-text-muted);
+}
+
+/* Bannière de l'événement : toujours visible, entre la date et le titre */
+.track__index  { order: 1; }
+.track__date   { order: 2; }
+.track__banner { order: 3; }
+.track__main   { order: 4; }
+.track__side   { order: 5; }
+.track__cta    { order: 6; }
+
+.track__banner {
+    display: block;
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-line);
+}
+
+.track__banner img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur-slow) var(--ease-out-expo);
+}
+
+a.track:hover .track__banner img,
+a.track:focus-visible .track__banner img {
+    transform: scale(1.06);
+}
+
+/* Sans affiche : cartouche sobre aux couleurs de la DA */
+.track__banner-empty {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(var(--color-gold-rgb), 0.6);
+}
+
+/* ── Message vide + bouton Shotgun ─────────────────────────── */
+.events-empty {
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: var(--space-lg) 0 var(--space-md);
+}
+
+.events-cta {
+    text-align: center;
+    margin-top: var(--space-lg);
+}
+
+/* Chargement */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 4rem;
+}
+
+.loading-spinner::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(var(--color-gold-rgb), 0.2);
+    border-top-color: var(--color-gold);
+    border-radius: 50%;
+    animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Mobile ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .track__banner {
+        order: 0;
+        grid-column: 1 / -1;
+    }
+
+    .track {
+        grid-template-columns: 4.8rem minmax(0, 1fr);
+        gap: var(--space-sm);
+        padding: var(--space-md) 0;
+    }
+
+    .track__index {
+        display: none;
+    }
+
+    .track__title {
+        font-size: 0.78rem;
+        letter-spacing: 0.02em;
+    }
+
+    /* Date empilée (jour, mois, heure) : elle tient dans sa colonne
+       au lieu de déborder sur le line-up */
+    .track__date {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+        align-self: start;
+    }
+
+    .track__day {
+        font-size: 2.2rem;
+    }
+
+    .track__month {
+        font-size: 0.7rem;
+    }
+
+    .track__when {
+        font-size: 0.62rem;
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+    }
+
+    .track__lineup {
+        font-size: 0.8rem;
+    }
+
+    .track__side {
+        grid-column: 2;
+        flex-direction: row;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+
+    .track__cta {
+        grid-column: 1 / -1;
+        justify-content: center;
+    }
+
+    a.track:hover,
+    a.track:focus-visible {
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    a.track:hover,
+    a.track:focus-visible {
+        transform: none;
+    }
+}

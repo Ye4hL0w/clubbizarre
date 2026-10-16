@@ -1,226 +1,153 @@
-const ORGANIZER_ID = '241189';
-const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJJZCI6NjM1NjYsIm9yZ2FuaXplcklkIjoyNDExODksImZvcmVzdFVzZXJFbWFpbCI6bnVsbCwiaWF0IjoxNzc3OTgzNzUzfQ.Y2D0ovEi3xUzHBATT4QeuR0asuS7adgor3KUhAUWRuM';
+/* ============================================================
+   PAGE EVENTS — liste façon "tracklist"
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchEvents();
+   Sources : événements publics Shotgun (API) + événements ajoutés
+   à la main dans js/data/events.js, triés par date.
+   - Chaque ligne : grande date, titre, line-up, lieu, prix, lien billets.
+   - La bannière de l'événement est toujours visible dans la ligne.
+   - Survol / focus : la ligne glisse, un filet doré la souligne et la
+     bannière s'anime légèrement (rien n'est caché sans survol).
+   ============================================================ */
+
+import { SHOTGUN, MANUAL_EVENTS } from '../data/events.js';
+import { revealIn } from '../core/reveal.js';
+import { pageEntered } from '../core/transitions.js';
+
+const container = document.getElementById('events-container');
+const TZ = 'Europe/Paris';
+
+load().then((events) => {
+    render(events);
+    pageEntered.then(() => revealIn(container));
+    window.CB?.refreshMagnetic?.(container.parentElement);
 });
 
-async function fetchEvents() {
-    const container = document.getElementById('events-container');
+/* ── Données ─────────────────────────────────────────────────── */
 
+async function load() {
+    let fromShotgun = [];
     try {
-        const response = await fetch(`https://smartboard-api.shotgun.live/api/shotgun/organizers/${ORGANIZER_ID}/events?key=${TOKEN}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`API Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        let events = data.data || [];
-
-        // Filtrer uniquement les événements privés/cachés
-        events = events.filter(event => {
-            // Exclure les événements privés ou cachés
-            if (event.visibility === 'private' || event.visibility === 'hidden' || event.status === 'private' || event.isPrivate === true) {
-                return false;
-            }
-            return true;
-        });
-
-        if (events.length === 0) {
-            container.innerHTML = `
-                <div class="error-message" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); color: var(--text-secondary);">
-                    <p>Aucun événement disponible pour le moment.</p>
-                </div>
-            `;
-            return;
-        }
-
-        renderEvents(events, container);
-
-    } catch (error) {
-        console.error('Erreur lors de la récupération des événements:', error);
-        
-        // En cas d'erreur réseau, on affiche des mocks pour illustrer la DA
-        renderMockEvents(container);
+        const url = `https://smartboard-api.shotgun.live/api/shotgun/organizers/${SHOTGUN.organizerId}/events?key=${SHOTGUN.key}`;
+        const res = await fetch(url, { headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(`API Shotgun : ${res.status}`);
+        const json = await res.json();
+        fromShotgun = (json.data || [])
+            .filter((e) => !['private', 'hidden'].includes(e.visibility) && e.isPrivate !== true)
+            .map(fromApi);
+    } catch (err) {
+        console.warn('[CB] Événements Shotgun indisponibles, seuls les événements manuels sont affichés.', err);
+        container.dataset.error = '1';
     }
+
+    const now = Date.now();
+    return [...fromShotgun, ...MANUAL_EVENTS.map(fromManual)]
+        .filter((e) => !e.date || e.date.getTime() > now - 12 * 3600e3)   // passés depuis +12 h : masqués
+        .sort((a, b) => (a.date?.getTime() ?? Infinity) - (b.date?.getTime() ?? Infinity));
 }
 
-function renderEvents(events, container) {
-    let html = '<div class="events-grid">';
-
-    events.forEach(event => {
-        const title = event.name || 'Événement Club Bizarre';
-        const date = event.startTime;
-        const formattedDate = date ? new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' }) : 'Date à venir';
-        
-        let locationName = 'Lieu secret';
-        if (event.geolocation) {
-            const parts = [];
-            if (event.geolocation.street) parts.push(event.geolocation.street);
-            if (event.geolocation.city) parts.push(event.geolocation.city);
-            if (parts.length > 0) locationName = parts.join(', ');
-        }
-        
-        const imageUrl = event.coverUrl || event.coverThumbnailUrl || '../logo.png';
-        const shotgunUrl = event.url || `https://shotgun.live/events/${event.slug || event.id || ''}`;
-
-        const genres = event.genres ? event.genres.map(g => g.name) : [];
-        const artists = event.artists ? event.artists.map(a => a.name).join(', ') : '';
-        const ticketsLeft = event.leftTicketsCount !== undefined ? event.leftTicketsCount : null;
-        const isCancelled = !!(event.cancelledAt || event.canceledAt);
-        
-        let lowestPrice = null;
-        if (event.deals && event.deals.length > 0) {
-            const prices = event.deals.map(d => d.price).filter(p => p !== undefined && p !== null);
-            if (prices.length > 0) {
-                // Minimum 5.99€
-                lowestPrice = Math.max(Math.min(...prices), 5.99);
-            }
-        }
-
-        html += createEventCardHtml({
-            title,
-            date: formattedDate,
-            location: locationName,
-            imageUrl,
-            shotgunUrl,
-            genres,
-            artists,
-            ticketsLeft,
-            lowestPrice,
-            isCancelled
-        });
-    });
-
-    html += '</div>';
-    container.innerHTML = html;
-    // Boutons injectés : on les rend magnétiques (js/core/magnetic.js).
-    window.CB?.refreshMagnetic?.(container);
+/** Format commun à partir d'un événement de l'API Shotgun. */
+function fromApi(e) {
+    const prices = (e.deals || []).map((d) => d.price).filter((p) => p != null);
+    const geo = e.geolocation || {};
+    return {
+        title: e.name || 'Club Bizarre',
+        date: e.startTime ? new Date(e.startTime) : null,
+        venue: geo.venue || geo.name || geo.street || '',
+        city: geo.city || '',
+        url: e.url || `https://shotgun.live/events/${e.slug || e.id || ''}`,
+        image: e.coverUrl || e.coverThumbnailUrl || '',
+        artists: (e.artists || []).map((a) => a.name),
+        genres: (e.genres || []).map((g) => g.name),
+        price: prices.length ? Math.max(Math.min(...prices), SHOTGUN.minPrice) : null,
+        ticketsLeft: e.leftTicketsCount ?? null,
+        cancelled: Boolean(e.cancelledAt || e.canceledAt),
+    };
 }
 
-function renderMockEvents(container) {
-    const mockEvents = [
-        {
-            title: "CLUB BIZARRE : THE AWAKENING",
-            date: "samedi 24 octobre 2026 à 23:00",
-            location: "Nouveau Casino, Paris",
-            imageUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1000&auto=format&fit=crop",
-            shotgunUrl: "https://shotgun.live/",
-            genres: ["electro", "techno"],
-            artists: "Marcolino, DJ TREE, Gabbs",
-            ticketsLeft: 124,
-            lowestPrice: 15
-        },
-        {
-            title: "Bizarre Session #04",
-            date: "vendredi 13 novembre 2026 à 22:00",
-            location: "Le Rex Club, Paris",
-            imageUrl: "https://images.unsplash.com/photo-1545128485-c400e7702796?q=80&w=1000&auto=format&fit=crop",
-            shotgunUrl: "https://shotgun.live/",
-            genres: ["house", "minimal"],
-            artists: "Alex Dima, Cristian Sarde",
-            ticketsLeft: 42,
-            lowestPrice: 12.5
-        },
-        {
-            title: "CLUB BIZARRE x HELΛNOVA",
-            date: "jeudi 31 décembre 2026 à 23:59",
-            location: "Secret Location",
-            imageUrl: "https://images.unsplash.com/photo-1574390353081-35b86ea6143f?q=80&w=1000&auto=format&fit=crop",
-            shotgunUrl: "https://shotgun.live/",
-            genres: ["acid", "electro"],
-            artists: "HELΛNOVA, 90CYNOMEN",
-            ticketsLeft: 0,
-            lowestPrice: 20
-        }
-    ];
-
-    let html = `
-        <div style="margin-bottom: 2rem; text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
-            <p><i>Note: Connexion à l'API Shotgun en cours. Voici un aperçu du rendu.</i></p>
-        </div>
-        <div class="events-grid">
-    `;
-
-    mockEvents.forEach(event => {
-        html += createEventCardHtml(event);
-    });
-
-    html += '</div>';
-    container.innerHTML = html;
-    // Boutons injectés : on les rend magnétiques (js/core/magnetic.js).
-    window.CB?.refreshMagnetic?.(container);
+/** Format commun à partir d'un événement saisi dans js/data/events.js. */
+function fromManual(e) {
+    return {
+        title: e.title || 'Club Bizarre',
+        date: e.date ? new Date(e.date) : null,
+        venue: e.venue || '',
+        city: e.city || '',
+        url: e.url || SHOTGUN.pageUrl,
+        image: e.image || '',
+        artists: e.artists || [],
+        genres: e.genres || [],
+        price: e.price ?? null,
+        ticketsLeft: e.soldOut ? 0 : null,
+        cancelled: Boolean(e.cancelled),
+    };
 }
 
-function createEventCardHtml({ title, date, location, imageUrl, shotgunUrl, genres, artists, ticketsLeft, lowestPrice, isCancelled }) {
-    let tagsHtml = '';
-    if (genres && genres.length > 0) {
-        tagsHtml = '<div class="event-tags">' + genres.map(g => `<span class="event-tag">${g}</span>`).join('') + '</div>';
+/* ── Rendu ───────────────────────────────────────────────────── */
+
+const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = (date, opts) => new Intl.DateTimeFormat('fr-FR', { timeZone: TZ, ...opts }).format(date);
+
+function render(events) {
+    const cta = `
+        <div class="events-cta" data-reveal="up">
+            <a class="btn primary-btn" href="${SHOTGUN.pageUrl}" target="_blank" rel="noopener noreferrer" data-cursor="SHOTGUN">
+                Tous nos événements sur Shotgun
+            </a>
+        </div>`;
+
+    if (!events.length) {
+        const msg = container.dataset.error
+            ? 'La billetterie est momentanément indisponible.'
+            : 'Aucun événement annoncé pour le moment. La prochaine date arrive bientôt.';
+        container.innerHTML = `<p class="events-empty" data-reveal="up">${msg}</p>${cta}`;
+        return;
     }
 
-    let artistsHtml = '';
-    if (artists) {
-        artistsHtml = `<div class="event-artists">🎵 ${artists}</div>`;
-    }
+    container.innerHTML = `
+        <ol class="tracklist" data-reveal="stagger" aria-label="Prochains événements">
+            ${events.map(row).join('')}
+        </ol>
+        ${cta}`;
+}
 
-    let infoRowHtml = '';
-    if (isCancelled) {
-        infoRowHtml = `
-            <div class="event-info-row">
-                <span style="color: var(--accent-red); font-weight: bold; text-transform: uppercase;">Événement Annulé</span>
-            </div>
-        `;
-    } else if (lowestPrice !== null || ticketsLeft !== null) {
-        let priceStr = lowestPrice !== null ? `À partir de ${lowestPrice.toString().replace('.', ',')}€` : '';
-        let ticketsStr = '';
-        
-        if (ticketsLeft !== null) {
-            if (ticketsLeft === 0) ticketsStr = '<span style="color: var(--text-secondary)">Sold Out</span>';
-            else if (ticketsLeft < 50) ticketsStr = `<span class="event-tickets">Plus que ${ticketsLeft} places !</span>`;
-            else ticketsStr = `${ticketsLeft} places restantes`;
-        }
+function row(e, i) {
+    const date = e.date
+        ? `<span class="track__day">${fmt(e.date, { day: '2-digit' })}</span>
+           <span class="track__month">${fmt(e.date, { month: 'short' }).replace('.', '')}</span>
+           <span class="track__when">${fmt(e.date, { weekday: 'short' }).replace('.', '')} · ${fmt(e.date, { hour: '2-digit', minute: '2-digit' })}</span>`
+        : '<span class="track__day">—</span><span class="track__month">À venir</span>';
 
-        infoRowHtml = `
-            <div class="event-info-row">
-                <span class="event-price">${priceStr}</span>
-                <span>${ticketsStr}</span>
-            </div>
-        `;
-    }
+    const place = [e.venue, e.city].filter(Boolean).join(', ') || 'Lieu dévoilé bientôt';
+    const lineup = e.artists.length ? e.artists.join(' · ') : '';
 
-    let buttonText = 'Prendre sa place';
-    if (isCancelled) buttonText = 'Annulé';
-    else if (ticketsLeft === 0) buttonText = 'Liste d\'attente';
+    let status = '';
+    if (e.cancelled) status = '<span class="track__status track__status--off">Annulé</span>';
+    else if (e.ticketsLeft === 0) status = '<span class="track__status">Complet</span>';
+    else if (e.ticketsLeft !== null && e.ticketsLeft < 50) status = `<span class="track__status track__status--hot">Plus que ${e.ticketsLeft} places</span>`;
+    const price = !e.cancelled && e.price != null ? `<span class="track__price">dès ${String(e.price).replace('.', ',')} €</span>` : '';
+    const action = e.cancelled ? 'Annulé' : e.ticketsLeft === 0 ? 'Liste d’attente' : 'Billets';
 
-    return `
-        <div class="event-card ${isCancelled ? 'cancelled-event' : ''}" style="${isCancelled ? 'opacity: 0.7;' : ''}">
-            <img src="${imageUrl}" alt="${title}" class="event-image" onerror="this.src='../logo.png'">
-            <div class="event-content">
-                ${tagsHtml}
-                <div class="event-date">${date}</div>
-                <h3 class="event-title">${title}</h3>
-                ${artistsHtml}
-                <div class="event-location" style="margin-bottom: 1rem;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-red);">
-                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                    ${location}
-                </div>
-                ${infoRowHtml}
-                <div class="event-footer">
-                    <a href="${shotgunUrl}" target="_blank" rel="noopener noreferrer" class="buy-btn" data-cursor="BILLETS" ${isCancelled ? 'style="background: #333; color: #888; cursor: not-allowed;" onclick="event.preventDefault();"' : ''}>
-                        ${buttonText}
-                    </a>
-                </div>
-            </div>
-        </div>
-    `;
+    const inner = `
+        <span class="track__index" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
+        <span class="track__date">${date}</span>
+        <span class="track__main">
+            <span class="track__title">${esc(e.title)}</span>
+            ${lineup ? `<span class="track__lineup">${esc(lineup)}</span>` : ''}
+            <span class="track__place">${esc(place)}</span>
+        </span>
+        <span class="track__side">${price}${status}</span>
+        <span class="track__cta" aria-hidden="true">${action}
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </span>
+        <span class="track__banner" aria-hidden="true">
+            ${e.image
+                ? `<img src="${esc(e.image)}" alt="" loading="lazy" decoding="async">`
+                : '<span class="track__banner-empty">Club Bizarre</span>'}
+        </span>`;
+
+    // Ligne entière cliquable (sauf événement annulé)
+    return e.cancelled
+        ? `<li class="track track--off" aria-disabled="true">${inner}</li>`
+        : `<li><a class="track" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer"
+               data-cursor="${action.toUpperCase()}"
+               aria-label="${esc(`${e.title}, ${e.date ? fmt(e.date, { dateStyle: 'full', timeStyle: 'short' }) : 'date à venir'}, ${place} — ${action}`)}">${inner}</a></li>`;
 }

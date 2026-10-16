@@ -130,7 +130,9 @@ function samePage(url) {
 
 function closeMobileMenu() {
     document.querySelector('.nav-links.active')?.classList.remove('active');
-    document.querySelector('.hamburger.active')?.classList.remove('active');
+    const burger = document.querySelector('.hamburger.active');
+    burger?.classList.remove('active');
+    burger?.setAttribute('aria-expanded', 'false');
 }
 
 /* ── Rideau ─────────────────────────────────────────────────── */
