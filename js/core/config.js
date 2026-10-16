@@ -203,7 +203,8 @@ export const MOTION = {
         leaveDuration: 0.9,
         // Durée du dévoilement à l'arrivée (s).
         enterDuration: 1.1,
-        // Décalage entre la nappe or et la nappe noire (s).
-        layerDelay: 0.12,
+        // Décalage entre la nappe or et la nappe noire (s) : c'est l'épaisseur
+        // de la bande dorée visible (plus petit = bande plus fine).
+        layerDelay: 0.05,
     },
 };

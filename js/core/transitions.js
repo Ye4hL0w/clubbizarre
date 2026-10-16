@@ -21,13 +21,13 @@ const PATHS = {
     // Montée depuis le bas : le centre mène, les bords suivent.
     leave: {
         start: 'M0,100 C30,100 70,100 100,100 L100,100 L0,100 Z',
-        mid: 'M0,55 C30,15 70,15 100,55 L100,100 L0,100 Z',
+        mid: 'M0,52 C30,32 70,32 100,52 L100,100 L0,100 Z',
         end: 'M0,0 C30,0 70,0 100,0 L100,100 L0,100 Z',
     },
     // Retrait vers le haut : le bas coule comme une goutte qui se détache.
     enter: {
         start: 'M0,0 L100,0 L100,100 C70,100 30,100 0,100 Z',
-        mid: 'M0,0 L100,0 L100,35 C70,80 30,80 0,35 Z',
+        mid: 'M0,0 L100,0 L100,38 C70,58 30,58 0,38 Z',
         end: 'M0,0 L100,0 L100,0 C70,0 30,0 0,0 Z',
     },
 };
