@@ -219,3 +219,59 @@
     color: var(--color-text);
     text-shadow: none;
 }
+
+/* ── Team sur mobile : cercles plus petits pour voir plusieurs artistes ── */
+/* Le carrousel reste le même (structure, boucle, design) ; seules les
+   dimensions changent sous 768 px. */
+@media (max-width: 768px) {
+    .team-marquee {
+        gap: 1.6rem;
+        padding-left: 1.6rem;
+    }
+
+    .team-bubble {
+        min-width: 0;
+        width: 108px;
+        gap: 0.7rem;
+    }
+
+    .bubble-img {
+        width: 108px;
+        height: 108px;
+        border-width: 2px;
+    }
+
+    .bubble-name {
+        font-size: 0.72rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+    }
+
+    .bubble-role {
+        font-size: 0.62rem;
+        letter-spacing: 2px;
+    }
+
+    .team-marquee-container {
+        padding: 2rem 0;
+    }
+}
+
+@media (max-width: 380px) {
+    .team-marquee {
+        gap: 1.2rem;
+    }
+
+    .team-bubble,
+    .bubble-img {
+        width: 92px;
+    }
+
+    .bubble-img {
+        height: 92px;
+    }
+
+    .bubble-name {
+        font-size: 0.64rem;
+    }
+}
