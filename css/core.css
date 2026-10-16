@@ -1,0 +1,29 @@
+/* ============================================================
+   CORE — styles techniques partagés (pas de design ici)
+   ============================================================ */
+
+/* ── Lenis (repris de lenis@1.3.11/dist/lenis.css) ───────────── */
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+/* style.css active scroll-behavior: smooth, qui entre en conflit
+   avec Lenis : on le neutralise uniquement quand Lenis tourne. */
+html.lenis {
+    scroll-behavior: auto !important;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+    overflow: clip;
+}
+
+.lenis [data-lenis-prevent],
+.lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+    pointer-events: none;
+}

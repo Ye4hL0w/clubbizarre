@@ -1,0 +1,86 @@
+/* ============================================================
+   CLUB BIZARRE — DESIGN TOKENS
+   Source unique de vérité pour la DA. Chargé AVANT style.css.
+   Règle : aucune nouvelle couleur ni police sans validation.
+   ============================================================ */
+
+:root {
+    /* ── Palette ───────────────────────────────────────────────
+       Valeurs reprises à l'identique du site existant, et cohérentes
+       avec le logo : vinyle noir, anneau rouge, lettrage or. */
+    --color-black: #000000;          /* fond de l'intro vidéo / du logo   */
+    --color-bg: #050505;             /* fond principal                    */
+    --color-bg-alt: #0a0a0a;         /* sections alternées (team, contact) */
+    --color-text: #ffffff;
+    --color-text-muted: #aaaaaa;
+    --color-gold: #D4AF37;           /* lettrage du logo, accents         */
+    --color-red: #A50000;            /* anneau du logo, glows             */
+
+    /* Variantes RGB pour les rgba() (ex. rgba(var(--color-gold-rgb), .3)) */
+    --color-gold-rgb: 212, 175, 55;
+    --color-red-rgb: 165, 0, 0;
+    --color-bg-rgb: 5, 5, 5;
+
+    /* Traits et voiles utilisés partout dans le CSS actuel */
+    --color-line: rgba(255, 255, 255, 0.05);
+    --color-line-strong: rgba(255, 255, 255, 0.1);
+
+    /* ── Typographie ───────────────────────────────────────────
+       Display = police du titre "CLUB BIZARRE" du hero (Syncopate). */
+    --font-display: 'Syncopate', sans-serif;
+    --font-text: 'Outfit', sans-serif;
+
+    --fw-light: 300;
+    --fw-regular: 400;
+    --fw-semibold: 600;
+    --fw-bold: 800;
+
+    --tracking-tight: 2px;
+    --tracking-wide: 5px;
+    --tracking-xwide: 8px;
+
+    /* ── Espacements (échelle 8 pt) ──────────────────────────── */
+    --space-2xs: 0.25rem;
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 2rem;
+    --space-lg: 4rem;
+    --space-xl: 8rem;
+    --container-max: 1200px;
+    --gutter: 2rem;
+
+    /* ── Motion ────────────────────────────────────────────────
+       Mouvements lents, fluides, intentionnels. */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);    /* easing actuel du site */
+    --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+    --ease-in-out-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+    --dur-fast: 0.4s;
+    --dur-base: 0.8s;
+    --dur-slow: 1.2s;
+    --dur-xslow: 2s;
+
+    /* ── Profondeur ──────────────────────────────────────────── */
+    --z-base: 1;
+    --z-nav: 1000;
+    --z-overlay: 9999;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --gutter: 1.2rem;
+    }
+}
+
+/* Réglage global : si l'utilisateur réduit les animations, les durées
+   des futurs effets tombent à ~0 (les animations existantes ne sont
+   pas encore touchées à cette étape). */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --dur-fast: 0.01s;
+        --dur-base: 0.01s;
+        --dur-slow: 0.01s;
+        --dur-xslow: 0.01s;
+    }
+}

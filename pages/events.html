@@ -8,7 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../css/tokens.css">
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" type="image/png" href="../logo.png">
     <style>
         .events-hero {
@@ -195,6 +197,15 @@
             margin-top: 2rem;
         }
     </style>
+    <!-- Three.js : déclaré ici, chargé uniquement quand un module l'importe -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.min.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+      }
+    }
+    </script>
 </head>
 
 <body>
@@ -233,8 +244,16 @@
         <p>&copy; 2026 Club Bizarre. All rights reserved.</p>
     </footer>
 
-    <script src="../script.js"></script>
-    <script src="events.js"></script>
+    <!-- Motion stack (versions figées + SRI) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"
+        integrity="sha384-HOvlOYPIs/zjoIkWUGXkVmXsjr8GuZLV+Q+rcPwmJOVZVpvTSXQChiN4t9Euv9Vc" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"
+        integrity="sha384-P8VzCVnT9NBUkMrpcIZrJbA7EBjJvh/fJS6PmP+4nLIM284DtsImIv8D0fFjIkeh" crossorigin="anonymous" defer></script>
+    <script src="https://unpkg.com/lenis@1.3.11/dist/lenis.min.js"
+        integrity="sha384-kdY9hFBPoAPpxcrLihsO3APivFOxtQwSeYdzFD5CIIfLurwhdMrEHhkQxZJDkxgk" crossorigin="anonymous" defer></script>
+    <script src="../js/legacy/script.js"></script>
+    <script type="module" src="../js/core/main.js"></script>
+    <script src="../js/pages/events.js"></script>
 </body>
 
 </html>

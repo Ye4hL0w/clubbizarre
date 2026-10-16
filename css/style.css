@@ -1,13 +1,15 @@
+/* Anciennes variables, conservées comme alias des tokens (css/tokens.css)
+   pour ne rien casser. Pour le nouveau code, utiliser directement --color-*. */
 :root {
-    --bg-primary: #050505;
-    --bg-secondary: #0a0a0a;
-    --text-primary: #ffffff;
-    --text-secondary: #aaaaaa;
-    --accent-gold: #D4AF37;
-    --accent-red: #A50000;
-    --font-heading: 'Syncopate', sans-serif;
-    --font-body: 'Outfit', sans-serif;
-    --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    --bg-primary: var(--color-bg);
+    --bg-secondary: var(--color-bg-alt);
+    --text-primary: var(--color-text);
+    --text-secondary: var(--color-text-muted);
+    --accent-gold: var(--color-gold);
+    --accent-red: var(--color-red);
+    --font-heading: var(--font-display);
+    --font-body: var(--font-text);
+    --transition: all var(--dur-fast) var(--ease-out-quart);
 }
 
 * {

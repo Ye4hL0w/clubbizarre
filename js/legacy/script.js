@@ -36,6 +36,19 @@
     }
 })();
 
+// Défilement doux : passe par Lenis (js/core/main.js) s'il est actif,
+// sinon scroll natif comme avant.
+function smoothScrollTo(targetElement) {
+    if (window.CB && window.CB.scrollTo) {
+        window.CB.scrollTo(targetElement, { offset: -80 });
+        return;
+    }
+    window.scrollTo({
+        top: targetElement.offsetTop - 80,
+        behavior: 'smooth'
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Smooth Scrolling for Anchor Links (Handles cross-page correctly)
@@ -50,23 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (targetId && targetId !== '#undefined') {
                     e.preventDefault();
                     const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
+                    if (targetElement) smoothScrollTo(targetElement);
                 }
             } else if (href.startsWith('#')) {
                 // Lien d'ancre classique sur la même page
                 e.preventDefault();
                 const targetElement = document.querySelector(href);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
+                if (targetElement) smoothScrollTo(targetElement);
             }
 
             // Close mobile menu if open
