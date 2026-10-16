@@ -213,37 +213,9 @@
     }
 }
 
-/* ── Contact : l'email roule lettre par lettre au survol ───── */
-.contact-email.is-split:hover {
+/* ── Contact : l'email roule lettre par lettre (css/components/roll.css) ── */
+.contact-email.roll-host:hover {
     /* la copie dorée remplace l'ancien changement de couleur global */
     color: var(--color-text);
     text-shadow: none;
-}
-
-.email-char {
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: bottom;
-    line-height: 1.15;
-}
-
-.email-char__inner {
-    position: relative;
-    display: inline-block;
-    transition: transform var(--dur-base) var(--ease-out-expo);
-    transition-delay: calc(var(--i, 0) * 12ms);
-}
-
-/* Copie dorée placée juste sous chaque lettre */
-.email-char__inner::after {
-    content: attr(data-char);
-    position: absolute;
-    left: 0;
-    top: 100%;
-    color: var(--color-gold);
-}
-
-.contact-email.is-split:hover .email-char__inner,
-.contact-email.is-split:focus-visible .email-char__inner {
-    transform: translateY(-100%);
 }

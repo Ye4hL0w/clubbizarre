@@ -20,33 +20,50 @@ import { prefersReducedMotion } from './utils.js';
 import { splitChars, splitWords } from './split.js';
 import { pageEntered } from './transitions.js';
 
+const done = new WeakSet(); // éléments déjà pris en charge
+let ready = false;
+
 export function initReveals() {
     const { gsap, ScrollTrigger } = window;
     if (!gsap || !ScrollTrigger) return;
     // On attend l'ouverture du rideau : sinon les reveals visibles d'emblée
     // se joueraient cachés derrière lui.
-    pageEntered.then(() => setup(gsap, ScrollTrigger));
+    pageEntered.then(() => {
+        document.documentElement.classList.add('has-reveal');
+        ready = true;
+        revealIn(document);
+    });
 }
 
-function setup(gsap, ScrollTrigger) {
-    const root = document.documentElement;
-    root.classList.add('has-reveal');
+/**
+ * Applique les reveals au contenu de `root`. Peut être rappelé après
+ * une injection de contenu (ex. pages artistes) : chaque élément n'est
+ * traité qu'une fois. Sans effet tant que la page n'est pas entrée.
+ */
+export function revealIn(root = document) {
+    const { gsap } = window;
+    if (!ready || !gsap) return;
+    const pick = (selector) => [...root.querySelectorAll(selector)].filter((el) => {
+        if (done.has(el)) return false;
+        done.add(el);
+        return true;
+    });
 
     if (prefersReducedMotion()) {
         // Tout est visible d'emblée, filets des titres compris.
-        document.querySelectorAll('.section-title').forEach((t) => t.classList.add('is-revealed'));
+        pick('.section-title').forEach((t) => t.classList.add('is-revealed'));
         return;
     }
 
     const R = MOTION.reveal;
 
-    document.querySelectorAll('.section-title').forEach((el) => revealTitle(el, gsap, R));
-    document.querySelectorAll('[data-reveal="up"]').forEach((el) => revealUp([el], el, gsap, R));
-    document.querySelectorAll('[data-reveal="stagger"]').forEach((el) => revealUp([...el.children], el, gsap, R));
-    document.querySelectorAll('[data-reveal="words"]').forEach((el) => revealWords(el, gsap, R));
+    pick('.section-title').forEach((el) => revealTitle(el, gsap, R));
+    pick('[data-reveal="up"]').forEach((el) => revealUp([el], el, gsap, R));
+    pick('[data-reveal="stagger"]').forEach((el) => revealUp([...el.children], el, gsap, R));
+    pick('[data-reveal="words"]').forEach((el) => revealWords(el, gsap, R));
 
     // Sections sans reveal explicite : leurs blocs montent, échelonnés.
-    document.querySelectorAll('.fade-in-section').forEach((section) => {
+    pick('.fade-in-section').forEach((section) => {
         if (section.id === 'hero' || section.querySelector('[data-reveal]')) return;
         const box = section.classList.contains('container')
             ? section

@@ -10,12 +10,15 @@
             if (sessionStorage.getItem('cb:page-transition') &&
                 !matchMedia('(prefers-reduced-motion: reduce)').matches) r.classList.add('pt-enter');
         } catch (e) {}
+        r.classList.add('hero-pending');
         // Filet de sécurité si les modules ne se chargent pas.
         setTimeout(function () { r.classList.remove('pt-enter', 'hero-pending'); }, 3500);
     })(document.documentElement);
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>90Cynomen | Club Bizarre</title>
+    <meta name="description" content="90cynomen (DJ) — artiste du collectif de musique électronique niçois Club Bizarre.">
+    <link rel="canonical" href="https://clubbizarre.vercel.app/pages/90cynomen.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
@@ -27,6 +30,8 @@
     <link rel="stylesheet" href="../css/components/cursor.css">
     <link rel="stylesheet" href="../css/components/reveal.css">
     <link rel="stylesheet" href="../css/components/socials.css">
+    <link rel="stylesheet" href="../css/components/roll.css">
+    <link rel="stylesheet" href="../css/pages/artist.css">
     <link rel="icon" type="image/png" href="../logo.png">
     <!-- Three.js : déclaré ici, chargé uniquement quand un module l'importe -->
     <script type="importmap">
@@ -38,12 +43,13 @@
     }
     </script>
 </head>
-<body>
+<body data-artist="90cynomen">
     <nav class="navbar">
         <a href="../index.html" class="nav-logo" data-cursor="RETOUR">CLUB BIZARRE</a>
         <ul class="nav-links">
             <li><a href="../index.html#about">About</a></li>
             <li><a href="../index.html#team">Team</a></li>
+            <li><a href="events.html">Events</a></li>
             <li><a href="media.html">Media</a></li>
             <li><a href="../index.html#contact">Contact</a></li>
         </ul>
@@ -51,26 +57,25 @@
             <span></span><span></span><span></span>
         </div>
     </nav>
-    <main>
-        <section class="member-profile fade-in-section">
-            <div class="container">
-                <div class="profile-header">
-                    <div class="profile-avatar">
-                        <img src="../media/team/90cynomen.png" alt="90CYNOMEN">
-                    </div>
-                    <h1 class="hero-title">90cynomen</h1>
-                    <p class="hero-subtitle">DJ</p>
-                    <div class="socials" style="margin-top: 2rem;">
-                        <a href="https://www.instagram.com/cynthia.lng/" target="_blank" rel="noopener noreferrer" class="social-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-                        </a>
-                    </div>
-                </div>
-                <div class="profile-content" style="margin-top: 4rem; text-align: center;">
-                    <p style="color: var(--text-secondary); font-size: 1.2rem; max-width: 800px; margin: 0 auto;">Contenu à venir...</p>
-                </div>
+    <main class="artist">
+        <!-- Hero : nom et rôle en dur (référencement) ; le reste de la page est
+             construit par js/pages/artist.js à partir de js/data/. -->
+        <section class="artist-hero">
+            <div class="artist-hero__scene" aria-hidden="true"></div>
+            <div class="container artist-hero__inner">
+                <h1 class="artist-hero__name">90cynomen</h1>
+                <p class="artist-hero__role">DJ</p>
+                <div class="artist-hero__line" aria-hidden="true"></div>
             </div>
         </section>
+        <noscript>
+            <section class="artist-intro">
+                <div class="container artist-intro__grid">
+                    <img src="../media/team/90cynomen.png" alt="Portrait de 90cynomen" style="max-width: 360px; width: 100%; border-radius: 4px;">
+                    <p><a class="artist-link" href="https://www.instagram.com/cynthia.lng/">Instagram</a></p>
+                </div>
+            </section>
+        </noscript>
     </main>
     <footer>
         <p>&copy; 2026 Club Bizarre. All rights reserved.</p>
@@ -84,5 +89,6 @@
         integrity="sha384-kdY9hFBPoAPpxcrLihsO3APivFOxtQwSeYdzFD5CIIfLurwhdMrEHhkQxZJDkxgk" crossorigin="anonymous" defer></script>
     <script src="../js/legacy/script.js"></script>
     <script type="module" src="../js/core/main.js"></script>
+    <script type="module" src="../js/pages/artist.js"></script>
 </body>
 </html>

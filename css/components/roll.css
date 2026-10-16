@@ -1,0 +1,31 @@
+/* ============================================================
+   TEXTE QUI ROULE AU SURVOL (js/core/roll.js)
+   ============================================================ */
+
+.roll-char {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    line-height: 1.15;
+}
+
+.roll-char__inner {
+    position: relative;
+    display: inline-block;
+    transition: transform var(--dur-base) var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 12ms);
+}
+
+/* Copie dorée placée juste sous chaque lettre */
+.roll-char__inner::after {
+    content: attr(data-char);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    color: var(--color-gold);
+}
+
+.roll-host:hover .roll-char__inner,
+.roll-host:focus-visible .roll-char__inner {
+    transform: translateY(-100%);
+}

@@ -1,0 +1,574 @@
+/* ============================================================
+   PAGES ARTISTES — template commun (js/pages/artist.js)
+   ============================================================ */
+
+.artist {
+    position: relative;
+}
+
+/* ── Hero ──────────────────────────────────────────────────── */
+.artist-hero {
+    position: relative;
+    min-height: 88vh;
+    min-height: 88svh;
+    display: flex;
+    align-items: flex-end;
+    padding: calc(7rem + var(--safe-top, 0px)) 0 var(--space-lg);
+    overflow: hidden;
+}
+
+/* Zone de fond : sobre pour l'instant, accueillera la scène WebGL
+   propre à chaque artiste (étape 6). */
+.artist-hero__scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse 70% 60% at 50% 0%, rgba(var(--color-red-rgb), 0.14) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 85% 100%, rgba(var(--color-gold-rgb), 0.05) 0%, transparent 70%),
+        var(--color-bg);
+}
+
+/* Fondu bas pour enchaîner sur la suite */
+.artist-hero__scene::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 30%;
+    background: linear-gradient(to bottom, transparent, var(--color-bg));
+}
+
+.artist-hero__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+}
+
+.artist-hero__name {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: clamp(2.6rem, 11vw, 10rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    /* même étirement et même dégradé que le titre de l'accueil */
+    display: inline-block;
+    transform: scaleX(1.12);
+    transform-origin: left center;
+    /* la mise en page ignore l'étirement : on réserve sa place pour que
+       le passage à la ligne se fasse avant de déborder */
+    max-width: calc(100% / 1.12);
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-text-muted) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Une fois découpé, chaque lettre porte le dégradé ; le titre ne doit plus
+   peindre le sien, sinon Chrome dessine des lettres fantômes pendant l'animation. */
+.artist-hero__name.is-split {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+}
+
+.artist-hero__name .char {
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-text-muted) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.artist-hero__role {
+    margin-top: var(--space-sm);
+    font-size: clamp(0.85rem, 2vw, 1.2rem);
+    font-weight: var(--fw-light);
+    letter-spacing: var(--tracking-xwide);
+    text-transform: uppercase;
+    color: var(--color-gold);
+}
+
+.artist-hero__line {
+    margin-top: var(--space-md);
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-red), var(--color-gold));
+}
+
+/* État avant l'entrée animée (classe posée par le script du <head>) */
+.hero-pending .artist-hero__inner > * {
+    opacity: 0;
+}
+
+/* ── Sections ──────────────────────────────────────────────── */
+.artist-section {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid var(--color-line);
+}
+
+.artist-label {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: var(--space-sm);
+}
+
+/* ── Portrait + bio ────────────────────────────────────────── */
+.artist-intro {
+    padding: var(--space-lg) 0 var(--space-xl);
+}
+
+.artist-intro__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--space-lg);
+    align-items: center;
+}
+
+.artist-portrait {
+    margin: 0;
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    justify-self: center;
+    transition: rotate var(--dur-base) var(--ease-out-expo);
+}
+
+.artist-portrait__inner {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--color-bg-alt);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+.artist-portrait__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    will-change: transform;
+}
+
+/* Liseré doré discret */
+.artist-portrait::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(var(--color-gold-rgb), 0.18);
+    pointer-events: none;
+}
+
+.artist-bio__text p {
+    font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+    font-weight: var(--fw-light);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    max-width: 38em;
+}
+
+.artist-bio__text p + p {
+    margin-top: var(--space-sm);
+}
+
+/* ── Placeholders ──────────────────────────────────────────── */
+.artist-placeholder,
+.gallery-item--placeholder {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    width: 100%;
+    height: 100%;
+    color: var(--color-text-muted);
+    background:
+        radial-gradient(circle at 50% 40%, rgba(var(--color-gold-rgb), 0.06), transparent 65%),
+        var(--color-bg-alt);
+    border: 1px solid var(--color-line-strong);
+    border-radius: 4px;
+}
+
+.artist-placeholder span {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: 3rem;
+    color: rgba(var(--color-gold-rgb), 0.5);
+}
+
+.artist-placeholder small,
+.gallery-item--placeholder span {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+}
+
+/* ── Galerie (masonry en colonnes) ─────────────────────────── */
+.gallery-grid {
+    columns: 3 280px;
+    column-gap: var(--space-md);
+}
+
+.gallery-item {
+    display: block;
+    width: 100%;
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    break-inside: avoid;
+    background: var(--color-bg-alt);
+    cursor: zoom-in;
+    position: relative;
+}
+
+.gallery-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.06);
+    transition:
+        opacity var(--dur-slow) var(--ease-out-quart),
+        transform var(--dur-xslow) var(--ease-out-expo);
+}
+
+.gallery-item img.is-loaded {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@media (hover: hover) {
+    .gallery-item:hover img.is-loaded {
+        transform: scale(1.05);
+    }
+}
+
+.gallery-item:focus-visible {
+    outline: 1px solid var(--color-gold);
+    outline-offset: 4px;
+}
+
+/* ── Sets ──────────────────────────────────────────────────── */
+.sets-list {
+    display: grid;
+    gap: var(--space-md);
+}
+
+.set-player iframe {
+    width: 100%;
+    height: 166px;
+    border: 0;
+    border-radius: 4px;
+}
+
+.sets-empty p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-sm);
+}
+
+/* ── Liens ─────────────────────────────────────────────────── */
+.artist-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.artist-link svg {
+    flex: none;
+    transition: transform var(--dur-base) var(--ease-out-expo), color var(--dur-fast);
+}
+
+.artist-link:hover svg,
+.artist-link:focus-visible svg {
+    color: var(--color-gold);
+    transform: translate(3px, -3px);
+}
+
+.artist-links__list {
+    display: grid;
+}
+
+/* Grandes lignes : filet qui se remplit d'or au survol */
+.artist-link--big {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-md) 0;
+    font-size: clamp(1.4rem, 4vw, 3rem);
+    font-weight: var(--fw-bold);
+    border-bottom: 1px solid var(--color-line-strong);
+}
+
+.artist-link--big::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.artist-link--big:hover::after,
+.artist-link--big:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.artist-link--big .artist-link__icon {
+    color: var(--color-gold);
+}
+
+.artist-link--big .artist-link__label {
+    flex: 1;
+}
+
+.artist-link--big .artist-link__arrow svg {
+    width: clamp(20px, 3vw, 32px);
+    height: auto;
+}
+
+/* ── Navigation entre artistes ─────────────────────────────── */
+.artist-nav {
+    padding: var(--space-xl) 0 var(--space-lg);
+    border-top: 1px solid var(--color-line);
+}
+
+.artist-nav__grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: var(--space-md);
+}
+
+.artist-nav__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+.artist-nav__link--next {
+    text-align: right;
+    align-items: flex-end;
+}
+
+.artist-nav__hint {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.artist-nav__hint svg {
+    width: 16px;
+    height: 16px;
+    transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.artist-nav__link--prev .artist-nav__hint svg {
+    transform: rotate(180deg);
+}
+
+.artist-nav__link--prev:hover .artist-nav__hint svg {
+    transform: rotate(180deg) translateX(4px);
+}
+
+.artist-nav__link--next:hover .artist-nav__hint svg {
+    transform: translateX(4px);
+}
+
+.artist-nav__name {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: clamp(1.1rem, 3.2vw, 2.4rem);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.artist-nav__back {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    text-decoration: none;
+    padding: 0.8rem 1.4rem;
+    border: 1px solid rgba(var(--color-gold-rgb), 0.5);
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: background var(--dur-fast), color var(--dur-fast);
+}
+
+.artist-nav__back:hover,
+.artist-nav__back:focus-visible {
+    background: var(--color-gold);
+    color: var(--color-bg);
+}
+
+/* ── Lightbox ──────────────────────────────────────────────── */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+    overflow: hidden;
+}
+
+.lightbox::backdrop {
+    background: transparent;
+}
+
+.lightbox__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(var(--color-bg-rgb), 0.94);
+    backdrop-filter: blur(8px);
+}
+
+.lightbox__figure {
+    position: absolute;
+    inset: 6vh 8vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* un clic hors de l'image ferme la lightbox */
+}
+
+.lightbox__img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+    pointer-events: auto;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
+}
+
+.lightbox__counter {
+    position: absolute;
+    left: 50%;
+    bottom: calc(1.5rem + var(--safe-bottom, 0px));
+    transform: translateX(-50%);
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--color-gold);
+}
+
+.lightbox__btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--color-line-strong);
+    background: rgba(var(--color-bg-rgb), 0.6);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: border-color var(--dur-fast), color var(--dur-fast);
+}
+
+.lightbox__btn:hover,
+.lightbox__btn:focus-visible {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+}
+
+.lightbox__close {
+    top: calc(1.5rem + var(--safe-top, 0px));
+    right: 1.5rem;
+}
+
+.lightbox__prev,
+.lightbox__next {
+    top: 50%;
+    margin-top: -26px;
+}
+
+.lightbox__prev {
+    left: 1.5rem;
+}
+
+.lightbox__prev svg {
+    transform: rotate(180deg);
+}
+
+.lightbox__next {
+    right: 1.5rem;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .artist-intro__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .artist-portrait {
+        max-width: 380px;
+    }
+}
+
+@media (max-width: 768px) {
+    .artist-hero__name {
+        transform: scaleX(1.05);
+        max-width: calc(100% / 1.05);
+    }
+
+    .artist-section {
+        padding: var(--space-lg) 0;
+    }
+
+    .artist-nav__grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .artist-nav__back {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-self: center;
+    }
+
+    .lightbox__figure {
+        inset: 10vh 4vw 14vh;
+    }
+
+    .lightbox__prev,
+    .lightbox__next {
+        top: auto;
+        bottom: calc(1rem + var(--safe-bottom, 0px));
+        margin-top: 0;
+    }
+
+    .lightbox__counter {
+        bottom: calc(2.4rem + var(--safe-bottom, 0px));
+    }
+}
