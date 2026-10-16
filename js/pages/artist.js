@@ -17,6 +17,7 @@ import { createLightbox } from './artist/lightbox.js';
 import { pageEntered } from '../core/transitions.js';
 import { introDone } from '../core/intro.js';
 import { revealIn } from '../core/reveal.js';
+import { mountScene } from '../scenes/loader.js';
 import { splitChars } from '../core/split.js';
 import { splitRoll } from '../core/roll.js';
 import { frameFactor, hasFinePointer, lerp, prefersReducedMotion } from '../core/utils.js';
@@ -53,6 +54,8 @@ if (!artist || !main) {
 
     enhance(gallery);
     Promise.all([introDone, pageEntered]).then(() => {
+        // Scène WebGL propre à l'artiste (si elle existe), derrière le nom.
+        mountScene(main.querySelector('.artist-hero__scene'), slug);
         revealHero();
         revealIn(main);
         revealPortrait();

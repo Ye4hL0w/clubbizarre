@@ -101,6 +101,30 @@ export const MOTION = {
         maxSkew: 6,
     },
 
+    // Scènes WebGL des pages artistes (js/scenes/<slug>.js)
+    scenes: {
+        jerem_wav: {
+            // Nombre de lignes d'écho derrière l'onde principale (mobile : moitié).
+            echoes: 36,
+            // Points par ligne : plus = onde plus fine (mobile : moitié).
+            resolution: 320,
+            // Hauteur de l'onde au repos.
+            amplitude: 0.32,
+            // Vitesse d'ondulation (1 = défaut).
+            speed: 0.6,
+            // Retard entre deux échos : plus haut = l'onde "voyage" vers le fond.
+            echoDelay: 1.6,
+            // Bosse créée par le curseur (0 = aucune).
+            mouseStrength: 0.55,
+            // Gain d'intensité quand on scrolle dans le hero (0 = aucun).
+            scrollBoost: 1.6,
+            // Opacité des échos (0–1).
+            echoOpacity: 0.9,
+            // Durée d'apparition : de la ligne plate au signal (s).
+            revealDuration: 2.6,
+        },
+    },
+
     // Transitions de pages (rideau "liquid gold")
     transition: {
         // Durée de la couverture à la sortie (s).

@@ -29,6 +29,15 @@
         var(--color-bg);
 }
 
+/* Canvas de la scène WebGL de l'artiste (js/scenes/) */
+.artist-scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
 /* Fondu bas pour enchaîner sur la suite */
 .artist-hero__scene::after {
     content: '';
