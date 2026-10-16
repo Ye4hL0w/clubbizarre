@@ -1,40 +1,4 @@
-/* ============================================================
-   VIDEO INTRO OVERLAY
-   ============================================================ */
-(function () {
-    const overlay = document.getElementById('intro-overlay');
-    const video   = document.getElementById('intro-video');
-    const skipBtn = document.getElementById('skip-intro');
-
-    if (!overlay || !video) return;
-
-    function dismissIntro() {
-        overlay.classList.add('fade-out');
-        document.body.classList.remove('no-scroll');
-
-        // Remove overlay from DOM after transition ends
-        overlay.addEventListener('transitionend', () => {
-            overlay.remove();
-        }, { once: true });
-    }
-
-    // Auto-dismiss when the video finishes
-    video.addEventListener('ended', dismissIntro);
-
-    // Skip button
-    if (skipBtn) {
-        skipBtn.addEventListener('click', dismissIntro);
-    }
-
-    // If autoplay is blocked by the browser, dismiss immediately
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-        playPromise.catch(() => {
-            // Autoplay was prevented — skip intro silently
-            dismissIntro();
-        });
-    }
-})();
+// L'intro vidéo est gérée par js/core/intro.js.
 
 // Défilement doux : passe par Lenis (js/core/main.js) s'il est actif,
 // sinon scroll natif comme avant.
@@ -65,6 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) smoothScrollTo(targetElement);
                 }
+            } else if (href === '#') {
+                // Lien vers le haut de page (logo) : querySelector('#') lèverait une erreur.
+                e.preventDefault();
+                smoothScrollTo(document.body);
             } else if (href.startsWith('#')) {
                 // Lien d'ancre classique sur la même page
                 e.preventDefault();
@@ -132,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 wrapper.href = post.link || post.permalink;
                 wrapper.target = "_blank";
                 wrapper.className = 'insta-wrapper';
+                wrapper.dataset.cursor = 'VOIR';
 
                 const img = document.createElement('img');
                 // Si c'est une vidéo, l'API fournit thumbnail_url, sinon media_url

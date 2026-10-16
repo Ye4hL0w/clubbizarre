@@ -2,6 +2,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <!-- Avant le premier rendu : intro déjà vue ? arrivée par une transition ? (voir js/core/) -->
+    <script>
+    (function (r) {
+        try {
+            if (sessionStorage.getItem('cb:intro-seen')) r.classList.add('intro-seen');
+            if (sessionStorage.getItem('cb:page-transition') &&
+                !matchMedia('(prefers-reduced-motion: reduce)').matches) r.classList.add('pt-enter');
+        } catch (e) {}
+        // Filet de sécurité si les modules ne se chargent pas.
+        setTimeout(function () { r.classList.remove('pt-enter', 'hero-pending'); }, 3500);
+    })(document.documentElement);
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>HELΛNOVA | Club Bizarre</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,7 +22,10 @@
     <link rel="stylesheet" href="../css/tokens.css">
     <link rel="stylesheet" href="../css/core.css">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="../css/components/intro.css">
+    <link rel="stylesheet" href="../css/components/transition.css">
+    <link rel="stylesheet" href="../css/components/cursor.css">
+    <link rel="icon" type="image/png" href="../logo.png">
     <!-- Three.js : déclaré ici, chargé uniquement quand un module l'importe -->
     <script type="importmap">
     {
@@ -23,12 +38,12 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="../index.html" class="nav-logo">CLUB BIZARRE</a>
+        <a href="../index.html" class="nav-logo" data-cursor="RETOUR">CLUB BIZARRE</a>
         <ul class="nav-links">
-            <li><a href="../index.html#"about">About</a></li>
-            <li><a href="../index.html#"team">Team</a></li>
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../index.html#team">Team</a></li>
             <li><a href="media.html">Media</a></li>
-            <li><a href="../index.html#"contact">Contact</a></li>
+            <li><a href="../index.html#contact">Contact</a></li>
         </ul>
         <div class="hamburger">
             <span></span><span></span><span></span>

@@ -31,3 +31,39 @@ export function supportsWebGL() {
         return false;
     }
 }
+
+/** sessionStorage protégé (navigation privée, stockage bloqué…). */
+export const session = {
+    get(key) {
+        try { return window.sessionStorage.getItem(key); } catch { return null; }
+    },
+    set(key, value) {
+        try { window.sessionStorage.setItem(key, value); } catch { /* ignoré */ }
+    },
+    remove(key) {
+        try { window.sessionStorage.removeItem(key); } catch { /* ignoré */ }
+    },
+};
+
+/** Clés de session partagées avec le script inline du <head>. */
+export const STORAGE_KEYS = {
+    introSeen: 'cb:intro-seen',
+    pageTransition: 'cb:page-transition',
+};
+
+/** Interpolation linéaire. */
+export const lerp = (a, b, t) => a + (b - a) * t;
+
+/** Pointeur fin + survol disponibles (souris / trackpad). */
+export function hasFinePointer() {
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+}
+
+/**
+ * Convertit un facteur de lissage "par image à 60 Hz" en facteur réel
+ * pour un intervalle `dtMs` : même ressenti à 60, 120 Hz ou en cas de saccade.
+ */
+export function frameFactor(t, dtMs) {
+    const frames = Math.min(dtMs / (1000 / 60), 60);
+    return 1 - Math.pow(1 - t, frames);
+}

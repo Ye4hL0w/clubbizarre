@@ -1,0 +1,167 @@
+/* ============================================================
+   INTRO — vidéo "liquid gold" + préloader (js/core/intro.js)
+   ============================================================ */
+
+.no-scroll {
+    overflow: hidden;
+}
+
+.intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-overlay);
+    background: var(--color-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Intro déjà vue dans la session : masquée avant le premier rendu
+   (classe posée par le script inline du <head>). */
+.intro-seen .intro-overlay {
+    display: none;
+}
+
+.intro-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    /* Cachée pendant le chargement, révélée en fondu au lancement */
+    opacity: 0;
+    transition: opacity var(--dur-base) var(--ease-out-quart);
+}
+
+.intro-overlay.is-playing .intro-video {
+    opacity: 1;
+}
+
+/* Vignette pour fondre les bords */
+.intro-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── Sortie : fondu + léger zoom, puis le hero prend le relais ── */
+.intro-overlay.is-leaving {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--intro-outro, 1.6s) var(--ease-in-out-standard);
+}
+
+.intro-overlay.is-leaving .intro-video {
+    transform: scale(1.08);
+    filter: blur(6px);
+    transition:
+        transform var(--intro-outro, 1.6s) var(--ease-out-expo),
+        filter var(--intro-outro, 1.6s) var(--ease-out-quart);
+}
+
+/* ── Préloader : compteur + filet doré ─────────────────────── */
+.intro-loader {
+    position: absolute;
+    left: 50%;
+    bottom: calc(18vh + var(--safe-bottom, 0px));
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    width: min(260px, 60vw);
+    transition: opacity var(--dur-fast) var(--ease-out-quart), transform var(--dur-base) var(--ease-out-expo);
+}
+
+.intro-loader.is-done {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+}
+
+.intro-loader__count {
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: 0.85rem;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-gold);
+    font-variant-numeric: tabular-nums;
+}
+
+.intro-loader__bar {
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background: rgba(var(--color-gold-rgb), 0.15);
+    overflow: hidden;
+}
+
+.intro-loader__fill {
+    position: absolute;
+    inset: 0;
+    background: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: left center;
+}
+
+/* ── Bouton PASSER : visible dès le début ──────────────────── */
+.skip-btn {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    z-index: 3;
+    background: transparent;
+    border: 1px solid rgba(var(--color-gold-rgb), 0.6);
+    color: rgba(var(--color-gold-rgb), 0.9);
+    font-family: var(--font-text);
+    font-size: 0.8rem;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 0.65rem 1.4rem;
+    border-radius: 3px;
+    cursor: pointer;
+    opacity: 0;
+    animation: skip-appear var(--dur-base) var(--ease-out-quart) forwards 0.15s;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.skip-btn:hover,
+.skip-btn:focus-visible {
+    background: rgba(var(--color-gold-rgb), 0.15);
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+}
+
+@keyframes skip-appear {
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .skip-btn {
+        bottom: calc(1.5rem + var(--safe-bottom));
+        right: calc(1.5rem + var(--safe-right));
+    }
+}
+
+@media (max-width: 430px) {
+    @supports (padding: max(0px)) {
+        .skip-btn {
+            bottom: max(1.5rem, var(--safe-bottom));
+            right: max(1.5rem, var(--safe-right));
+        }
+    }
+}
+
+/* ── Hero : état initial avant son entrée (js/pages/home.js) ── */
+.hero-pending .hero-content > *,
+.hero-pending .scroll-indicator {
+    opacity: 0;
+}

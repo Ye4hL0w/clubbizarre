@@ -101,6 +101,8 @@ function renderEvents(events, container) {
 
     html += '</div>';
     container.innerHTML = html;
+    // Boutons injectés : on les rend magnétiques (js/core/magnetic.js).
+    window.CB?.refreshMagnetic?.(container);
 }
 
 function renderMockEvents(container) {
@@ -153,6 +155,8 @@ function renderMockEvents(container) {
 
     html += '</div>';
     container.innerHTML = html;
+    // Boutons injectés : on les rend magnétiques (js/core/magnetic.js).
+    window.CB?.refreshMagnetic?.(container);
 }
 
 function createEventCardHtml({ title, date, location, imageUrl, shotgunUrl, genres, artists, ticketsLeft, lowestPrice, isCancelled }) {
@@ -212,7 +216,7 @@ function createEventCardHtml({ title, date, location, imageUrl, shotgunUrl, genr
                 </div>
                 ${infoRowHtml}
                 <div class="event-footer">
-                    <a href="${shotgunUrl}" target="_blank" rel="noopener noreferrer" class="buy-btn" ${isCancelled ? 'style="background: #333; color: #888; cursor: not-allowed;" onclick="event.preventDefault();"' : ''}>
+                    <a href="${shotgunUrl}" target="_blank" rel="noopener noreferrer" class="buy-btn" data-cursor="BILLETS" ${isCancelled ? 'style="background: #333; color: #888; cursor: not-allowed;" onclick="event.preventDefault();"' : ''}>
                         ${buttonText}
                     </a>
                 </div>

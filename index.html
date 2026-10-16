@@ -3,6 +3,19 @@
 
 <head>
     <meta charset="UTF-8">
+    <!-- Avant le premier rendu : intro déjà vue ? arrivée par une transition ? (voir js/core/) -->
+    <script>
+    (function (r) {
+        try {
+            if (sessionStorage.getItem('cb:intro-seen')) r.classList.add('intro-seen');
+            if (sessionStorage.getItem('cb:page-transition') &&
+                !matchMedia('(prefers-reduced-motion: reduce)').matches) r.classList.add('pt-enter');
+        } catch (e) {}
+        r.classList.add('hero-pending');
+        // Filet de sécurité si les modules ne se chargent pas.
+        setTimeout(function () { r.classList.remove('pt-enter', 'hero-pending'); }, 3500);
+    })(document.documentElement);
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Club Bizarre | Collectif Musical Électronique</title>
     <meta name="description"
@@ -42,6 +55,9 @@
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/core.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components/intro.css">
+    <link rel="stylesheet" href="css/components/transition.css">
+    <link rel="stylesheet" href="css/components/cursor.css">
     <link rel="icon" type="image/png" href="logo.png">
     <!-- Font Awesome (for SoundCloud icon) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -77,13 +93,14 @@
       }
     }
     </script>
+    <noscript><style>.intro-overlay { display: none; } body.no-scroll { overflow: auto; }</style></noscript>
 </head>
 
 <body class="no-scroll">
 
     <!-- Video Intro Splash Screen -->
     <div id="intro-overlay" class="intro-overlay">
-        <video id="intro-video" class="intro-video" autoplay muted playsinline>
+        <video id="intro-video" class="intro-video" muted playsinline preload="auto">
             <source src="Logo_Reveal_Liquid_gold_drips_and_flows_across_a_dark_marble_04tGjFtP.mp4" type="video/mp4">
         </video>
         <button id="skip-intro" class="skip-btn" aria-label="Passer l'intro">PASSER ›</button>
@@ -133,56 +150,56 @@
                 <div class="team-marquee-container">
                     <div class="team-marquee">
                         <!-- Premier jeu d'artistes -->
-                        <a href="pages/jerem_wav.html" class="team-bubble">
+                        <a href="pages/jerem_wav.html" class="team-bubble" data-cursor="VOIR">
                             <div class="bubble-img">
                                 <img src="media/team/jeremwav.png" alt="JEREM.WAV">
                             </div>
                             <span class="bubble-name">JEREM.WAV</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/helanova.html" class="team-bubble">
+                        <a href="pages/helanova.html" class="team-bubble" data-cursor="VOIR">
                             <div class="bubble-img">
                                 <img src="media/team/helanova.png" alt="HELΛNOVA">
                             </div>
                             <span class="bubble-name">HELΛNOVA</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/datseven.html" class="team-bubble">
+                        <a href="pages/datseven.html" class="team-bubble" data-cursor="VOIR">
                             <div class="bubble-img">
                                 <img src="media/team/datseven.png" alt="Datseven">
                             </div>
                             <span class="bubble-name">Datseven</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/forn.html" class="team-bubble">
+                        <a href="pages/forn.html" class="team-bubble" data-cursor="VOIR">
                             <div class="bubble-img">
                                 <img src="media/team/forn.png" alt="FØRN">
                             </div>
                             <span class="bubble-name">FØRN</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/90cynomen.html" class="team-bubble">
+                        <a href="pages/90cynomen.html" class="team-bubble" data-cursor="VOIR">
                             <div class="bubble-img">
                                 <img src="media/team/90cynomen.png" alt="90CYNOMEN">
                             </div>
                             <span class="bubble-name">90CYNOMEN</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/bastoune_bellon.html" class="team-bubble">
+                        <a href="pages/bastoune_bellon.html" class="team-bubble" data-cursor="VOIR">
                             <div class="bubble-img">
                                 <img src="media/team/bastoune.bellon.png" alt="BASTOUNE BELLON">
                             </div>
                             <span class="bubble-name">BASTOUNE</span>
                             <span class="bubble-role">Light + DJ</span>
                         </a>
-                        <a href="pages/mariam.html" class="team-bubble">
+                        <a href="pages/mariam.html" class="team-bubble" data-cursor="VOIR">
                             <div class="bubble-img">
                                 <img src="media/team/mariam.png" alt="MARIAM">
                             </div>
                             <span class="bubble-name">MARIAM</span>
                             <span class="bubble-role">CM</span>
                         </a>
-                        <!-- <a href="pages/capolami.html" class="team-bubble">
+                        <!-- <a href="pages/capolami.html" class="team-bubble" data-cursor="VOIR">
                             <div class="bubble-img">
                                 <img src="media/team/capo.png" alt="CAPOLAMI">
                             </div>
@@ -190,56 +207,56 @@
                             <span class="bubble-role">DJ Soon</span>
                         </a> -->
                         <!-- Deuxième jeu (Duplication pour l'effet de défilement infini) -->
-                        <a href="pages/jerem_wav.html" class="team-bubble" aria-hidden="true">
+                        <a href="pages/jerem_wav.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
                             <div class="bubble-img">
                                 <img src="media/team/jeremwav.png" alt="JEREM.WAV">
                             </div>
                             <span class="bubble-name">JEREM.WAV</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/helanova.html" class="team-bubble" aria-hidden="true">
+                        <a href="pages/helanova.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
                             <div class="bubble-img">
                                 <img src="media/team/helanova.png" alt="HELΛNOVA">
                             </div>
                             <span class="bubble-name">HELΛNOVA</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/datseven.html" class="team-bubble" aria-hidden="true">
+                        <a href="pages/datseven.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
                             <div class="bubble-img">
                                 <img src="media/team/datseven.png" alt="Datseven">
                             </div>
                             <span class="bubble-name">Datseven</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/forn.html" class="team-bubble" aria-hidden="true">
+                        <a href="pages/forn.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
                             <div class="bubble-img">
                                 <img src="media/team/forn.png" alt="FØRN">
                             </div>
                             <span class="bubble-name">FØRN</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/90cynomen.html" class="team-bubble" aria-hidden="true">
+                        <a href="pages/90cynomen.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
                             <div class="bubble-img">
                                 <img src="media/team/90cynomen.png" alt="90CYNOMEN">
                             </div>
                             <span class="bubble-name">90CYNOMEN</span>
                             <span class="bubble-role">DJ</span>
                         </a>
-                        <a href="pages/bastoune_bellon.html" class="team-bubble" aria-hidden="true">
+                        <a href="pages/bastoune_bellon.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
                             <div class="bubble-img">
                                 <img src="media/team/bastoune.bellon.png" alt="BASTOUNE BELLON">
                             </div>
                             <span class="bubble-name">BASTOUNE</span>
                             <span class="bubble-role">Light + DJ</span>
                         </a>
-                        <a href="pages/mariam.html" class="team-bubble" aria-hidden="true">
+                        <a href="pages/mariam.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
                             <div class="bubble-img">
                                 <img src="media/team/mariam.png" alt="MARIAM">
                             </div>
                             <span class="bubble-name">MARIAM</span>
                             <span class="bubble-role">CM</span>
                         </a>
-                        <!-- <a href="pages/capolami.html" class="team-bubble" aria-hidden="true">
+                        <!-- <a href="pages/capolami.html" class="team-bubble" data-cursor="VOIR" aria-hidden="true">
                             <div class="bubble-img">
                                 <img src="media/team/capo.png" alt="CAPOLAMI">
                             </div>
@@ -258,7 +275,7 @@
                 <h2 class="section-title">CONTACT</h2>
                 <div class="contact-content">
                     <p class="contact-subtitle">Booking & Inquiries</p>
-                    <a href="mailto:clubbizarre06@gmail.com" class="contact-email">clubbizarre06@gmail.com</a>
+                    <a href="mailto:clubbizarre06@gmail.com" class="contact-email" data-cursor="ÉCRIRE">clubbizarre06@gmail.com</a>
                     <div class="socials">
                         <!-- Instagram -->
                         <a href="https://www.instagram.com/clubbizarre06/" target="_blank" rel="noopener noreferrer"
@@ -291,12 +308,12 @@
                         </a>
                         <!-- SoundCloud -->
                         <a href="https://soundcloud.com/clubbizarre06" target="_blank" rel="noopener noreferrer"
-                            class="social-icon" title="SoundCloud">
+                            class="social-icon" title="SoundCloud" data-cursor="ÉCOUTER">
                             <i class="fa-brands fa-soundcloud" style="font-size: 24px;"></i>
                         </a>
                         <!-- YouTube -->
                         <a href="https://www.youtube.com/channel/UC1VJ7-PTaAsYsLicFTLFEPQ" target="_blank"
-                            rel="noopener noreferrer" class="social-icon" title="YouTube">
+                            rel="noopener noreferrer" class="social-icon" title="YouTube" data-cursor="ÉCOUTER">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -338,6 +355,7 @@
         integrity="sha384-kdY9hFBPoAPpxcrLihsO3APivFOxtQwSeYdzFD5CIIfLurwhdMrEHhkQxZJDkxgk" crossorigin="anonymous" defer></script>
     <script src="js/legacy/script.js"></script>
     <script type="module" src="js/core/main.js"></script>
+    <script type="module" src="js/pages/home.js"></script>
 </body>
 
 </html>

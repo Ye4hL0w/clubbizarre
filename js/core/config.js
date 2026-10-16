@@ -6,7 +6,6 @@ export const MOTION = {
     // Smooth scroll (Lenis)
     scroll: {
         // Durée d'inertie en secondes : plus haut = plus lent et "glissant".
-        // Ignoré si lerp est défini.
         duration: 1.2,
         // easeOutExpo : départ franc, arrivée très douce.
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -16,5 +15,46 @@ export const MOTION = {
         syncTouch: false,
         // Décalage appliqué aux liens d'ancre (hauteur de la navbar).
         anchorOffset: -80,
+    },
+
+    // Préloader + intro vidéo
+    intro: {
+        // Le compteur reste affiché au moins ce temps (s), même si tout est en cache.
+        minLoaderTime: 1.2,
+        // Au-delà (s), on lance l'intro même si tout n'est pas chargé.
+        maxLoaderTime: 8,
+        // Vitesse de rattrapage du compteur (0–1) : plus bas = compteur plus "posé".
+        counterLerp: 0.08,
+        // Durée du fondu intro → hero (s).
+        outroDuration: 1.6,
+    },
+
+    // Curseur custom (desktop uniquement)
+    cursor: {
+        // Inertie (0–1) : 1 = colle à la souris, plus bas = plus de traîne.
+        dotLerp: 0.4,
+        haloLerp: 0.13,
+        // Déformation du halo selon la vitesse (0 = aucune).
+        stretch: 0.0045,
+        maxStretch: 0.35,
+    },
+
+    // Éléments magnétiques
+    magnetic: {
+        // Part du décalage curseur/centre appliquée à l'élément (0–1).
+        // Surcharge possible par élément : data-magnetic="0.5".
+        strength: 0.3,
+        // Inertie du retour (0–1).
+        lerp: 0.15,
+    },
+
+    // Transitions de pages (rideau "liquid gold")
+    transition: {
+        // Durée de la couverture à la sortie (s).
+        leaveDuration: 0.9,
+        // Durée du dévoilement à l'arrivée (s).
+        enterDuration: 1.1,
+        // Décalage entre la nappe or et la nappe noire (s).
+        layerDelay: 0.12,
     },
 };

@@ -1,0 +1,132 @@
+/* ============================================================
+   CURSEUR CUSTOM (js/core/cursor.js) — desktop uniquement
+   ============================================================ */
+
+/* Le curseur natif n'est masqué que si le module a démarré. */
+html.has-cursor,
+html.has-cursor * {
+    cursor: none !important;
+}
+
+.cursor {
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--dur-fast) var(--ease-out-quart);
+}
+
+.cursor.is-visible {
+    opacity: 1;
+}
+
+.cursor__dot,
+.cursor__halo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    will-change: transform;
+}
+
+/* Point : centré sur la position exacte de la souris */
+.cursor__dot {
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: var(--color-gold);
+    transition: opacity var(--dur-fast) var(--ease-out-quart);
+}
+
+.cursor.has-label .cursor__dot {
+    opacity: 0;
+}
+
+/* Halo : le conteneur suit avec inertie, l'anneau se déforme */
+.cursor__halo {
+    width: 0;
+    height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cursor__ring {
+    --size: 26px;
+    --scale: 1;
+    position: absolute;
+    width: var(--size);
+    height: var(--size);
+    margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--color-gold-rgb), 0.55);
+    background: rgba(var(--color-gold-rgb), 0);
+    transform:
+        rotate(var(--stretch-angle, 0deg))
+        scale(calc(var(--stretch-x, 1) * var(--scale)), calc(var(--stretch-y, 1) * var(--scale)));
+    transition:
+        --scale var(--dur-base) var(--ease-out-expo),
+        background-color var(--dur-fast) var(--ease-out-quart),
+        border-color var(--dur-fast) var(--ease-out-quart);
+}
+
+/* Survol d'un lien / bouton : le halo grossit */
+.cursor.is-hover .cursor__ring {
+    --scale: 1.8;
+    border-color: rgba(var(--color-gold-rgb), 0.8);
+    background: rgba(var(--color-gold-rgb), 0.06);
+}
+
+/* Avec label contextuel : grande pastille */
+.cursor.has-label .cursor__ring {
+    --scale: 2.6;
+    border-color: rgba(var(--color-gold-rgb), 0.9);
+    background: rgba(var(--color-bg-rgb), 0.55);
+    backdrop-filter: blur(4px);
+}
+
+.cursor.is-pressed .cursor__ring {
+    --scale: 0.8;
+}
+
+.cursor.is-hover.is-pressed .cursor__ring {
+    --scale: 1.5;
+}
+
+.cursor__label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: var(--font-display);
+    font-size: 0.55rem;
+    font-weight: var(--fw-bold);
+    letter-spacing: 2px;
+    color: var(--color-gold);
+    white-space: nowrap;
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0;
+    transition:
+        opacity var(--dur-fast) var(--ease-out-quart),
+        transform var(--dur-base) var(--ease-out-expo);
+}
+
+.cursor.has-label .cursor__label {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* --scale animable en douceur (Chrome, Safari 16.4+, Firefox 128+) */
+@property --scale {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 1;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+    .cursor {
+        display: none;
+    }
+}
