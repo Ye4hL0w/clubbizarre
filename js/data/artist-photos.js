@@ -20,6 +20,13 @@ export const PHOTOS = {
             "h": 1024
         }
     ],
+    "capolami": [
+        {
+            "src": "_web/capo.jpg",
+            "w": 1600,
+            "h": 1200
+        }
+    ],
     "datseven": [
         {
             "src": "_web/datseven.jpg",

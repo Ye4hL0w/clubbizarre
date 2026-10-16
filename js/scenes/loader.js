@@ -25,6 +25,7 @@ const SCENES = {
     '90cynomen': () => import('./90cynomen.js'),
     bastoune_bellon: () => import('./bastoune_bellon.js'),
     mariam: () => import('./mariam.js'),
+    capolami: () => import('./capolami.js'),
 };
 
 // Scènes dessinées en Canvas 2D : elles n'ont pas besoin de WebGL.

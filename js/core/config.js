@@ -195,6 +195,16 @@ export const MOTION = {
             // Durée d'apparition (s).
             revealDuration: 2.4,
         },
+        capolami: {
+            // Vitesse des lumières.
+            speed: 1,
+            // Persistance des traînées (0.9 = courtes, 0.99 = très longues).
+            persistence: 0.978,
+            // Éclat des lumières.
+            intensity: 1,
+            // Durée d'apparition après le flash (s).
+            revealDuration: 1.5,
+        },
     },
 
     // Transitions de pages (rideau "liquid gold")

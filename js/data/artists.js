@@ -90,6 +90,16 @@ export const ARTISTS = [
         ],
         sets: [],
     },
+    {
+        slug: 'capolami',
+        name: 'CAPOLAMI',
+        role: 'DJ',
+        bio: [],
+        links: [
+            { label: 'Instagram', url: 'https://www.instagram.com/lucas.lesbros/', icon: 'instagram' },
+        ],
+        sets: [],
+    },
 ];
 
 /** Liens du collectif, utilisés quand un artiste n'a pas encore de sets. */
