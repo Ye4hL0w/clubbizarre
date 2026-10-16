@@ -123,6 +123,78 @@ export const MOTION = {
             // Durée d'apparition : de la ligne plate au signal (s).
             revealDuration: 2.6,
         },
+        helanova: {
+            // Nombre de particules (mobile : 40 %).
+            particles: 14000,
+            // Part des particules qui dessinent le Λ (0–1).
+            lambdaShare: 0.12,
+            // Taille des particules.
+            size: 26,
+            // Vitesse de rotation de la nébuleuse.
+            orbitSpeed: 0.05,
+            // Force d'attraction du curseur (0 = aucune, 1 = collées au curseur).
+            attraction: 0.35,
+            // Rayon d'influence du curseur (unités de la scène).
+            attractionRadius: 0.9,
+            // Durée de la convergence à l'arrivée (s).
+            revealDuration: 4,
+        },
+        datseven: {
+            // Vitesse de rotation des polyèdres.
+            rotationSpeed: 0.18,
+            // Vitesse des impulsions lumineuses le long des arêtes.
+            pulseSpeed: 0.25,
+            // Intensité du glitch au survol (0 = désactivé, 1 = fort).
+            glitch: 0.6,
+            // Durée d'apparition (s).
+            revealDuration: 2.2,
+        },
+        forn: {
+            // Intensité de la déformation (0 = sphère lisse).
+            deformation: 0.32,
+            // Échelle des formes : plus haut = reliefs plus petits et nombreux.
+            scale: 1.3,
+            // Vitesse de transformation de la matière.
+            speed: 1,
+            // Grain de surface (0 = lisse).
+            grain: 0.05,
+            // Gonflement de la matière vers le curseur (0 = aucun).
+            mouseStrength: 0.12,
+            // Durée de formation à l'arrivée (s).
+            revealDuration: 2.8,
+        },
+        '90cynomen': {
+            // Vitesse de défilement de la grille.
+            gridSpeed: 0.6,
+            // Courbure de l'écran CRT (0 = plat).
+            curvature: 0.06,
+            // Intensité des lignes de balayage (0–1).
+            scanlines: 0.35,
+            // Durée de l'allumage du téléviseur (s).
+            revealDuration: 1.6,
+        },
+        bastoune_bellon: {
+            // Vitesse de balayage des projecteurs.
+            sweepSpeed: 0.35,
+            // Intensité des faisceaux (0–1.5).
+            beamIntensity: 1,
+            // Densité de la brume (plus = faisceaux plus visibles).
+            haze: 1,
+            // Présence des lasers (0 = aucun ; ils montent au scroll).
+            lasers: 0.6,
+            // Durée d'allumage des projecteurs (s).
+            revealDuration: 2.4,
+        },
+        mariam: {
+            // Vitesse de dérive des mots en liberté.
+            drift: 1,
+            // Durée d'un temps du cycle libre → rangé (s). Un cycle complet = 4 temps.
+            cycle: 6,
+            // Écart des mots au passage du curseur (px).
+            repel: 40,
+            // Durée d'apparition (s).
+            revealDuration: 2.4,
+        },
     },
 
     // Transitions de pages (rideau "liquid gold")

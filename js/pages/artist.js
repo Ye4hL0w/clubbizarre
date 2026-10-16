@@ -55,7 +55,7 @@ if (!artist || !main) {
     enhance(gallery);
     Promise.all([introDone, pageEntered]).then(() => {
         // Scène WebGL propre à l'artiste (si elle existe), derrière le nom.
-        mountScene(main.querySelector('.artist-hero__scene'), slug);
+        mountScene(main.querySelector('.artist-hero__scene'), slug, { photo: portrait?.url });
         revealHero();
         revealIn(main);
         revealPortrait();

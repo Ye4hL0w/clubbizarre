@@ -19,7 +19,16 @@ import { cssColor, hasFinePointer, isLowPowerDevice, prefersReducedMotion, suppo
 // Ajouter une scène : créer js/scenes/<slug>.js puis l'inscrire ici.
 const SCENES = {
     jerem_wav: () => import('./jerem_wav.js'),
+    helanova: () => import('./helanova.js'),
+    datseven: () => import('./datseven.js'),
+    forn: () => import('./forn.js'),
+    '90cynomen': () => import('./90cynomen.js'),
+    bastoune_bellon: () => import('./bastoune_bellon.js'),
+    mariam: () => import('./mariam.js'),
 };
+
+// Scènes dessinées en Canvas 2D : elles n'ont pas besoin de WebGL.
+const CANVAS_2D = new Set(['mariam']);
 
 export function hasScene(slug) {
     return slug in SCENES;
@@ -27,10 +36,12 @@ export function hasScene(slug) {
 
 /**
  * Monte la scène de `slug` dans `container` (le fond du hero).
+ * `extra` est transmis tel quel à la scène (ex. { photo } : URL du portrait).
  * Résout avec un contrôleur { destroy } ou null si rien n'a été monté.
  */
-export async function mountScene(container, slug) {
-    if (!container || !hasScene(slug) || !supportsWebGL()) return null;
+export async function mountScene(container, slug, extra = {}) {
+    if (!container || !hasScene(slug)) return null;
+    if (!CANVAS_2D.has(slug) && !supportsWebGL()) return null;
 
     let mod;
     try {
@@ -49,7 +60,8 @@ export async function mountScene(container, slug) {
 
     let scene;
     try {
-        scene = mod.init(canvas, {
+        scene = await mod.init(canvas, {
+            ...extra,
             low,
             reduced,
             pixelRatio: Math.min(window.devicePixelRatio || 1, low ? 1.5 : 2),
