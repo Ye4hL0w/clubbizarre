@@ -41,7 +41,18 @@ export function initTeam(section) {
     });
 }
 
-/* ── Contact : l'email roule lettre par lettre au survol ───── */
+/* ── Contact : filet doré qui se dessine, e-mail qui roule au survol ───── */
 export function initContact(section) {
-    splitRoll(section?.querySelector('.contact-email'));
+    const email = section?.querySelector('.contact-email');
+    splitRoll(email?.querySelector('.contact-email__text'), email);
+
+    const rule = section?.querySelector('.contact-rule');
+    if (rule && animated) {
+        gsap.from(rule, {
+            scaleX: 0,
+            duration: 1.8,
+            ease: 'expo.inOut',
+            scrollTrigger: { trigger: rule, start: 'top 90%', once: true },
+        });
+    }
 }

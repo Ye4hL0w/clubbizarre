@@ -552,17 +552,6 @@ section {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.contact::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 100px;
-    background: linear-gradient(to bottom, var(--accent-red), transparent);
-}
-
 .contact-content {
     margin-top: 4rem;
 }

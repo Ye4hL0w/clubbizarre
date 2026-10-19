@@ -213,65 +213,148 @@
     }
 }
 
-/* ── Contact : l'email roule lettre par lettre (css/components/roll.css) ── */
+/* ── Contact ────────────────────────────────────────────────
+   Même langage que les pages artistes : titre immense aligné à gauche,
+   filet doré qui se dessine, gros lien e-mail, mot-clé fantôme en fond.
+   Aucun trait rouge : l'or reste l'accent unique de la section. */
+.contact {
+    text-align: left;
+    overflow: hidden;
+    padding: var(--space-xl) 0;
+    background:
+        radial-gradient(ellipse 60% 55% at 12% 100%, rgba(var(--color-gold-rgb), 0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 45% 40% at 95% 0%, rgba(var(--color-red-rgb), 0.07) 0%, transparent 70%),
+        var(--color-bg-alt);
+}
+
+.contact-bg-word {
+    position: absolute;
+    right: -2vw;
+    bottom: -0.12em;
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: clamp(7rem, 24vw, 22rem);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.035);
+    pointer-events: none;
+    user-select: none;
+}
+
+.contact-layout {
+    position: relative;
+    z-index: 1;
+}
+
+.contact-subtitle {
+    margin: 0 0 var(--space-sm);
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+}
+
+/* Titre : même traitement que les noms d'artistes (étiré, dégradé blanc → gris) */
+.contact h2.section-title {
+    position: static;
+    left: auto;
+    display: block;
+    margin: 0;
+    text-align: left;
+    font-size: clamp(2.6rem, 9vw, 8rem);
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    transform: scaleX(1.1);
+    transform-origin: left center;
+    max-width: calc(100% / 1.1);
+}
+
+.contact h2.section-title .char {
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-text-muted) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Plus de soulignement rouge → or sous le titre */
+html.has-reveal .contact h2.section-title::after,
+.contact h2.section-title::after {
+    display: none;
+}
+
+/* Filet doré qui se dessine sous le titre (js/pages/home/sections.js) */
+.contact-rule {
+    width: 100%;
+    height: 1px;
+    margin: var(--space-md) 0 var(--space-lg);
+    background: linear-gradient(90deg, var(--color-gold), rgba(var(--color-gold-rgb), 0.15) 70%, transparent);
+    transform-origin: left center;
+}
+
+.contact-content {
+    margin: 0;
+}
+
+.contact-email {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin: 0 0 var(--space-lg);
+    font-size: clamp(1.05rem, 3.2vw, 2.8rem);
+    font-weight: var(--fw-bold);
+    word-break: normal;       /* coupure possible seulement après le @ (mobile) */
+    overflow-wrap: normal;
+    max-width: 100%;
+}
+
+.contact-email__arrow {
+    flex: none;
+    width: clamp(20px, 3.5vw, 44px);
+    height: auto;
+    color: var(--color-gold);
+    transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.contact-email:hover .contact-email__arrow,
+.contact-email:focus-visible .contact-email__arrow {
+    transform: translate(6px, -6px);
+}
+
+.contact-email::after {
+    bottom: -8px;
+}
+
+/* Roulement doré de l'e-mail (css/components/roll.css) : plus de halo de couleur */
 .contact-email.roll-host:hover {
-    /* la copie dorée remplace l'ancien changement de couleur global */
     color: var(--color-text);
     text-shadow: none;
 }
 
-/* ── Team sur mobile : cercles plus petits pour voir plusieurs artistes ── */
-/* Le carrousel reste le même (structure, boucle, design) ; seules les
-   dimensions changent sous 768 px. */
-@media (max-width: 768px) {
-    .team-marquee {
-        gap: 1.6rem;
-        padding-left: 1.6rem;
-    }
-
-    .team-bubble {
-        min-width: 0;
-        width: 108px;
-        gap: 0.7rem;
-    }
-
-    .bubble-img {
-        width: 108px;
-        height: 108px;
-        border-width: 2px;
-    }
-
-    .bubble-name {
-        font-size: 0.72rem;
-        letter-spacing: 1px;
-        white-space: nowrap;
-    }
-
-    .bubble-role {
-        font-size: 0.62rem;
-        letter-spacing: 2px;
-    }
-
-    .team-marquee-container {
-        padding: 2rem 0;
-    }
+/* Pastilles des réseaux : style d'origine (css/style.css), seule la position change */
+.contact .socials {
+    justify-content: flex-start;
+    margin-top: 0;
 }
 
-@media (max-width: 380px) {
-    .team-marquee {
-        gap: 1.2rem;
+@media (max-width: 768px) {
+    .contact {
+        padding: var(--space-lg) 0;
     }
 
-    .team-bubble,
-    .bubble-img {
-        width: 92px;
+    .contact h2.section-title {
+        font-size: clamp(2rem, 11vw, 3.4rem);
+        transform: scaleX(1.05);
+        max-width: calc(100% / 1.05);
     }
 
-    .bubble-img {
-        height: 92px;
+    .contact-rule {
+        margin: var(--space-sm) 0 var(--space-md);
     }
 
-    .bubble-name {
-        font-size: 0.64rem;
+    .contact-email {
+        margin-bottom: var(--space-md);
     }
 }
