@@ -49,19 +49,30 @@
     z-index: 1;
 }
 
-/* ── Sortie : fondu + léger zoom, puis le hero prend le relais ── */
+/* ── Sortie en deux temps, sans jamais superposer vidéo et hero ──
+   1. .is-leaving : la vidéo (dont la dernière image montre déjà le logo)
+      s'éteint vers le noir, le fond de l'intro reste opaque ;
+   2. .is-gone    : le noir se retire, le hero apparaît seul.
+   Pas de flou ni de zoom : ils forçaient un nouveau rendu de la vidéo
+   (scintillement) pendant que le hero commençait déjà à apparaître. */
 .intro-overlay.is-leaving {
-    opacity: 0;
     pointer-events: none;
-    transition: opacity var(--intro-outro, 1.6s) var(--ease-in-out-standard);
 }
 
 .intro-overlay.is-leaving .intro-video {
-    transform: scale(1.08);
-    filter: blur(6px);
-    transition:
-        transform var(--intro-outro, 1.6s) var(--ease-out-expo),
-        filter var(--intro-outro, 1.6s) var(--ease-out-quart);
+    opacity: 0;
+    transition: opacity var(--intro-video-fade, 0.8s) var(--ease-in-out-standard);
+}
+
+.intro-overlay.is-gone {
+    opacity: 0;
+    transition: opacity var(--intro-overlay-fade, 0.5s) var(--ease-in-out-standard);
+}
+
+/* La vignette s'éteint avec la vidéo */
+.intro-overlay.is-leaving::after {
+    opacity: 0;
+    transition: opacity var(--intro-video-fade, 0.8s) var(--ease-in-out-standard);
 }
 
 /* ── Préloader : compteur + filet doré ─────────────────────── */

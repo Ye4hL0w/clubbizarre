@@ -165,16 +165,29 @@ function createLoader(overlay) {
 
 /* ── Sortie ─────────────────────────────────────────────────── */
 
-/** Fondu lent de l'intro vers le hero (zoom léger de la vidéo). */
+/**
+ * Sortie en deux temps : la vidéo s'éteint vers le noir (sa dernière image
+ * montre le logo, qu'il ne faut pas superposer à celui du hero), puis le
+ * noir se retire et le hero apparaît seul.
+ */
 function playOutro(overlay, video) {
-    const duration = MOTION.intro.outroDuration;
-    overlay.style.setProperty('--intro-outro', `${duration}s`);
+    const total = MOTION.intro.outroDuration;
+    const videoFade = total * 0.5;
+    const overlayFade = total * 0.3;
+    overlay.style.setProperty('--intro-video-fade', `${videoFade}s`);
+    overlay.style.setProperty('--intro-overlay-fade', `${overlayFade}s`);
     overlay.classList.add('is-leaving');
     document.body.classList.remove('no-scroll');
 
-    // Le hero commence à apparaître pendant le fondu, pas après.
-    setTimeout(resolveIntro, duration * 350);
-    setTimeout(() => removeOverlay(overlay, video), duration * 1000 + 100);
+    // 2e temps : la vidéo est noire, on retire le noir.
+    setTimeout(() => {
+        overlay.classList.add('is-gone');
+        // Le hero démarre dès que le noir commence à se retirer : ses éléments
+        // partent de l'invisible, il n'y a donc jamais deux logos à l'écran.
+        resolveIntro();
+    }, videoFade * 1000 + 60);
+
+    setTimeout(() => removeOverlay(overlay, video), (videoFade + overlayFade) * 1000 + 160);
 }
 
 function removeOverlay(overlay, video) {

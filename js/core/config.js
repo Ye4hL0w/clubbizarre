@@ -25,7 +25,8 @@ export const MOTION = {
         maxLoaderTime: 8,
         // Vitesse de rattrapage du compteur (0–1) : plus bas = compteur plus "posé".
         counterLerp: 0.08,
-        // Durée du fondu intro → hero (s).
+        // Durée totale de la sortie (s) : la vidéo s'éteint (50 %), puis le noir
+        // se retire (30 %) et le hero apparaît seul.
         outroDuration: 1.6,
     },
 

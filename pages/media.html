@@ -12,7 +12,10 @@
                 !matchMedia('(prefers-reduced-motion: reduce)').matches) r.classList.add('pt-enter');
         } catch (e) {}
         // Filet de sécurité si les modules ne se chargent pas.
-        setTimeout(function () { r.classList.remove('pt-enter', 'hero-pending'); }, 3500);
+        // Avec l'intro (compteur + vidéo), on laisse largement le temps : retirer
+        // hero-pending trop tôt montrerait le hero sous la vidéo avant son entrée.
+        setTimeout(function () { r.classList.remove('pt-enter', 'hero-pending'); },
+            (!r.classList.contains('intro-seen') && /(\/|index\.html|media\.html)$/.test(location.pathname)) ? 30000 : 3500);
     })(document.documentElement);
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
