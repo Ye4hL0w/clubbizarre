@@ -264,6 +264,42 @@
     color: var(--color-gold);
 }
 
+/* ── Team : titre encadré par les deux télés holographiques ── */
+.team-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(3.5rem, 9vw, 9rem);
+    margin-bottom: 1.5rem;
+}
+
+.team-heading h2.section-title {
+    left: auto;
+    margin: 0;
+    transform: scaleX(1.2);
+}
+
+@media (max-width: 700px) {
+    /* Les télés passent au-dessus du titre, côte à côte */
+    .team-heading {
+        flex-wrap: wrap;
+        gap: var(--space-sm) 3rem;
+        margin-bottom: 1rem;
+        padding-top: var(--space-md);
+    }
+
+    .team-heading .tv {
+        --w: 92px;
+    }
+
+    .team-heading h2.section-title {
+        order: 3;
+        width: 100%;
+        text-align: center;
+        transform: none;
+    }
+}
+
 /* ── Partenaires : liste alignée à gauche, logo puis texte ─── */
 .partners {
     text-align: left;

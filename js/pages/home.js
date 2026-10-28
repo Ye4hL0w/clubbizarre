@@ -14,6 +14,7 @@ import { pageEntered } from '../core/transitions.js';
 import { prefersReducedMotion, supportsWebGL } from '../core/utils.js';
 import { splitTitle, initTitleHover } from './home/hero-title.js';
 import { initMarquee } from './home/marquee.js';
+import { initTvs } from './home/tvs.js';
 import { initAbout, initTeam, initPartners, initContact } from './home/sections.js';
 
 const root = document.documentElement;
@@ -36,6 +37,7 @@ const chars = title ? splitTitle(title) : [];
 initPartners(document.querySelector('#partners'));
 initContact(document.querySelector('#contact'));
 initMarquee(document.querySelector('.marquee-band'));
+initTvs(document.querySelector('.team-heading'));
 pageEntered.then(() => {
     initAbout(document.querySelector('#about'));
     initTeam(document.querySelector('#team'));

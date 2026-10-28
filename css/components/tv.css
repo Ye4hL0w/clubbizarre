@@ -1,0 +1,392 @@
+/* ============================================================
+   TÉLÉS CATHODIQUES HOLOGRAPHIQUES (accueil, autour de THE TEAM)
+
+   Boîtier en vraie 3D CSS : façade arrondie dominée par l'écran bombé,
+   arrière qui se rétrécit (le tube), antennes en V et petits pieds.
+   Matière « hologramme doré » : faces sombres translucides, arêtes
+   dorées, reflet irisé qui glisse.
+   Écrans : logo qui tourne comme le vinyle du hero,
+   - .tv--clean : logo net avec un halo doré ;
+   - .tv--crt   : lignes de balayage, barre qui défile, scintillement.
+   Flottement et léger suivi du curseur : js/pages/home/tvs.js
+   ============================================================ */
+
+.tv {
+    --w: clamp(120px, 13vw, 190px);
+    --h: calc(var(--w) * 0.86);
+    --d: calc(var(--w) * 0.8);
+    --turn: 20deg;              /* profil vers le centre de la page */
+    --tilt-x: 0deg;             /* suivi du curseur (tvs.js) */
+    --tilt-y: 0deg;
+    --edge: rgba(var(--color-gold-rgb), 0.6);
+    position: relative;
+    flex: none;
+    width: var(--w);
+    height: var(--h);
+    perspective: 900px;
+    animation: tv-float 6s var(--ease-in-out-standard) infinite;
+}
+
+.tv--right {
+    --turn: -20deg;
+    animation-delay: -3s;
+}
+
+@keyframes tv-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+}
+
+/* Halo doré au sol */
+.tv::after {
+    content: '';
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: calc(var(--h) * -0.22);
+    height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(var(--color-gold-rgb), 0.35), transparent 70%);
+    filter: blur(6px);
+    animation: tv-shadow 6s var(--ease-in-out-standard) infinite;
+    animation-delay: inherit;
+}
+
+@keyframes tv-shadow {
+    0%, 100% { opacity: 0.9; transform: scaleX(1); }
+    50%      { opacity: 0.55; transform: scaleX(0.85); }
+}
+
+.tv__body {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform:
+        rotateX(calc(-10deg + var(--tilt-x)))
+        rotateY(calc(var(--turn) + var(--tilt-y)));
+}
+
+/* ── Matière commune ──────────────────────────────────────── */
+.tv__face {
+    position: absolute;
+    display: block;
+    border: 1px solid var(--edge);
+    background:
+        linear-gradient(135deg,
+            rgba(var(--color-gold-rgb), 0.24) 0%,
+            rgba(12, 10, 6, 0.9) 36%,
+            rgba(12, 10, 6, 0.9) 64%,
+            rgba(var(--color-gold-rgb), 0.18) 100%);
+    box-shadow: inset 0 0 14px rgba(var(--color-gold-rgb), 0.25);
+    overflow: hidden;
+    backface-visibility: hidden;
+}
+
+/* Reflet holographique irisé + fines lignes d'hologramme */
+.tv__face::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(0deg, rgba(var(--color-gold-rgb), 0.08) 0 1px, transparent 1px 4px),
+        linear-gradient(115deg,
+            transparent 20%,
+            rgba(var(--color-gold-rgb), 0.35) 35%,
+            rgba(255, 236, 200, 0.28) 42%,
+            rgba(120, 220, 255, 0.16) 48%,
+            rgba(255, 140, 200, 0.12) 54%,
+            transparent 68%);
+    background-size: 100% 100%, 260% 100%;
+    mix-blend-mode: screen;
+    animation: tv-holo 7s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes tv-holo {
+    from { background-position: 0 0, 130% 0; }
+    to   { background-position: 0 0, -130% 0; }
+}
+
+/* ── Façade : grand écran, petite rangée de boutons dessous ── */
+.tv__face--front {
+    width: var(--w);
+    height: var(--h);
+    transform: translateZ(calc(var(--d) / 2));
+    border-radius: 16% / 18%;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--w) * 0.035);
+    padding: calc(var(--w) * 0.065) calc(var(--w) * 0.065) calc(var(--w) * 0.045);
+}
+
+/* ── Arrière : le tube se rétrécit vers le fond ────────────── */
+.tv__face--back {
+    width: var(--w);
+    height: var(--h);
+    border-radius: 22%;
+    transform: rotateY(180deg) translateZ(calc(var(--d) / 2)) scale(0.62);
+}
+
+.tv__face--left,
+.tv__face--right {
+    width: var(--d);
+    height: var(--h);
+    left: calc((var(--w) - var(--d)) / 2);
+}
+
+/* Côtés en trapèze : bord arrière plus court (19 % = (1 - 0,62) / 2) */
+.tv__face--left {
+    transform: rotateY(-90deg) translateZ(calc(var(--w) / 2));
+    clip-path: polygon(0 19%, 100% 4%, 100% 96%, 0 81%);
+}
+
+.tv__face--right {
+    transform: rotateY(90deg) translateZ(calc(var(--w) / 2));
+    clip-path: polygon(0 4%, 100% 19%, 100% 81%, 0 96%);
+}
+
+.tv__face--top,
+.tv__face--bottom {
+    width: var(--w);
+    height: var(--d);
+    top: calc((var(--h) - var(--d)) / 2);
+}
+
+.tv__face--top {
+    transform: rotateX(90deg) translateZ(calc(var(--h) / 2));
+    clip-path: polygon(19% 0, 81% 0, 96% 100%, 4% 100%);
+}
+
+.tv__face--bottom {
+    transform: rotateX(-90deg) translateZ(calc(var(--h) / 2));
+    clip-path: polygon(4% 0, 96% 0, 81% 100%, 19% 100%);
+}
+
+/* ── Antennes en V ─────────────────────────────────────────── */
+.tv__antenna {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+    transform: translateZ(calc(var(--d) * -0.1));
+}
+
+.tv__antenna::before,
+.tv__antenna::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -1px;
+    width: 2px;
+    height: calc(var(--h) * 0.55);
+    background: linear-gradient(to top, rgba(var(--color-gold-rgb), 0.9), rgba(var(--color-gold-rgb), 0.35));
+    border-radius: 2px;
+    box-shadow: 0 0 6px rgba(var(--color-gold-rgb), 0.6);
+    transform-origin: bottom center;
+}
+
+.tv__antenna::before { transform: rotate(-28deg); }
+.tv__antenna::after  { transform: rotate(34deg); }
+
+/* Socle de l'antenne */
+.tv__antenna span {
+    position: absolute;
+    left: calc(var(--w) * -0.07);
+    bottom: -3px;
+    width: calc(var(--w) * 0.14);
+    height: calc(var(--w) * 0.06);
+    border-radius: 50% 50% 0 0;
+    border: 1px solid var(--edge);
+    background: rgba(12, 10, 6, 0.9);
+}
+
+/* ── Pieds ─────────────────────────────────────────────────── */
+.tv__feet {
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    bottom: calc(var(--w) * -0.05);
+    height: calc(var(--w) * 0.05);
+    display: flex;
+    justify-content: space-between;
+    transform: translateZ(calc(var(--d) * 0.3));
+}
+
+.tv__feet::before,
+.tv__feet::after {
+    content: '';
+    width: calc(var(--w) * 0.12);
+    height: 100%;
+    border: 1px solid var(--edge);
+    border-top: 0;
+    border-radius: 0 0 4px 4px;
+    background: rgba(12, 10, 6, 0.9);
+}
+
+/* ── Écran ────────────────────────────────────────────────── */
+.tv__screen {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    border-radius: 14% / 16%;
+    background: radial-gradient(ellipse at center, #15110a 0%, #030303 78%);
+    border: 2px solid rgba(var(--color-gold-rgb), 0.5);
+    box-shadow:
+        inset 0 0 22px rgba(0, 0, 0, 0.95),
+        inset 0 0 4px rgba(var(--color-gold-rgb), 0.45),
+        0 0 14px rgba(var(--color-gold-rgb), 0.25);
+    display: grid;
+    place-items: center;
+    isolation: isolate;
+}
+
+/* Lueur du tube */
+.tv__screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(var(--color-gold-rgb), 0.18), transparent 70%);
+    z-index: 0;
+}
+
+/* Calque d'effet (lignes de balayage sur .tv--crt), hors de la grille */
+.tv__noise {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* Vitre bombée : reflet en haut à gauche, coins assombris */
+.tv__glare {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    border-radius: inherit;
+    background:
+        radial-gradient(ellipse 80% 55% at 28% 16%, rgba(255, 255, 255, 0.2), transparent 55%),
+        radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+    pointer-events: none;
+}
+
+/* Rangée sous l'écran : deux boutons et la grille du haut-parleur */
+.tv__panel {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--w) * 0.04);
+    height: calc(var(--w) * 0.08);
+    padding: 0 calc(var(--w) * 0.02);
+}
+
+.tv__knob {
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--color-gold-rgb), 0.7);
+    background: radial-gradient(circle at 35% 30%, rgba(var(--color-gold-rgb), 0.6), rgba(10, 8, 4, 0.9) 70%);
+    box-shadow: 0 0 6px rgba(var(--color-gold-rgb), 0.35);
+}
+
+.tv__grille {
+    flex: 1;
+    height: 60%;
+    background: repeating-linear-gradient(90deg, rgba(var(--color-gold-rgb), 0.55) 0 1px, transparent 1px 4px);
+    opacity: 0.7;
+}
+
+/* ── Logo : tourne à plat, comme le vinyle du hero ─────────── */
+.tv__logo {
+    position: relative;
+    z-index: 1;
+    height: 104%;
+    aspect-ratio: 1;
+    animation: tv-spin 15s linear infinite;
+}
+
+.tv__logo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+@keyframes tv-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* ── Télé 1 : logo net, simple halo doré ─────────────────── */
+.tv--clean .tv__logo-main {
+    filter: drop-shadow(0 0 6px rgba(var(--color-gold-rgb), 0.6));
+}
+
+/* ── Télé 2 : tube cathodique ────────────────────────────── */
+.tv--crt .tv__logo-main {
+    filter:
+        sepia(0.35)
+        brightness(1.15)
+        drop-shadow(0 0 4px rgba(var(--color-gold-rgb), 0.8))
+        drop-shadow(0 0 12px rgba(var(--color-gold-rgb), 0.35));
+    animation: tv-crt-jitter 5s steps(1) infinite;
+}
+
+/* Lignes de balayage qui scintillent */
+.tv--crt .tv__noise {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.45) 0 1px, transparent 1px 3px);
+    animation: tv-flicker 0.12s steps(2) infinite;
+    pointer-events: none;
+}
+
+/* Barre lumineuse qui défile */
+.tv--crt .tv__screen::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -30%;
+    height: 30%;
+    z-index: 3;
+    background: linear-gradient(180deg, transparent, rgba(var(--color-gold-rgb), 0.16), transparent);
+    animation: tv-roll 4.5s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes tv-roll {
+    from { transform: translateY(0); }
+    to   { transform: translateY(440%); }
+}
+
+@keyframes tv-flicker {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.8; }
+}
+
+@keyframes tv-crt-jitter {
+    0%, 40%, 42%, 100% { transform: none; }
+    41% { transform: translateX(2%) skewX(3deg); }
+}
+
+/* ── Pause hors écran (tvs.js) et animations réduites ────── */
+.tvs-paused .tv,
+.tvs-paused .tv *,
+.tvs-paused .tv *::before,
+.tvs-paused .tv *::after,
+.tvs-paused .tv::after {
+    animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tv,
+    .tv *,
+    .tv *::before,
+    .tv *::after,
+    .tv::after {
+        animation: none !important;
+    }
+}
