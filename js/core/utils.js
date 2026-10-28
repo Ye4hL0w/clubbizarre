@@ -86,3 +86,23 @@ export function cssColor(name, fallback = '#000000') {
     const n = parseInt(full, 16);
     return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255];
 }
+
+/**
+ * Plafonne la cadence d'une boucle de rendu (fonds WebGL).
+ * Sur un écran 120/144 Hz, rendre ces fonds à 60 images/s divise le travail
+ * du GPU par deux sans différence visible ; à 60 Hz, rien ne change.
+ * `shouldRender(now)` dit si l'image courante doit être dessinée.
+ */
+export function createFrameLimiter(maxFps) {
+    const interval = 1000 / maxFps;
+    let next = 0;
+    return {
+        shouldRender(now) {
+            // 1 ms de tolérance : le vsync n'arrive jamais pile à l'heure.
+            if (now < next - 1) return false;
+            next = Math.max(next + interval, now);
+            return true;
+        },
+        reset() { next = 0; },
+    };
+}

@@ -49,6 +49,18 @@ export const MOTION = {
         lerp: 0.15,
     },
 
+    // Performance des fonds WebGL (accueil + pages artistes)
+    performance: {
+        // Images/s max des fonds animés (au-delà, invisible mais coûteux sur écrans 120 Hz).
+        maxFps: 60,
+        // Marbre de l'accueil : si l'ordinateur passe sous ce nombre d'images/s,
+        // la résolution de rendu baisse par paliers (jamais sur une machine assez rapide).
+        minFps: 50,
+        // Palier de baisse et plancher de la résolution (1 = 1 pixel de rendu par pixel CSS).
+        resolutionStep: 0.25,
+        minResolution: 1,
+    },
+
     // Fond WebGL du hero (marbre veiné d'or)
     heroGL: {
         // Vitesse de dérive du marbre (1 = défaut, 0 = figé).

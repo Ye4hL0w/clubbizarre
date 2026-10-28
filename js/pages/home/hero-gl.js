@@ -8,14 +8,15 @@
    - Le scroll décale et assombrit le marbre.
    - Le centre reste plus sombre : le titre garde le focus.
 
-   Perf : pixel ratio plafonné à 2, rendu en pause hors écran / onglet
-   caché, version allégée sur mobile et appareils faibles.
+   Perf : pixel ratio plafonné à 2, 60 images/s max, résolution qui baisse
+   d'elle-même si l'ordinateur n'arrive pas à suivre, rendu en pause hors
+   écran / onglet caché, version allégée sur mobile et appareils faibles.
    Fallback : si WebGL ou Three.js manquent, le fond CSS d'origine reste.
    ============================================================ */
 
 import * as THREE from 'three';
 import { MOTION } from '../../core/config.js';
-import { cssColor, frameFactor, hasFinePointer, isLowPowerDevice, prefersReducedMotion } from '../../core/utils.js';
+import { createFrameLimiter, cssColor, frameFactor, hasFinePointer, isLowPowerDevice, prefersReducedMotion } from '../../core/utils.js';
 
 const vertexShader = /* glsl */ `
     varying vec2 vUv;
@@ -148,7 +149,7 @@ export function createHeroGL(hero) {
     }
 
     // Pixel ratio plafonné ; résolution réduite sur appareils faibles (le flou du marbre le permet).
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2) * (low ? cfg.lowResolution : 1);
+    let pixelRatio = Math.min(window.devicePixelRatio || 1, 2) * (low ? cfg.lowResolution : 1);
     renderer.setPixelRatio(pixelRatio);
 
     const canvas = renderer.domElement;
@@ -218,8 +219,38 @@ export function createHeroGL(hero) {
     let reveal = 0;
     let revealTarget = 0;
 
+    const perf = MOTION.performance;
+    const limiter = createFrameLimiter(perf.maxFps);
+    const minRatio = Math.min(perf.minResolution, pixelRatio);
+    let sampleTime = 0;
+    let sampleFrames = 0;
+    let warmup = true;                           // 1re fenêtre ignorée : entrée du hero en cours
+
+    /**
+     * Résolution adaptative : mesurée par fenêtres de 2 s. Si la cadence reste
+     * sous perf.minFps, on retire un palier de résolution (le marbre est doux,
+     * la différence se voit à peine, la fluidité beaucoup). Ne remonte jamais,
+     * pour éviter les allers-retours ; une machine rapide garde la pleine résolution.
+     */
+    const measure = (dt) => {
+        if (dt >= 100) return;                   // reprise après pause : non représentatif
+        sampleTime += dt;
+        sampleFrames += 1;
+        if (sampleTime < 2000) return;
+        const fps = (sampleFrames * 1000) / sampleTime;
+        sampleTime = 0;
+        sampleFrames = 0;
+        if (warmup) { warmup = false; return; }
+        if (fps >= perf.minFps || pixelRatio <= minRatio) return;
+        pixelRatio = Math.max(minRatio, pixelRatio - perf.resolutionStep);
+        renderer.setPixelRatio(pixelRatio);
+        renderer.setSize(hero.clientWidth, hero.clientHeight, false);
+    };
+
     const tick = (now) => {
+        if (!limiter.shouldRender(now)) return;
         const dt = Math.min(now - last, 100);
+        measure(now - last);
         last = now;
         if (!reduced) uniforms.uTime.value += (dt / 1000) * cfg.speed;
 
@@ -241,6 +272,7 @@ export function createHeroGL(hero) {
         if (shouldRun === running) return;
         running = shouldRun;
         last = performance.now();
+        limiter.reset();
         renderer.setAnimationLoop(running ? tick : null);
     };
 

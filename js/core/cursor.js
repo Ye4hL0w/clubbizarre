@@ -81,8 +81,24 @@ export function initCursor() {
         const text = el ? (el.getAttribute('data-cursor') || '').trim() : '';
         cursor.classList.toggle('is-hover', Boolean(el));
         cursor.classList.toggle('has-label', Boolean(text));
-        if (text) label.textContent = text;
+        if (text && label.textContent !== text) {
+            label.textContent = text;
+            // Centrage au pixel près pour un texte net (voir cursor.css).
+            label.style.setProperty('--label-x', `${-Math.round(label.offsetWidth / 2)}px`);
+            label.style.setProperty('--label-y', `${-Math.round(label.offsetHeight / 2)}px`);
+        }
     }
+
+    // Positions calées sur les pixels physiques de l'écran :
+    // une position fractionnaire rend le texte et l'anneau flous.
+    const snap = (v) => Math.round(v * devicePixelRatio) / devicePixelRatio;
+
+    const written = new Map();
+    const setTransform = (el, value) => {
+        if (written.get(el) === value) return;
+        written.set(el, value);
+        el.style.transform = value;
+    };
 
     /* ── Boucle ──────────────────────────────────────────────── */
     let last = performance.now();
@@ -107,13 +123,15 @@ export function initCursor() {
         const vy = haloPos.y - prevY;
         const speed = Math.hypot(vx, vy) / Math.max(dt / (1000 / 60), 1);
         const s = current ? 0 : Math.min(speed * stretch, maxStretch);
-        const angle = Math.atan2(vy, vx) * (180 / Math.PI);
+        const angle = s ? Math.atan2(vy, vx) * (180 / Math.PI) : 0;
 
-        dot.style.transform = `translate3d(${dotPos.x}px, ${dotPos.y}px, 0)`;
-        halo.style.transform = `translate3d(${haloPos.x}px, ${haloPos.y}px, 0)`;
-        ring.style.setProperty('--stretch-angle', `${angle}deg`);
-        ring.style.setProperty('--stretch-x', 1 + s);
-        ring.style.setProperty('--stretch-y', 1 - s * 0.6);
+        // Écritures DOM seulement si quelque chose a bougé : curseur immobile = zéro travail
+        // de style/rendu (le navigateur ne recompose plus la pastille à chaque image).
+        setTransform(dot, `translate3d(${snap(dotPos.x)}px, ${snap(dotPos.y)}px, 0)`);
+        setTransform(halo, `translate3d(${snap(haloPos.x)}px, ${snap(haloPos.y)}px, 0)`);
+        setTransform(ring, s > 0.002
+            ? `rotate(${angle.toFixed(1)}deg) scale(${(1 + s).toFixed(3)}, ${(1 - s * 0.6).toFixed(3)})`
+            : 'none');
 
         requestAnimationFrame(tick);
     };

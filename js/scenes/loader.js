@@ -14,7 +14,8 @@
    - animations réduites : une seule image fixe.
    ============================================================ */
 
-import { cssColor, hasFinePointer, isLowPowerDevice, prefersReducedMotion, supportsWebGL } from '../core/utils.js';
+import { MOTION } from '../core/config.js';
+import { createFrameLimiter, cssColor, hasFinePointer, isLowPowerDevice, prefersReducedMotion, supportsWebGL } from '../core/utils.js';
 
 // Ajouter une scène : créer js/scenes/<slug>.js puis l'inscrire ici.
 const SCENES = {
@@ -117,7 +118,13 @@ export async function mountScene(container, slug, extra = {}) {
     let clock = 0;
     let inView = true;
 
+    // 60 images/s max : même rendu, GPU deux fois moins sollicité sur écran 120 Hz.
+    // Une scène dont l'image dépend de la précédente (traînées) exporte son propre maxFps.
+    const limiter = createFrameLimiter(mod.maxFps ?? MOTION.performance.maxFps);
+
     const tick = (now) => {
+        raf = requestAnimationFrame(tick);
+        if (!limiter.shouldRender(now)) return;
         const dt = Math.min(now - last, 100) / 1000;
         last = now;
         clock += dt;
@@ -128,7 +135,6 @@ export async function mountScene(container, slug, extra = {}) {
         input.hover += (target.hover - input.hover) * k;
         readScroll();
         scene.render(clock, dt, input);
-        raf = requestAnimationFrame(tick);
     };
 
     const update = () => {
@@ -138,6 +144,7 @@ export async function mountScene(container, slug, extra = {}) {
         cancelAnimationFrame(raf);
         if (running) {
             last = performance.now();
+            limiter.reset();
             raf = requestAnimationFrame(tick);
         }
     };

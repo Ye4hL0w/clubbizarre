@@ -53,8 +53,11 @@ html.has-cursor * {
 }
 
 .cursor__ring {
-    --size: 26px;
+    /* La taille est appliquée en vraies dimensions (pas en scale) :
+       un anneau agrandi par transform est un bitmap étiré, donc flou. */
     --scale: 1;
+    --size: calc(26px * var(--scale));
+    --size: round(calc(26px * var(--scale)), 2px);
     position: absolute;
     width: var(--size);
     height: var(--size);
@@ -62,11 +65,10 @@ html.has-cursor * {
     top: 0;
     left: 0;
     border-radius: 50%;
-    border: 1px solid rgba(var(--color-gold-rgb), 0.55);
+    border: calc(1px * var(--scale)) solid rgba(var(--color-gold-rgb), 0.55);
     background: rgba(var(--color-gold-rgb), 0);
-    transform:
-        rotate(var(--stretch-angle, 0deg))
-        scale(calc(var(--stretch-x, 1) * var(--scale)), calc(var(--stretch-y, 1) * var(--scale)));
+    /* Seul l'étirement de vitesse passe par transform, écrit par cursor.js
+       (proche de 1, et « none » au repos). */
     transition:
         --scale var(--dur-base) var(--ease-out-expo),
         background-color var(--dur-fast) var(--ease-out-quart),
@@ -106,7 +108,10 @@ html.has-cursor * {
     letter-spacing: 2px;
     color: var(--color-gold);
     white-space: nowrap;
-    transform: translate(-50%, -50%) scale(0.6);
+    /* Centrage en pixels entiers calculé par cursor.js (--label-x/y) :
+       un translate(-50%) tombe souvent sur un demi-pixel et floute le texte. */
+    transform: translate(var(--label-x, -50%), var(--label-y, -50%)) scale(0.6);
+    -webkit-font-smoothing: antialiased;
     opacity: 0;
     transition:
         opacity var(--dur-fast) var(--ease-out-quart),
@@ -115,7 +120,7 @@ html.has-cursor * {
 
 .cursor.has-label .cursor__label {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(var(--label-x, -50%), var(--label-y, -50%));
 }
 
 /* --scale animable en douceur (Chrome, Safari 16.4+, Firefox 128+) */

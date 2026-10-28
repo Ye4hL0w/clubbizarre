@@ -74,6 +74,11 @@ export function initTitleHover(title, chars) {
         active = true;
     }, { passive: true });
 
+    // Dernières valeurs écrites : on ne touche au DOM que si elles changent.
+    // Chaque écriture de --mx/--my force à repeindre tout le titre (texte en dégradé).
+    let lastLight = '';
+    const lastLifts = chars.map(() => '');
+
     const tick = (now) => {
         const dt = now - last;
         last = now;
@@ -82,8 +87,13 @@ export function initTitleHover(title, chars) {
             const k = frameFactor(0.12, dt);
             light.x = lerp(light.x, mouse.x, k);
             light.y = lerp(light.y, mouse.y, k);
-            title.style.setProperty('--mx', `${light.x.toFixed(1)}px`);
-            title.style.setProperty('--my', `${light.y.toFixed(1)}px`);
+            const mx = `${light.x.toFixed(1)}px`;
+            const my = `${light.y.toFixed(1)}px`;
+            if (mx + my !== lastLight) {
+                lastLight = mx + my;
+                title.style.setProperty('--mx', mx);
+                title.style.setProperty('--my', my);
+            }
 
             const kl = frameFactor(0.1, dt);
             chars.forEach((char, i) => {
@@ -94,7 +104,11 @@ export function initTitleHover(title, chars) {
                 const goal = -lift * strength * strength;
                 lifts[i] = lerp(lifts[i], goal, kl);
                 // `translate` : indépendant du transform de l'animation d'entrée.
-                char.style.translate = Math.abs(lifts[i]) > 0.05 ? `0 ${lifts[i].toFixed(2)}px` : '';
+                const value = Math.abs(lifts[i]) > 0.05 ? `0 ${lifts[i].toFixed(2)}px` : '';
+                if (value !== lastLifts[i]) {
+                    lastLifts[i] = value;
+                    char.style.translate = value;
+                }
             });
         }
         requestAnimationFrame(tick);

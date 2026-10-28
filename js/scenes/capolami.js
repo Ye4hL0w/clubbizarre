@@ -124,6 +124,10 @@ function makeLights(count) {
     }));
 }
 
+// Traînées accumulées image par image : leur longueur dépend de la cadence,
+// on garde donc la fréquence native de l'écran (pas de plafond à 60 i/s).
+export const maxFps = Infinity;
+
 export function init(canvas, options) {
     const cfg = MOTION.scenes.capolami;
     const { low, pixelRatio, colors } = options;
