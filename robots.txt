@@ -7,6 +7,9 @@ Allow: /
 # Bloque les fichiers inutiles
 Disallow: /.git/
 Disallow: /.DS_Store
+Disallow: /_legacy/
+Disallow: /node_modules/
+Disallow: /scripts/
 
 # Lien vers le sitemap
 Sitemap: https://clubbizarre.vercel.app/sitemap.xml

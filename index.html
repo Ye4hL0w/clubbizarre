@@ -22,7 +22,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Club Bizarre | Electronic Music Collective</title>
     <meta name="description"
-        content="Club Bizarre – Electronic music collective from Nice, French Riviera. DJs 90Cynomen, Førn, Datseven, Jerem.wav, HelΛnova. Events, parties, booking.">
+        content="Club Bizarre is an electronic music collective from Nice, on the French Riviera. Club nights, DJ sets and events with jerem.wav, FØRN, 90cynomen, Datseven, HELΛNOVA, CAPOLAMI and bastoune bellon.">
     <meta name="keywords"
         content="Club Bizarre, music collective, electronic music, DJ, Nice, French Riviera, Côte d'Azur, party, techno, events, clubbizarre06">
     <meta name="author" content="Club Bizarre">
@@ -37,8 +37,11 @@
     <meta property="og:url" content="https://clubbizarre.vercel.app/">
     <meta property="og:title" content="Club Bizarre | Electronic Music Collective">
     <meta property="og:description"
-        content="Club Bizarre – Electronic music collective from Nice, French Riviera. DJs 90Cynomen, Førn, Datseven, Jerem.wav, HelΛnova. Events, parties, booking.">
-    <meta property="og:image" content="https://clubbizarre.vercel.app/logo.png">
+        content="Club Bizarre is an electronic music collective from Nice, on the French Riviera. Club nights, DJ sets and events with jerem.wav, FØRN, 90cynomen, Datseven, HELΛNOVA, CAPOLAMI and bastoune bellon.">
+    <meta property="og:image" content="https://clubbizarre.vercel.app/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Club Bizarre logo">
     <meta property="og:locale" content="en_GB">
     <meta property="og:site_name" content="Club Bizarre">
 
@@ -47,7 +50,7 @@
     <meta name="twitter:title" content="Club Bizarre | Electronic Music Collective">
     <meta name="twitter:description"
         content="Club Bizarre – Electronic music collective from Nice, French Riviera. Events, parties, booking.">
-    <meta name="twitter:image" content="https://clubbizarre.vercel.app/logo.png">
+    <meta name="twitter:image" content="https://clubbizarre.vercel.app/og-image.jpg">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,27 +72,151 @@
     <!-- Font Awesome (for SoundCloud icon) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         crossorigin="anonymous">
-    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+    <link rel="icon" href="favicon.ico" sizes="48x48">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#0a0a0a">
 
     <!-- Données structurées JSON-LD (Google Rich Results) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "MusicGroup",
-      "name": "Club Bizarre",
-      "url": "https://clubbizarre.vercel.app",
-      "logo": "https://clubbizarre.vercel.app/logo.png",
-      "description": "Club Bizarre est un collectif musical électronique basé à Nice, France.",
-      "genre": "Electronic Music",
-      "email": "clubbizarre06@gmail.com",
-      "sameAs": [
-        "https://www.instagram.com/clubbizarre06/",
-        "https://www.tiktok.com/@clubbizarre06",
-        "https://m.facebook.com/clubbizarre06",
-        "https://soundcloud.com/clubbizarre06",
-        "https://www.youtube.com/channel/UC1VJ7-PTaAsYsLicFTLFEPQ",
-        "https://shotgun.live/fr/venues/clubbizarre"
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://clubbizarre.vercel.app/#website",
+          "url": "https://clubbizarre.vercel.app/",
+          "name": "Club Bizarre",
+          "inLanguage": "en",
+          "publisher": {
+            "@id": "https://clubbizarre.vercel.app/#org"
+          }
+        },
+        {
+          "@type": [
+            "MusicGroup",
+            "Organization"
+          ],
+          "@id": "https://clubbizarre.vercel.app/#org",
+          "name": "Club Bizarre",
+          "alternateName": "clubbizarre06",
+          "url": "https://clubbizarre.vercel.app/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://clubbizarre.vercel.app/icon-512.png",
+            "width": 512,
+            "height": 512
+          },
+          "image": "https://clubbizarre.vercel.app/og-image.jpg",
+          "description": "Club Bizarre is a group of friends from the 06, on the French Riviera, united by a passion for music, sharing and discovering new musical horizons. Electronic music collective based in Nice.",
+          "slogan": "Bizarre is the new standard",
+          "genre": [
+            "Electronic music",
+            "House",
+            "Techno",
+            "Club music"
+          ],
+          "email": "clubbizarre06@gmail.com",
+          "foundingLocation": {
+            "@type": "Place",
+            "name": "Nice, France"
+          },
+          "location": {
+            "@type": "Place",
+            "name": "Nice, French Riviera",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Nice",
+              "addressRegion": "Provence-Alpes-Côte d'Azur",
+              "addressCountry": "FR"
+            }
+          },
+          "areaServed": "French Riviera",
+          "member": [
+            {
+              "@type": "OrganizationRole",
+              "roleName": "DJ",
+              "member": {
+                "@type": "Person",
+                "name": "jerem.wav",
+                "url": "https://clubbizarre.vercel.app/pages/jerem_wav.html"
+              }
+            },
+            {
+              "@type": "OrganizationRole",
+              "roleName": "DJ",
+              "member": {
+                "@type": "Person",
+                "name": "HELΛNOVA",
+                "url": "https://clubbizarre.vercel.app/pages/helanova.html"
+              }
+            },
+            {
+              "@type": "OrganizationRole",
+              "roleName": "DJ",
+              "member": {
+                "@type": "Person",
+                "name": "Datseven",
+                "url": "https://clubbizarre.vercel.app/pages/datseven.html"
+              }
+            },
+            {
+              "@type": "OrganizationRole",
+              "roleName": "DJ",
+              "member": {
+                "@type": "Person",
+                "name": "FØRN",
+                "url": "https://clubbizarre.vercel.app/pages/forn.html"
+              }
+            },
+            {
+              "@type": "OrganizationRole",
+              "roleName": "DJ",
+              "member": {
+                "@type": "Person",
+                "name": "90cynomen",
+                "url": "https://clubbizarre.vercel.app/pages/90cynomen.html"
+              }
+            },
+            {
+              "@type": "OrganizationRole",
+              "roleName": "Light + DJ",
+              "member": {
+                "@type": "Person",
+                "name": "bastoune bellon",
+                "url": "https://clubbizarre.vercel.app/pages/bastoune_bellon.html"
+              }
+            },
+            {
+              "@type": "OrganizationRole",
+              "roleName": "Community Manager",
+              "member": {
+                "@type": "Person",
+                "name": "mariam",
+                "url": "https://clubbizarre.vercel.app/pages/mariam.html"
+              }
+            },
+            {
+              "@type": "OrganizationRole",
+              "roleName": "DJ",
+              "member": {
+                "@type": "Person",
+                "name": "CAPOLAMI",
+                "url": "https://clubbizarre.vercel.app/pages/capolami.html"
+              }
+            }
+          ],
+          "sameAs": [
+            "https://www.instagram.com/clubbizarre06/",
+            "https://www.tiktok.com/@clubbizarre06",
+            "https://m.facebook.com/clubbizarre06",
+            "https://soundcloud.com/clubbizarre06",
+            "https://www.youtube.com/channel/UC1VJ7-PTaAsYsLicFTLFEPQ",
+            "https://shotgun.live/fr/venues/clubbizarre"
+          ]
+        }
       ]
     }
     </script>
@@ -133,7 +260,7 @@
         <section id="hero" class="hero fade-in-section">
             <div class="hero-content">
                 <div class="hero-logo-container">
-                    <img src="logo.png" alt="Club Bizarre Logo" class="hero-logo vinyl-spin">
+                    <img src="logo-hero.webp" alt="Club Bizarre logo" class="hero-logo vinyl-spin" fetchpriority="high">
                     <div class="glow"></div>
                 </div>
                 <h1 class="hero-title">CLUB BIZARRE</h1>

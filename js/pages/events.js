@@ -22,6 +22,7 @@ const TZ = 'Europe/Paris';
 
 load().then(({ upcoming, past }) => {
     render(upcoming, past);
+    addStructuredData([...upcoming, ...past]);
     const cta = container.querySelector('.events-cta .btn');
     splitRoll(cta?.querySelector('.btn__label'), cta);
     pageEntered.then(() => revealIn(container));
@@ -72,6 +73,8 @@ function fromApi(e) {
         end: e.endTime ? new Date(e.endTime) : null,
         venue: geo.venue || geo.name || geo.street || '',
         city: geo.city || '',
+        street: geo.street || '',
+        zip: geo.zipCode || geo.postalCode || '',
         url: e.url || `https://shotgun.live/events/${e.slug || e.id || ''}`,
         image: e.coverUrl || e.coverThumbnailUrl || '',
         artists: (e.artists || []).map((a) => a.name),
@@ -98,6 +101,47 @@ function fromManual(e) {
         ticketsLeft: e.soldOut ? 0 : null,
         cancelled: Boolean(e.cancelled),
     };
+}
+
+/* ── Données structurées (Google : résultats enrichis « Événements ») ── */
+
+function addStructuredData(events) {
+    const site = 'https://clubbizarre.vercel.app/';
+    const org = { '@type': 'MusicGroup', name: 'Club Bizarre', url: site };
+    const graph = events.filter((e) => e.date).map((e) => ({ e, lineup: e.artists.filter((a) => a.toLowerCase() !== 'club bizarre') })).map(({ e, lineup }) => ({
+        '@type': 'MusicEvent',
+        name: e.title,
+        startDate: e.date.toISOString(),
+        ...(e.end && { endDate: e.end.toISOString() }),
+        eventStatus: `https://schema.org/${e.cancelled ? 'EventCancelled' : 'EventScheduled'}`,
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        location: {
+            '@type': 'Place',
+            name: e.venue || e.city || 'French Riviera',
+            address: {
+                '@type': 'PostalAddress',
+                ...(e.street && { streetAddress: e.street }),
+                ...(e.zip && { postalCode: e.zip }),
+                addressLocality: e.city || 'Nice',
+                addressCountry: 'FR',
+            },
+        },
+        ...(e.image && { image: [e.image] }),
+        description: `${e.title}, a Club Bizarre night${e.city ? ` in ${e.city}` : ''} on the French Riviera.`,
+        organizer: org,
+        performer: lineup.length ? lineup.map((name) => ({ '@type': 'Person', name })) : org,
+        offers: {
+            '@type': 'Offer',
+            url: e.url,
+            ...(e.price != null && { price: e.price, priceCurrency: 'EUR' }),
+            availability: `https://schema.org/${e.ticketsLeft === 0 ? 'SoldOut' : 'InStock'}`,
+        },
+    }));
+    if (!graph.length) return;
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+    document.head.append(script);
 }
 
 /* ── Rendu ───────────────────────────────────────────────────── */
