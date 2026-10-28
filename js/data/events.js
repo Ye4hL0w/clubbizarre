@@ -7,7 +7,8 @@
    - d'ajouter des événements à la main (MANUAL_EVENTS), par exemple
      une date annoncée avant l'ouverture de la billetterie, ou un
      événement hors Shotgun. Ils sont mélangés aux événements Shotgun
-     et triés par date ; ceux déjà passés disparaissent d'eux-mêmes.
+     et triés par date ; une fois terminés, ils passent d'eux-mêmes
+     dans « Past Events ».
 
    Format d'un événement manuel :
    {

@@ -50,9 +50,29 @@ export const PHOTOS = {
     ],
     "jerem_wav": [
         {
-            "src": "jeremwav.png",
+            "src": "00-jeremwav.png",
             "w": 256,
             "h": 256
+        },
+        {
+            "src": "_web/01-neon-moon.jpg",
+            "w": 1200,
+            "h": 1600
+        },
+        {
+            "src": "02-blue-coast.jpg",
+            "w": 769,
+            "h": 1024
+        },
+        {
+            "src": "03-blue-coast-neon.jpg",
+            "w": 360,
+            "h": 540
+        },
+        {
+            "src": "04-b2b.jpg",
+            "w": 665,
+            "h": 1182
         }
     ],
     "mariam": [

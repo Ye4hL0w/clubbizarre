@@ -277,6 +277,26 @@
     border-radius: 4px;
 }
 
+/* Morceaux du profil SoundCloud (js/pages/artist.js → loadSoundcloudSets) */
+.sc-sets {
+    display: grid;
+    gap: var(--space-md);
+}
+
+/* Lecteur du profil chargé hors écran, le temps de lire la liste */
+.sc-sets__probe {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Secours : lecteur du profil visible, assez haut pour la liste */
+.set-player--profile iframe {
+    height: 450px;
+}
+
 .sets-empty p {
     color: var(--color-text-muted);
     margin-bottom: var(--space-sm);
@@ -306,51 +326,21 @@
     transform: translate(3px, -3px);
 }
 
-.artist-links__list {
-    display: grid;
+/* Icônes sous la bio (style des réseaux du contact, alignées à gauche) */
+.artist-socials {
+    justify-content: flex-start;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
 }
 
-/* Grandes lignes : filet qui se remplit d'or au survol */
-.artist-link--big {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    padding: var(--space-md) 0;
-    font-size: clamp(1.4rem, 4vw, 3rem);
-    font-weight: var(--fw-bold);
-    border-bottom: 1px solid var(--color-line-strong);
+.artist-socials a {
+    width: 48px;
+    height: 48px;
 }
 
-.artist-link--big::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 1px;
-    background: var(--color-gold);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform var(--dur-base) var(--ease-out-expo);
-}
-
-.artist-link--big:hover::after,
-.artist-link--big:focus-visible::after {
-    transform: scaleX(1);
-    transform-origin: left;
-}
-
-.artist-link--big .artist-link__icon {
-    color: var(--color-gold);
-}
-
-.artist-link--big .artist-link__label {
-    flex: 1;
-}
-
-.artist-link--big .artist-link__arrow svg {
-    width: clamp(20px, 3vw, 32px);
-    height: auto;
+.artist-socials svg {
+    width: 20px;
+    height: 20px;
 }
 
 /* ── Navigation entre artistes ─────────────────────────────── */

@@ -285,6 +285,136 @@ a.track:focus-visible .track__banner img {
     to { transform: rotate(360deg); }
 }
 
+/* ── Événements passés : cartes avec bannière ─────────────── */
+.past-events {
+    margin-top: var(--space-xl);
+}
+
+.past-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: var(--space-lg) var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.past-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.past-card__banner {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-line);
+}
+
+.past-card__banner img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.85);
+    transition:
+        transform var(--dur-slow) var(--ease-out-expo),
+        filter var(--dur-base) var(--ease-out-expo);
+}
+
+.past-card:hover .past-card__banner img,
+.past-card:focus-visible .past-card__banner img {
+    transform: scale(1.05);
+    filter: none;
+}
+
+.past-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: var(--space-sm) 2.5rem var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-line-strong);
+    flex: 1;
+}
+
+/* Filet doré qui se dessine sous la carte survolée */
+.past-card::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.past-card:hover::after,
+.past-card:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.past-card__date {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+}
+
+.past-card__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    transition: color var(--dur-fast) var(--ease-out-quart);
+}
+
+.past-card:hover .past-card__title,
+.past-card:focus-visible .past-card__title {
+    color: var(--color-gold);
+}
+
+.past-card__place {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.past-card__lineup {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.past-card__arrow {
+    position: absolute;
+    right: 0.25rem;
+    bottom: var(--space-sm);
+    color: var(--color-gold);
+    transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.past-card:hover .past-card__arrow,
+.past-card:focus-visible .past-card__arrow {
+    transform: translate(4px, -4px);
+}
+
 /* ── Mobile ────────────────────────────────────────────────── */
 @media (max-width: 768px) {
     .track__banner {

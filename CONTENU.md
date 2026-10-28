@@ -7,7 +7,7 @@ animations (`js/core/`, `js/scenes/`, `js/pages/`) n'a pas besoin d'être ouvert
 
 | Quoi | Fichier |
 |---|---|
-| Nom, rôle, bio, liens, sets SoundCloud, ordre précédent/suivant | `js/data/artists.js` |
+| Nom, rôle, bio, liens, profil SoundCloud (sets à jour tout seuls), ordre précédent/suivant | `js/data/artists.js` |
 | Photos (portrait + galerie) | dossier `assets/artistes/<artiste>/` |
 
 Ajouter ou retirer une photo :
@@ -32,7 +32,8 @@ dans `sitemap.xml`.
 
 - Les événements publics Shotgun s'affichent automatiquement.
 - `MANUAL_EVENTS` : ajouter une date à la main (format décrit en tête du fichier).
-- Les événements passés disparaissent d'eux-mêmes.
+- Une fois terminé, un événement passe tout seul dans « Past Events » (avec
+  sa bannière Shotgun), du plus récent au plus ancien.
 
 ## Partenaires
 

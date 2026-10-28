@@ -7,11 +7,14 @@
    - name   : nom affiché
    - role   : rôle affiché sous le nom
    - bio    : liste de paragraphes (vide → "Biographie à venir.")
-   - links  : liens affichés (icon : instagram, soundcloud, tiktok,
-              youtube, facebook, spotify, link)
-   - sets   : sets / mixes. Une URL SoundCloud est affichée en lecteur
-              intégré ; toute autre URL devient un lien.
-              Vide → message "Sets à venir" + lien SoundCloud du collectif.
+   - links  : liens affichés en icônes rondes sous la bio (icon : instagram,
+              soundcloud, shotgun, tiktok, youtube, facebook, spotify, link)
+   - soundcloud (conseillé) : lien du profil SoundCloud. Affiche un lecteur
+              avec TOUS ses morceaux, mis à jour automatiquement.
+   - sets   : (si pas de `soundcloud`) liste choisie à la main. Une URL
+              SoundCloud est affichée en lecteur intégré ; toute autre URL
+              devient un lien.
+              Rien des deux → message "Sets coming soon" + SoundCloud du collectif.
 
    Les PHOTOS ne se déclarent pas ici : voir js/data/artist-photos.js
    (généré par `node scripts/artist-photos.mjs`).
@@ -27,7 +30,10 @@ export const ARTISTS = [
         bio: [],
         links: [
             { label: 'Instagram', url: 'https://www.instagram.com/jerem_mcd/', icon: 'instagram' },
+            { label: 'SoundCloud', url: 'https://soundcloud.com/jeremy-moncada-350394306', icon: 'soundcloud' },
+            { label: 'Shotgun', url: 'https://shtgn.live/artist/jeremy-moncada-350394306', icon: 'shotgun' },
         ],
+        soundcloud: 'https://soundcloud.com/jeremy-moncada-350394306',
         sets: [],
     },
     {
@@ -47,7 +53,9 @@ export const ARTISTS = [
         bio: [],
         links: [
             { label: 'Instagram', url: 'https://www.instagram.com/mat.mileo_/', icon: 'instagram' },
+            { label: 'SoundCloud', url: 'https://soundcloud.com/dj-seven-410848559', icon: 'soundcloud' },
         ],
+        soundcloud: 'https://soundcloud.com/dj-seven-410848559',
         sets: [],
     },
     {
@@ -57,7 +65,9 @@ export const ARTISTS = [
         bio: [],
         links: [
             { label: 'Instagram', url: 'https://www.instagram.com/adrien_fornes06115/', icon: 'instagram' },
+            { label: 'SoundCloud', url: 'https://soundcloud.com/adrien-fornes', icon: 'soundcloud' },
         ],
+        soundcloud: 'https://soundcloud.com/adrien-fornes',
         sets: [],
     },
     {
@@ -67,7 +77,9 @@ export const ARTISTS = [
         bio: [],
         links: [
             { label: 'Instagram', url: 'https://www.instagram.com/cynthia.lng/', icon: 'instagram' },
+            { label: 'SoundCloud', url: 'https://soundcloud.com/cynthiaa-lng', icon: 'soundcloud' },
         ],
+        soundcloud: 'https://soundcloud.com/cynthiaa-lng',
         sets: [],
     },
     {
@@ -77,7 +89,9 @@ export const ARTISTS = [
         bio: [],
         links: [
             { label: 'Instagram', url: 'https://www.instagram.com/bastoune.bellon/', icon: 'instagram' },
+            { label: 'SoundCloud', url: 'https://soundcloud.com/bastounebellon', icon: 'soundcloud' },
         ],
+        soundcloud: 'https://soundcloud.com/bastounebellon',
         sets: [],
     },
     {

@@ -48,11 +48,11 @@ if (!artist || !main) {
         introSection(portrait),
         gallerySection(gallery),
         setsSection(),
-        linksSection(),
         navSection(),
     ].join(''));
 
     enhance(gallery);
+    loadSoundcloudSets();
     Promise.all([introDone, pageEntered]).then(() => {
         // Scène WebGL propre à l'artiste (si elle existe), derrière le nom.
         mountScene(main.querySelector('.artist-hero__scene'), slug, { photo: portrait?.url });
@@ -92,6 +92,7 @@ function introSection(portrait) {
             <div class="artist-bio">
                 <p class="artist-label" data-reveal="up">Bio</p>
                 <div class="artist-bio__text" data-reveal="up">${bio}</div>
+                ${socialsBlock()}
             </div>
         </div>
     </section>`;
@@ -118,13 +119,22 @@ function gallerySection(gallery) {
     </section>`;
 }
 
+function scPlayer(url) {
+    return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23d4af37&auto_play=false&hide_related=true&show_comments=false&show_reposts=false&show_teaser=false&visual=false`;
+}
+
 function setsSection() {
     const sets = artist.sets || [];
-    const content = sets.length
+    // Profil SoundCloud : la liste des morceaux est lue au chargement
+    // (loadSoundcloudSets), un lecteur compact par morceau. Un nouveau
+    // morceau publié apparaît donc tout seul.
+    const content = artist.soundcloud
+        ? `<div class="sc-sets"></div>`
+        : sets.length
         ? sets.map((s) => isSoundCloud(s.url)
             ? `<div class="set-player">
                    <iframe title="${esc(s.title || `Set by ${artist.name}`)}" loading="lazy" allow="autoplay"
-                       src="https://w.soundcloud.com/player/?url=${encodeURIComponent(s.url)}&color=%23d4af37&auto_play=false&hide_related=true&show_comments=false&show_reposts=false&show_teaser=false&visual=false"></iframe>
+                       src="${scPlayer(s.url)}"></iframe>
                </div>`
             : `<a class="artist-link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" data-cursor="LISTEN">
                    <span class="artist-link__label">${esc(s.title || s.url)}</span>${ICONS.link}
@@ -140,27 +150,64 @@ function setsSection() {
     <section class="artist-section artist-sets">
         <div class="container">
             <h2 class="section-title">Sets &amp; Mixes</h2>
-            <div class="sets-list" data-reveal="stagger">${content}</div>
+            <div class="sets-list" data-reveal="${artist.soundcloud ? 'up' : 'stagger'}">${content}</div>
         </div>
     </section>`;
 }
 
-function linksSection() {
+/**
+ * Morceaux du profil SoundCloud : un lecteur caché charge le profil, l'API du
+ * widget (getSounds) donne la liste, puis chaque morceau reçoit son lecteur
+ * compact. En cas d'échec, le lecteur du profil est affiché tel quel.
+ */
+function loadSoundcloudSets() {
+    const box = main.querySelector('.sc-sets');
+    if (!box) return;
+
+    const probe = document.createElement('iframe');
+    probe.className = 'sc-sets__probe';
+    probe.title = `${artist.name} on SoundCloud`;
+    probe.allow = 'autoplay';
+    probe.src = scPlayer(artist.soundcloud);
+    box.appendChild(probe);
+
+    const fallback = () => {
+        if (box.querySelector('.set-player')) return;
+        probe.className = '';
+        box.classList.add('set-player', 'set-player--profile');
+    };
+    const timer = setTimeout(fallback, 8000);
+
+    const script = document.createElement('script');
+    script.src = 'https://w.soundcloud.com/player/api.js';
+    script.onerror = fallback;
+    script.onload = () => {
+        const widget = window.SC?.Widget?.(probe);
+        if (!widget) return fallback();
+        widget.bind(window.SC.Widget.Events.READY, () => widget.getSounds((sounds) => {
+            const urls = (sounds || [])
+                .map((t) => t.permalink_url || (t.id && `https://api.soundcloud.com/tracks/${t.id}`))
+                .filter(Boolean);
+            if (!urls.length) return fallback();
+            clearTimeout(timer);
+            probe.remove();
+            box.innerHTML = urls.map((url, i) => `
+                <div class="set-player">
+                    <iframe title="${esc(sounds[i]?.title || `Set by ${artist.name}`)}" loading="lazy" allow="autoplay"
+                        src="${scPlayer(url)}"></iframe>
+                </div>`).join('');
+        }));
+    };
+    document.head.appendChild(script);
+}
+
+/** Liens de l'artiste : icônes rondes sous la bio (même style que le contact de l'accueil). */
+function socialsBlock() {
     if (!artist.links?.length) return '';
     const links = artist.links.map((l) => `
-        <a class="artist-link artist-link--big" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" data-cursor="OPEN">
-            <span class="artist-link__icon">${ICONS[l.icon] || ICONS.link}</span>
-            <span class="artist-link__label">${esc(l.label)}</span>
-            <span class="artist-link__arrow">${ICONS.link}</span>
-        </a>`).join('');
-
-    return `
-    <section class="artist-section artist-links">
-        <div class="container">
-            <h2 class="section-title">Follow</h2>
-            <div class="artist-links__list" data-reveal="stagger">${links}</div>
-        </div>
-    </section>`;
+        <a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" class="social-icon"
+            title="${esc(l.label)}" aria-label="${esc(l.label)}" data-cursor="OPEN">${ICONS[l.icon] || ICONS.link}</a>`).join('');
+    return `<div class="socials artist-socials" data-reveal="stagger">${links}</div>`;
 }
 
 function navSection() {
