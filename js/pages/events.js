@@ -11,6 +11,7 @@
 
 import { SHOTGUN, MANUAL_EVENTS } from '../data/events.js';
 import { revealIn } from '../core/reveal.js';
+import { splitRoll } from '../core/roll.js';
 import { pageEntered } from '../core/transitions.js';
 
 const container = document.getElementById('events-container');
@@ -18,6 +19,8 @@ const TZ = 'Europe/Paris';
 
 load().then((events) => {
     render(events);
+    const cta = container.querySelector('.events-cta .btn');
+    splitRoll(cta?.querySelector('.btn__label'), cta);
     pageEntered.then(() => revealIn(container));
     window.CB?.refreshMagnetic?.(container.parentElement);
 });
@@ -90,7 +93,8 @@ function render(events) {
     const cta = `
         <div class="events-cta" data-reveal="up">
             <a class="btn primary-btn" href="${SHOTGUN.pageUrl}" target="_blank" rel="noopener noreferrer" data-cursor="SHOTGUN">
-                All our events on Shotgun
+                <span class="btn__label">All our events</span>
+                <svg class="btn__arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
             </a>
         </div>`;
 

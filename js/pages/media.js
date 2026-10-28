@@ -11,11 +11,15 @@
 import { MEDIA } from '../data/media.js';
 import { createLightbox } from '../core/lightbox.js';
 import { pageEntered } from '../core/transitions.js';
+import { splitRoll } from '../core/roll.js';
 import { hasFinePointer, prefersReducedMotion } from '../core/utils.js';
 
 const ROOT = new URL('../../', import.meta.url);
 const grid = document.getElementById('media-grid');
 const reduced = prefersReducedMotion();
+
+const follow = document.querySelector('.social-link-wrapper .btn');
+splitRoll(follow?.querySelector('.btn__label'), follow);
 
 const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const url = (path) => (path ? new URL(path, ROOT).href : '');
