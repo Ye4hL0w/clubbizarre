@@ -58,17 +58,6 @@ h2.section-title {
     letter-spacing: 2px;
 }
 
-h2.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--accent-red), var(--accent-gold));
-    border-radius: 2px;
-}
 
 .container {
     max-width: 1200px;

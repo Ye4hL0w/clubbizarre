@@ -26,7 +26,7 @@ if (grid) {
         type: m.type === 'video' ? 'video' : 'image',
         url: url(m.src),
         posterUrl: url(m.poster),
-        alt: m.caption || `Club Bizarre, média ${i + 1}`,
+        alt: m.caption || `Club Bizarre, media ${i + 1}`,
     }));
 
     grid.innerHTML = items.map(tile).join('');
@@ -53,7 +53,7 @@ function tile(m, i) {
 
     return `
         <button class="media-item" type="button" style="aspect-ratio: ${ratio}"
-            data-cursor="${m.type === 'video' ? 'LIRE' : 'VOIR'}" aria-label="Agrandir : ${esc(m.alt)}">
+            data-cursor="${m.type === 'video' ? 'PLAY' : 'VIEW'}" aria-label="Enlarge: ${esc(m.alt)}">
             ${media}
             ${m.caption ? `<span class="media-item__caption">${esc(m.caption)}</span>` : ''}
         </button>`;

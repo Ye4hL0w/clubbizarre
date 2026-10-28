@@ -23,7 +23,7 @@ export function createLightbox(items) {
 
     const dialog = document.createElement('dialog');
     dialog.className = 'lightbox';
-    dialog.setAttribute('aria-label', 'Photo agrandie');
+    dialog.setAttribute('aria-label', 'Enlarged photo');
     dialog.setAttribute('data-lenis-prevent', '');
     dialog.innerHTML = `
         <div class="lightbox__backdrop"></div>
@@ -32,9 +32,9 @@ export function createLightbox(items) {
             <video class="lightbox__img lightbox__video" controls playsinline hidden></video>
         </figure>
         <p class="lightbox__counter" aria-live="polite"></p>
-        <button class="lightbox__btn lightbox__close" type="button" aria-label="Fermer" data-cursor="FERMER">${ICON.close}</button>
-        <button class="lightbox__btn lightbox__prev" type="button" aria-label="Précédent">${ICON.arrow}</button>
-        <button class="lightbox__btn lightbox__next" type="button" aria-label="Suivant">${ICON.arrow}</button>`;
+        <button class="lightbox__btn lightbox__close" type="button" aria-label="Close" data-cursor="CLOSE">${ICON.close}</button>
+        <button class="lightbox__btn lightbox__prev" type="button" aria-label="Previous">${ICON.arrow}</button>
+        <button class="lightbox__btn lightbox__next" type="button" aria-label="Next">${ICON.arrow}</button>`;
     document.body.appendChild(dialog);
 
     const photo = dialog.querySelector('img.lightbox__img');

@@ -30,16 +30,6 @@ html.has-reveal .fade-in-section {
     will-change: transform;
 }
 
-/* ── Titres de section : le filet se dessine après les lettres ── */
-html.has-reveal h2.section-title::after {
-    transform: translateX(-50%) scaleX(0);
-    transition: transform var(--dur-slow) var(--ease-out-expo) 0.35s;
-}
-
-html.has-reveal h2.section-title.is-revealed::after {
-    transform: translateX(-50%) scaleX(1);
-}
-
 /* ── Texte révélé mot par mot ──────────────────────────────── */
 .reveal-word {
     will-change: opacity;

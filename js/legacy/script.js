@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 navLinks.classList.remove('active');
                 hamburger.classList.remove('active');
                 hamburger.setAttribute('aria-expanded', 'false');
-                hamburger.setAttribute('aria-label', 'Ouvrir le menu');
+                hamburger.setAttribute('aria-label', 'Open menu');
             }
         });
     });
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger.classList.toggle('active', open);
         navLinks.classList.toggle('active', open);
         hamburger.setAttribute('aria-expanded', String(open));
-        hamburger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+        hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     }
 
     hamburger.addEventListener('click', () => {

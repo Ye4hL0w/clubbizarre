@@ -84,26 +84,26 @@ function fromManual(e) {
 /* ── Rendu ───────────────────────────────────────────────────── */
 
 const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const fmt = (date, opts) => new Intl.DateTimeFormat('fr-FR', { timeZone: TZ, ...opts }).format(date);
+const fmt = (date, opts) => new Intl.DateTimeFormat('en-GB', { timeZone: TZ, ...opts }).format(date);
 
 function render(events) {
     const cta = `
         <div class="events-cta" data-reveal="up">
             <a class="btn primary-btn" href="${SHOTGUN.pageUrl}" target="_blank" rel="noopener noreferrer" data-cursor="SHOTGUN">
-                Tous nos événements sur Shotgun
+                All our events on Shotgun
             </a>
         </div>`;
 
     if (!events.length) {
         const msg = container.dataset.error
-            ? 'La billetterie est momentanément indisponible.'
-            : 'Aucun événement annoncé pour le moment. La prochaine date arrive bientôt.';
+            ? 'Ticketing is temporarily unavailable.'
+            : 'No events announced yet. The next date is coming soon.';
         container.innerHTML = `<p class="events-empty" data-reveal="up">${msg}</p>${cta}`;
         return;
     }
 
     container.innerHTML = `
-        <ol class="tracklist" data-reveal="stagger" aria-label="Prochains événements">
+        <ol class="tracklist" data-reveal="stagger" aria-label="Upcoming events">
             ${events.map(row).join('')}
         </ol>
         ${cta}`;
@@ -114,17 +114,17 @@ function row(e, i) {
         ? `<span class="track__day">${fmt(e.date, { day: '2-digit' })}</span>
            <span class="track__month">${fmt(e.date, { month: 'short' }).replace('.', '')}</span>
            <span class="track__when">${fmt(e.date, { weekday: 'short' }).replace('.', '')} · ${fmt(e.date, { hour: '2-digit', minute: '2-digit' })}</span>`
-        : '<span class="track__day">—</span><span class="track__month">À venir</span>';
+        : '<span class="track__day">—</span><span class="track__month">TBA</span>';
 
-    const place = [e.venue, e.city].filter(Boolean).join(', ') || 'Lieu dévoilé bientôt';
+    const place = [e.venue, e.city].filter(Boolean).join(', ') || 'Venue revealed soon';
     const lineup = e.artists.length ? e.artists.join(' · ') : '';
 
     let status = '';
-    if (e.cancelled) status = '<span class="track__status track__status--off">Annulé</span>';
-    else if (e.ticketsLeft === 0) status = '<span class="track__status">Complet</span>';
-    else if (e.ticketsLeft !== null && e.ticketsLeft < 50) status = `<span class="track__status track__status--hot">Plus que ${e.ticketsLeft} places</span>`;
-    const price = !e.cancelled && e.price != null ? `<span class="track__price">dès ${String(e.price).replace('.', ',')} €</span>` : '';
-    const action = e.cancelled ? 'Annulé' : e.ticketsLeft === 0 ? 'Liste d’attente' : 'Billets';
+    if (e.cancelled) status = '<span class="track__status track__status--off">Cancelled</span>';
+    else if (e.ticketsLeft === 0) status = '<span class="track__status">Sold out</span>';
+    else if (e.ticketsLeft !== null && e.ticketsLeft < 50) status = `<span class="track__status track__status--hot">Only ${e.ticketsLeft} tickets left</span>`;
+    const price = !e.cancelled && e.price != null ? `<span class="track__price">from €${e.price}</span>` : '';
+    const action = e.cancelled ? 'Cancelled' : e.ticketsLeft === 0 ? 'Waitlist' : 'Tickets';
 
     const inner = `
         <span class="track__index" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
@@ -149,5 +149,5 @@ function row(e, i) {
         ? `<li class="track track--off" aria-disabled="true">${inner}</li>`
         : `<li><a class="track" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer"
                data-cursor="${action.toUpperCase()}"
-               aria-label="${esc(`${e.title}, ${e.date ? fmt(e.date, { dateStyle: 'full', timeStyle: 'short' }) : 'date à venir'}, ${place} — ${action}`)}">${inner}</a></li>`;
+               aria-label="${esc(`${e.title}, ${e.date ? fmt(e.date, { dateStyle: 'full', timeStyle: 'short' }) : 'date TBA'}, ${place} — ${action}`)}">${inner}</a></li>`;
 }

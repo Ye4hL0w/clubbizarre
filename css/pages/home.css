@@ -141,6 +141,13 @@
     z-index: 1;
 }
 
+/* Le texte de .about est déjà centré : le décalage left 50% / translateX(-50%)
+   de .section-title s'y ajoutait et poussait le titre vers la droite. */
+.about h2.section-title {
+    left: auto;
+    transform: scaleX(1.2);
+}
+
 .about-bg-word {
     position: absolute;
     top: 50%;
@@ -277,12 +284,6 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-}
-
-/* Plus de soulignement rouge → or sous le titre */
-html.has-reveal .contact h2.section-title::after,
-.contact h2.section-title::after {
-    display: none;
 }
 
 /* Filet doré qui se dessine sous le titre (js/pages/home/sections.js) */

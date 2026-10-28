@@ -39,7 +39,7 @@ if (!artist || !main) {
     const photos = (PHOTOS[slug] || []).map((p, i) => ({
         ...p,
         url: new URL(`${slug}/${p.src}`, PHOTO_BASE).href,
-        alt: i === 0 ? `Portrait de ${artist.name}` : `${artist.name}, photo ${i}`,
+        alt: i === 0 ? `Portrait of ${artist.name}` : `${artist.name}, photo ${i}`,
     }));
     const [portrait, ...gallery] = photos;
 
@@ -77,11 +77,11 @@ function introSection(portrait) {
     const ratio = portrait?.w && portrait?.h ? `${portrait.w} / ${portrait.h}` : '4 / 5';
     const media = portrait
         ? `<img class="artist-portrait__img" src="${portrait.url}" ${imgAttrs(portrait, { lazy: false })}>`
-        : `<div class="artist-placeholder"><span>${esc(initials(artist.name))}</span><small>Portrait à venir</small></div>`;
+        : `<div class="artist-placeholder"><span>${esc(initials(artist.name))}</span><small>Portrait coming soon</small></div>`;
 
     const bio = artist.bio?.length
         ? artist.bio.map((p) => `<p>${esc(p)}</p>`).join('')
-        : '<p class="artist-bio__empty">Biographie à venir.</p>';
+        : '<p class="artist-bio__empty">Bio coming soon.</p>';
 
     return `
     <section class="artist-intro">
@@ -101,18 +101,18 @@ function gallerySection(gallery) {
     const items = gallery.length
         ? gallery.map((p, i) => `
             <button class="gallery-item" type="button" data-index="${i}" data-cursor="VOIR"
-                aria-label="Agrandir : ${esc(p.alt)}" style="aspect-ratio: ${p.w && p.h ? `${p.w} / ${p.h}` : '4 / 5'}">
+                aria-label="Enlarge: ${esc(p.alt)}" style="aspect-ratio: ${p.w && p.h ? `${p.w} / ${p.h}` : '4 / 5'}">
                 <img data-src="${p.url}" ${imgAttrs(p)}>
             </button>`).join('')
         : ['4 / 5', '1 / 1', '3 / 4'].map((r) => `
             <div class="gallery-item gallery-item--placeholder" style="aspect-ratio: ${r}" aria-hidden="true">
-                <span>Photos à venir</span>
+                <span>Photos coming soon</span>
             </div>`).join('');
 
     return `
     <section class="artist-section artist-gallery">
         <div class="container">
-            <h2 class="section-title">Galerie</h2>
+            <h2 class="section-title">Gallery</h2>
             <div class="gallery-grid" data-reveal="stagger">${items}</div>
         </div>
     </section>`;
@@ -123,16 +123,16 @@ function setsSection() {
     const content = sets.length
         ? sets.map((s) => isSoundCloud(s.url)
             ? `<div class="set-player">
-                   <iframe title="${esc(s.title || `Set de ${artist.name}`)}" loading="lazy" allow="autoplay"
+                   <iframe title="${esc(s.title || `Set by ${artist.name}`)}" loading="lazy" allow="autoplay"
                        src="https://w.soundcloud.com/player/?url=${encodeURIComponent(s.url)}&color=%23d4af37&auto_play=false&hide_related=true&show_comments=false&show_reposts=false&show_teaser=false&visual=false"></iframe>
                </div>`
-            : `<a class="artist-link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" data-cursor="ÉCOUTER">
+            : `<a class="artist-link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" data-cursor="LISTEN">
                    <span class="artist-link__label">${esc(s.title || s.url)}</span>${ICONS.link}
                </a>`).join('')
         : `<div class="sets-empty">
-               <p>Sets à venir.</p>
-               <a class="artist-link" href="${COLLECTIVE.soundcloud}" target="_blank" rel="noopener noreferrer" data-cursor="ÉCOUTER">
-                   <span class="artist-link__label">SoundCloud du collectif</span>${ICONS.link}
+               <p>Sets coming soon.</p>
+               <a class="artist-link" href="${COLLECTIVE.soundcloud}" target="_blank" rel="noopener noreferrer" data-cursor="LISTEN">
+                   <span class="artist-link__label">Collective SoundCloud</span>${ICONS.link}
                </a>
            </div>`;
 
@@ -148,7 +148,7 @@ function setsSection() {
 function linksSection() {
     if (!artist.links?.length) return '';
     const links = artist.links.map((l) => `
-        <a class="artist-link artist-link--big" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" data-cursor="OUVRIR">
+        <a class="artist-link artist-link--big" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" data-cursor="OPEN">
             <span class="artist-link__icon">${ICONS[l.icon] || ICONS.link}</span>
             <span class="artist-link__label">${esc(l.label)}</span>
             <span class="artist-link__arrow">${ICONS.link}</span>
@@ -157,7 +157,7 @@ function linksSection() {
     return `
     <section class="artist-section artist-links">
         <div class="container">
-            <h2 class="section-title">Suivre</h2>
+            <h2 class="section-title">Follow</h2>
             <div class="artist-links__list" data-reveal="stagger">${links}</div>
         </div>
     </section>`;
@@ -167,15 +167,15 @@ function navSection() {
     const prev = ARTISTS[(index - 1 + ARTISTS.length) % ARTISTS.length];
     const next = ARTISTS[(index + 1) % ARTISTS.length];
     return `
-    <nav class="artist-nav" aria-label="Autres artistes">
+    <nav class="artist-nav" aria-label="Other artists">
         <div class="container artist-nav__grid" data-reveal="stagger">
-            <a class="artist-nav__link artist-nav__link--prev" href="${prev.slug}.html" data-cursor="PRÉCÉDENT">
-                <span class="artist-nav__hint">${ICONS.arrow} Artiste précédent</span>
+            <a class="artist-nav__link artist-nav__link--prev" href="${prev.slug}.html" data-cursor="PREV">
+                <span class="artist-nav__hint">${ICONS.arrow} Previous artist</span>
                 <span class="artist-nav__name">${esc(prev.name)}</span>
             </a>
-            <a class="artist-nav__back" href="../index.html#team" data-cursor="RETOUR">Toute l'équipe</a>
-            <a class="artist-nav__link artist-nav__link--next" href="${next.slug}.html" data-cursor="SUIVANT">
-                <span class="artist-nav__hint">Artiste suivant ${ICONS.arrow}</span>
+            <a class="artist-nav__back" href="../index.html#team" data-cursor="BACK">Full team</a>
+            <a class="artist-nav__link artist-nav__link--next" href="${next.slug}.html" data-cursor="NEXT">
+                <span class="artist-nav__hint">Next artist ${ICONS.arrow}</span>
                 <span class="artist-nav__name">${esc(next.name)}</span>
             </a>
         </div>

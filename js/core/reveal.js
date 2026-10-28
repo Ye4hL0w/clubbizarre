@@ -2,7 +2,7 @@
    REVEALS AU SCROLL — un seul vocabulaire pour tout le site
 
    Automatique :
-   - .section-title          lettres qui montent de leurs masques + filet
+   - .section-title          lettres qui montent de leurs masques
    - .fade-in-section        (hors hero) ses blocs montent en fondu,
                              échelonnés, sauf si la section déclare
                              ses propres data-reveal

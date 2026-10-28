@@ -105,7 +105,7 @@ function createLoader(overlay) {
     const el = document.createElement('div');
     el.className = 'intro-loader';
     el.setAttribute('role', 'progressbar');
-    el.setAttribute('aria-label', 'Chargement');
+    el.setAttribute('aria-label', 'Loading');
     el.setAttribute('aria-valuemin', '0');
     el.setAttribute('aria-valuemax', '100');
     el.innerHTML = `
