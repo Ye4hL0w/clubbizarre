@@ -27,7 +27,10 @@ export const ARTISTS = [
         slug: 'jerem_wav',
         name: 'jerem.wav',
         role: 'DJ',
-        bio: [],
+        bio: [
+            "For jerem.wav, a set is a story. Each one is built like a narrative, sometimes drawn from a chapter of his own life, sometimes from somewhere else entirely, and always carried by his own universe.",
+            "He loves taking the crowd on a journey, blending styles and slipping in unexpected, atypical sounds along the way. But his heart beats for one thing above all: club music.",
+        ],
         links: [
             { label: 'Instagram', url: 'https://www.instagram.com/jerem_mcd/', icon: 'instagram' },
             { label: 'SoundCloud', url: 'https://soundcloud.com/jeremy-moncada-350394306', icon: 'soundcloud' },
