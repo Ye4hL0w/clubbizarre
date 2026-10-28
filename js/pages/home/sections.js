@@ -41,6 +41,13 @@ export function initTeam(section) {
     });
 }
 
+/* ── Partenaires : nom qui roule au survol du lien ───────────── */
+export function initPartners(section) {
+    section?.querySelectorAll('a.partner__logo').forEach((link) => {
+        splitRoll(link.querySelector('.partner__name'), link);
+    });
+}
+
 /* ── Contact : filet doré qui se dessine, e-mail qui roule au survol ───── */
 export function initContact(section) {
     const email = section?.querySelector('.contact-email');

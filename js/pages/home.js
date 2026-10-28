@@ -14,7 +14,7 @@ import { pageEntered } from '../core/transitions.js';
 import { prefersReducedMotion, supportsWebGL } from '../core/utils.js';
 import { splitTitle, initTitleHover } from './home/hero-title.js';
 import { initMarquee } from './home/marquee.js';
-import { initAbout, initTeam, initContact } from './home/sections.js';
+import { initAbout, initTeam, initPartners, initContact } from './home/sections.js';
 
 const root = document.documentElement;
 const { gsap, ScrollTrigger } = window;
@@ -33,6 +33,7 @@ const chars = title ? splitTitle(title) : [];
 /* ── Sections ───────────────────────────────────────────────
    Le découpage de l'email est immédiat (hors écran) ; les animations
    au scroll attendent l'ouverture du rideau, comme les reveals génériques. */
+initPartners(document.querySelector('#partners'));
 initContact(document.querySelector('#contact'));
 initMarquee(document.querySelector('.marquee-band'));
 pageEntered.then(() => {

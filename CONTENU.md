@@ -34,6 +34,19 @@ dans `sitemap.xml`.
 - `MANUAL_EVENTS` : ajouter une date à la main (format décrit en tête du fichier).
 - Les événements passés disparaissent d'eux-mêmes.
 
+## Partenaires
+
+Section « Partners » de l'accueil, directement dans `index.html` (`#partners`).
+
+- Texte : remplacer « Description coming soon. » dans le `<p class="partner__text">`.
+- Logo : déposer le fichier dans `assets/partners/`, puis remplacer
+  `<span class="partner__name">NOM</span>` par
+  `<img class="partner__img" src="assets/partners/<fichier>" alt="Nom">`.
+  Un logo clair (blanc ou or) sur fond transparent (PNG ou SVG) rend le mieux.
+  Taille : `style="--logo-h: 96px"` sur le `<img>` (voir Redzing et Blue Coast).
+- Lien vers le site du partenaire : copier le `<a class="partner__logo" …>` de
+  Redzing Radio ou Blue Coast et changer le `href`.
+
 ## Médias
 
 `js/data/media.js` : une ligne par photo ou vidéo (chemin, dimensions, légende).
