@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Collection brodée Club Bizarre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Syncopate:wght@400;700&display=swap">
+<style>
+/* Layout : vitrine d'atelier. Pour chaque pièce, un gros plan de la broderie puis les vêtements portés à plat. */
+:root{
+  color-scheme: dark;
+  --bg:#050505; --line:rgba(255,255,255,.08);
+  --text:#f4f1ea; --muted:#9a958c; --gold:#D4AF37; --red:#A50000;
+  --fabric:#101010;
+  --font-display:'Syncopate','Arial Black',sans-serif;
+  --font-text:'Outfit','Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-text);font-weight:300;font-size:16px;line-height:1.6;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 64px}
+.wrap{max-width:1280px;margin:0 auto}
+h1,h2,h3{font-family:var(--font-display);font-weight:700;text-transform:uppercase;text-wrap:balance;margin:0}
+.eyebrow{font-family:var(--font-display);font-size:.66rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+header.top{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:48px;align-items:end;padding-block:60px 36px;border-bottom:1px solid var(--line)}
+header.top h1{font-size:clamp(2rem,5.2vw,4rem);letter-spacing:.08em;line-height:1.05;margin-top:14px}
+header.top h1 span{color:var(--gold)}
+.lede{color:var(--muted);max-width:62ch;margin:18px 0 0}
+.controls{display:flex;flex-direction:column;gap:12px}
+.controls .lbl{font-size:.76rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.swatches{display:flex;flex-wrap:wrap;gap:10px}
+.swatch{display:flex;align-items:center;gap:10px;background:transparent;color:var(--text);border:1px solid var(--line);border-radius:999px;padding:7px 14px 7px 7px;font:inherit;font-size:.9rem;cursor:pointer}
+.swatch i{width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:block}
+.swatch[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}
+.swatch:focus-visible,.flip:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+section{padding-block:64px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:24px}
+.sec-head h2{font-size:clamp(1.3rem,2.6vw,1.9rem);letter-spacing:.12em}
+.sec-head p{color:var(--muted);margin:0;max-width:58ch}
+.piece{background:radial-gradient(110% 85% at 50% 30%, #2b2723 0%, #161412 52%, #080808 100%);border:1px solid var(--line);min-width:0;margin:0;display:flex;flex-direction:column}
+.piece .art{flex:1;display:flex;align-items:center}
+.piece svg{display:block;width:100%;height:auto}
+.piece figcaption{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px 14px 12px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.piece figcaption b{color:var(--text);font-weight:400}
+.piece.macro{background:#000}
+.piece.macro .art{position:relative;min-height:260px}
+.piece.macro .art svg{position:absolute;inset:0;width:100%;height:100%}
+.house{display:grid;grid-template-columns:minmax(0,1.25fr) repeat(2,minmax(0,1fr));gap:12px}
+.house .macro{grid-row:span 2}
+.member{border-top:1px solid var(--line);padding-block:28px 8px}
+.member .head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:24px;align-items:end;margin-bottom:16px}
+.member .role{font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px}
+.member h3{font-size:clamp(1.2rem,2.4vw,1.8rem);letter-spacing:.1em;overflow-wrap:anywhere}
+.member .idea{color:var(--muted);margin:0;font-size:.95rem;max-width:70ch}
+.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.flip{background:transparent;border:1px solid var(--line);color:var(--text);font:inherit;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:4px 12px;cursor:pointer;white-space:nowrap}
+.flip:hover{border-color:var(--gold);color:var(--gold)}
+.spec{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:12px}
+.spec div{background:var(--bg);padding:14px 16px;min-width:0}
+.spec b{display:block;font-family:var(--font-display);font-size:.58rem;letter-spacing:.24em;color:var(--gold);margin-bottom:4px;text-transform:uppercase}
+.spec p{margin:0;color:var(--muted);font-size:.88rem}
+.note{margin-top:64px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem;max-width:82ch}
+@media (max-width:1000px){
+  header.top{grid-template-columns:1fr}
+  .house{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .house .macro{grid-column:1/-1;grid-row:auto}
+  .row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .row .macro{grid-column:1/-1}
+  .member .head{grid-template-columns:1fr}
+  .spec{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .row{grid-template-columns:1fr}
+  .house{grid-template-columns:1fr}
+  .spec{grid-template-columns:1fr}
+}
+
+body{margin:0}
+</style>
+</head>
+<body>
+<svg id="lib" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="goldB" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="200" y2="200">
+      <stop offset="0" stop-color="#7a5a16"/><stop offset=".14" stop-color="#c9a23a"/><stop offset=".27" stop-color="#f4d98a"/>
+      <stop offset=".4" stop-color="#a8842a"/><stop offset=".55" stop-color="#e7c565"/><stop offset=".7" stop-color="#8a6a1c"/>
+      <stop offset=".84" stop-color="#d8b44e"/><stop offset="1" stop-color="#6e5215"/>
+    </linearGradient>
+    <linearGradient id="redB" gradientUnits="userSpaceOnUse" x1="0" y1="200" x2="200" y2="0">
+      <stop offset="0" stop-color="#5c0000"/><stop offset=".35" stop-color="#a50a0a"/><stop offset=".55" stop-color="#7a0000"/><stop offset=".8" stop-color="#b51616"/><stop offset="1" stop-color="#600000"/>
+    </linearGradient>
+    <radialGradient id="knotG" fx=".34" fy=".3" r=".6"><stop offset="0" stop-color="#fff3c6"/><stop offset=".35" stop-color="#e0bd58"/><stop offset=".8" stop-color="#8a6a1c"/><stop offset="1" stop-color="#2e2106"/></radialGradient>
+    <radialGradient id="knotR" fx=".34" fy=".3" r=".6"><stop offset="0" stop-color="#ff8a74"/><stop offset=".35" stop-color="#b81414"/><stop offset=".85" stop-color="#5e0000"/><stop offset="1" stop-color="#240000"/></radialGradient>
+    <radialGradient id="knotK" fx=".34" fy=".3" r=".6"><stop offset="0" stop-color="#5a5a5a"/><stop offset=".4" stop-color="#242424"/><stop offset="1" stop-color="#050505"/></radialGradient>
+    <radialGradient id="glowR"><stop offset="0" stop-color="#ff3b1f" stop-opacity=".55"/><stop offset="1" stop-color="#a50000" stop-opacity="0"/></radialGradient>
+
+    <!-- Tissu : plis à basse fréquence + grain de maille, éclairés -->
+    <filter id="cloth" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.016 0.0045" numOctaves="3" seed="11" result="fold"/>
+      <feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="1" seed="3" result="knit"/>
+      <feComposite in="fold" in2="knit" operator="arithmetic" k2="1" k3=".1" result="h"/>
+      <feColorMatrix in="h" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="ha"/>
+      <feDiffuseLighting in="ha" surfaceScale="9" diffuseConstant="1.05" lighting-color="#ffffff" result="L">
+        <feDistantLight azimuth="235" elevation="52"/>
+      </feDiffuseLighting>
+      <feComposite in="SourceGraphic" in2="L" operator="arithmetic" k1="1.2" k3=".075" result="lit"/>
+      <feComposite in="lit" in2="SourceAlpha" operator="in"/>
+    </filter>
+    <filter id="clothM" x="0" y="0" width="100%" height="100%" filterUnits="objectBoundingBox" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.004" numOctaves="2" seed="5" result="fold"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".55 .9" numOctaves="2" seed="8" result="knit"/>
+      <feComposite in="fold" in2="knit" operator="arithmetic" k2="1" k3=".22" result="h"/>
+      <feColorMatrix in="h" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="ha"/>
+      <feDiffuseLighting in="ha" surfaceScale="5" diffuseConstant="1.05" lighting-color="#ffffff" result="L">
+        <feDistantLight azimuth="235" elevation="50"/>
+      </feDiffuseLighting>
+      <feComposite in="SourceGraphic" in2="L" operator="arithmetic" k1="1.2" k3=".08"/>
+    </filter>
+    <!-- Relief de la broderie sur un vêtement : creux du tissu, rembourrage, ombre -->
+    <filter id="raiseG" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1" result="dil"/>
+      <feGaussianBlur in="dil" stdDeviation="1.8" result="pk"/>
+      <feFlood flood-color="#000" flood-opacity=".5"/><feComposite in2="pk" operator="in" result="pucker"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation=".45" result="b"/>
+      <feSpecularLighting in="b" surfaceScale="1.5" specularConstant=".65" specularExponent="14" lighting-color="#fff4d6" result="s"><feDistantLight azimuth="225" elevation="40"/></feSpecularLighting>
+      <feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
+      <feComposite in="SourceGraphic" in2="s2" operator="arithmetic" k2="1" k3=".45" result="lit"/>
+      <feDropShadow in="lit" dx=".3" dy=".45" stdDeviation=".3" flood-opacity=".85" result="ds"/>
+      <feMerge><feMergeNode in="pucker"/><feMergeNode in="ds"/></feMerge>
+    </filter>
+    <!-- Même chose pour les gros plans -->
+    <filter id="raiseM" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.6" result="dil"/>
+      <feGaussianBlur in="dil" stdDeviation="3" result="pk"/>
+      <feFlood flood-color="#000" flood-opacity=".6"/><feComposite in2="pk" operator="in" result="pucker"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.1" result="b"/>
+      <feSpecularLighting in="b" surfaceScale="2.4" specularConstant=".6" specularExponent="18" lighting-color="#fff4d6" result="s"><feDistantLight azimuth="225" elevation="38"/></feSpecularLighting>
+      <feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
+      <feComposite in="SourceGraphic" in2="s2" operator="arithmetic" k2="1" k3=".4" result="lit"/>
+      <feDropShadow in="lit" dx=".7" dy="1" stdDeviation=".7" flood-opacity=".85" result="ds"/>
+      <feMerge><feMergeNode in="pucker"/><feMergeNode in="ds"/></feMerge>
+    </filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <filter id="blur6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+
+    <pattern id="knitV" width="2.6" height="3" patternUnits="userSpaceOnUse">
+      <rect width="2.6" height="3" fill="none"/>
+      <path d="M0 0 L1.3 3 L2.6 0" fill="none" stroke="#000" stroke-opacity=".32" stroke-width=".45"/>
+      <path d="M.3 0 L1.3 2.4" fill="none" stroke="#fff" stroke-opacity=".05" stroke-width=".35"/>
+    </pattern>
+    <pattern id="rib" width="2.6" height="4" patternUnits="userSpaceOnUse">
+      <rect width="2.6" height="4" fill="none"/><path d="M1.3 0v4" stroke="#000" stroke-opacity=".4" stroke-width=".9"/>
+    </pattern>
+    <linearGradient id="shadeX" x1="0" x2="1">
+      <stop offset="0" stop-color="#000" stop-opacity=".6"/><stop offset=".18" stop-color="#000" stop-opacity="0"/>
+      <stop offset=".45" stop-color="#fff" stop-opacity=".05"/><stop offset=".82" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".6"/>
+    </linearGradient>
+    <linearGradient id="shadeY" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".06"/><stop offset=".7" stop-color="#000" stop-opacity=".04"/><stop offset="1" stop-color="#000" stop-opacity=".4"/>
+    </linearGradient>
+    <radialGradient id="vign" r=".75"><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".7"/></radialGradient>
+    <linearGradient id="brass" x1="0" x2="1">
+      <stop offset="0" stop-color="#5e450e"/><stop offset=".45" stop-color="#f1d47a"/><stop offset="1" stop-color="#7d5f18"/>
+    </linearGradient>
+  </defs>
+  <defs id="motifs"></defs>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Atelier · Nice · Collection 01</div>
+      <h1>Club Bizarre <span>brodé</span></h1>
+      <p class="lede">Une pièce maison et une pièce par membre, chacune tirée de sa scène sur le site. Chaque motif est dessiné point par point : satin, cannetille d'or, cordonnet couché, nœuds, chenille. Rien n'est imprimé ni collé.</p>
+    </div>
+    <div class="controls">
+      <span class="lbl" id="fabric-lbl">Couleur du tissu</span>
+      <div class="swatches" role="group" aria-labelledby="fabric-lbl">
+        <button class="swatch" type="button" id="sw-noir" data-fabric="#101010" aria-pressed="true"><i style="background:#101010"></i>Noir carbone</button>
+        <button class="swatch" type="button" id="sw-bordeaux" data-fabric="#2e0808" aria-pressed="false"><i style="background:#2e0808"></i>Bordeaux nuit</button>
+        <button class="swatch" type="button" id="sw-ecru" data-fabric="#d6cdbb" aria-pressed="false"><i style="background:#d6cdbb"></i>Écru</button>
+      </div>
+    </div>
+  </header>
+
+  <section id="maison">
+    <div class="sec-head">
+      <h2>La maison</h2>
+      <p>Le blason vinyle du logo : anneau rouge en satin, sillons noirs ton sur ton, étiquette en or avec les rayons du logo, et CLUB BIZARRE brodé tout autour.</p>
+    </div>
+    <div class="house" id="house"></div>
+    <div class="spec">
+      <div><b>T-shirt</b><p>Blason 9 cm sur le cœur. Au dos, blason 24 cm.</p></div>
+      <div><b>Pull zippé</b><p>Blason sur le cœur, NICE ton sur ton en bas. Au dos, CLUB BIZARRE en cannetille sur 28 cm.</p></div>
+      <div><b>Finitions</b><p>Zip et embouts laiton, doublure de capuche rouge, bord-côtes épais.</p></div>
+      <div><b>Fils</b><p>Or métallisé, rouge du logo, noir ton sur ton.</p></div>
+    </div>
+  </section>
+
+  <section id="membres">
+    <div class="sec-head">
+      <h2>Les membres</h2>
+      <p>Le motif du membre sur le cœur du t-shirt et en grand au dos du pull. Le blason du club reste sur la face du pull. Le bouton de chaque pièce la retourne.</p>
+    </div>
+    <div id="members"></div>
+  </section>
+
+  <p class="note">Maquettes d'intention dessinées en vectoriel, pas des fichiers de production. Avant fabrication, un brodeur doit numériser chaque motif (fichier DST) à partir de ces dessins et valider les tailles et les fils sur un échantillon.</p>
+</div>
+
+<script>
+(() => {
+  // ---------- outils ----------
+  const f = v => v.toFixed(2);
+  let U = 0; const uid = p => p + (U++);
+  function rng(seed){ return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  let R = rng(1);
+  const FONT = "font-family=\"Syncopate, 'Arial Black', sans-serif\" font-weight=\"700\"";
+  const GOLD = {body:'url(#goldB)', hi:'#fff1bf', ho:.75};
+  const GOLDL = {body:'#ecd083', hi:'#fffbe9', ho:.8};
+  const GOLDD = {body:'#8f6f22', hi:'#e9cd7c', ho:.55};
+  const RED = {body:'url(#redB)', hi:'#ff8270', ho:.45};
+  const BLK = {body:'#161616', hi:'#4d4d4d', ho:.6};
+  const BLK2 = {body:'#202020', hi:'#5c5c5c', ho:.5};
+
+  // Couche de points : ombre, corps du fil, reflet
+  class St {
+    constructor(){ this.d=''; this.h=''; }
+    seg(x1,y1,x2,y2){
+      this.d += `M${f(x1)} ${f(y1)}L${f(x2)} ${f(y2)}`;
+      const mx=(x1+x2)/2, my=(y1+y2)/2, k=.6;
+      this.h += `M${f(mx+(x1-mx)*k)} ${f(my+(y1-my)*k)}L${f(mx+(x2-mx)*k)} ${f(my+(y2-my)*k)}`;
+    }
+    out(th, w, op=1){
+      if(!this.d) return '';
+      return `<g fill="none" stroke-linecap="round" opacity="${op}"><path d="${this.d}" stroke="#000" stroke-opacity=".62" stroke-width="${f(w+.55)}" transform="translate(.35 .45)"/><path d="${this.d}" stroke="${th.body}" stroke-width="${f(w)}"/><path d="${this.h}" stroke="${th.hi}" stroke-opacity="${th.ho}" stroke-width="${f(w*.38)}" transform="translate(-.18 -.22)"/></g>`;
+    }
+  }
+  function resample(pts, sp){
+    const L=[0]; for(let i=1;i<pts.length;i++) L.push(L[i-1]+Math.hypot(pts[i][0]-pts[i-1][0], pts[i][1]-pts[i-1][1]));
+    const total=L[L.length-1], out=[]; let i=0;
+    for(let s=0; s<=total; s+=sp){
+      while(i<L.length-2 && L[i+1]<s) i++;
+      const seg=L[i+1]-L[i]||1, u=(s-L[i])/seg;
+      const [x0,y0]=pts[i], [x1,y1]=pts[i+1];
+      const tx=(x1-x0)/seg, ty=(y1-y0)/seg;
+      out.push({x:x0+(x1-x0)*u, y:y0+(y1-y0)*u, tx, ty, t: total? s/total : 0});
+    }
+    return out;
+  }
+  // Satin le long d'un tracé (points perpendiculaires, légèrement inclinés)
+  function satin(pts, wFn, o={}){
+    const sp=o.sp??.8, sl=o.slant??.55, jit=o.jit??.18, st=new St();
+    for(const p of resample(pts, sp)){
+      const w = typeof wFn==='function' ? wFn(p.t) : wFn; if(w<=.05) continue;
+      const nx=-p.ty, ny=p.tx, j=(R()-.5)*jit;
+      st.seg(p.x+nx*w/2-p.tx*sl+j, p.y+ny*w/2-p.ty*sl, p.x-nx*w/2+p.tx*sl, p.y-ny*w/2+p.ty*sl+j);
+    }
+    return st;
+  }
+  // Point de piqûre / point fendu
+  function run(pts, len=2.4, gap=.55){
+    const st=new St();
+    for(const p of resample(pts, len+gap)) st.seg(p.x, p.y, p.x+p.tx*len, p.y+p.ty*len);
+    return st;
+  }
+  // Remplissage (satin long ou point de tatami à rangs décalés)
+  function hatch(x0,y0,x1,y1, ang, sp=.8, segL=0){
+    const st=new St(), cx=(x0+x1)/2, cy=(y0+y1)/2, Rr=Math.hypot(x1-x0,y1-y0)/2+2;
+    const a=ang*Math.PI/180, dx=Math.cos(a), dy=Math.sin(a), px=-dy, py=dx;
+    let row=0;
+    for(let d=-Rr; d<=Rr; d+=sp, row++){
+      const aj=(R()-.5)*.02, ddx=dx+aj, ddy=dy-aj;
+      const ox=cx+px*d, oy=cy+py*d;
+      if(!segL){ st.seg(ox-ddx*Rr, oy-ddy*Rr, ox+ddx*Rr, oy+ddy*Rr); continue; }
+      const off=((row*0.37)%1)*segL;
+      for(let s=-Rr-off; s<Rr; s+=segL+.5) st.seg(ox+ddx*s, oy+ddy*s, ox+ddx*(s+segL), oy+ddy*(s+segL));
+    }
+    return st;
+  }
+  const clip = (shape, inner) => { const id=uid('c'); return `<clipPath id="${id}">${shape}</clipPath><g clip-path="url(#${id})">${inner}</g>`; };
+  // Cordonnet d'or couché : cordon torsadé + petits points d'attache
+  function cord(pts, w=2.2, th=GOLD){
+    const d='M'+pts.map(p=>f(p[0])+' '+f(p[1])).join('L');
+    const c=new St(); for(const p of resample(pts, 3.4)){ const nx=-p.ty, ny=p.tx; c.seg(p.x+nx*w*.75, p.y+ny*w*.75, p.x-nx*w*.75, p.y-ny*w*.75); }
+    return `<g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="${d}" stroke="#000" stroke-opacity=".65" stroke-width="${f(w+.7)}" transform="translate(.4 .5)"/><path d="${d}" stroke="${th.body}" stroke-width="${f(w)}"/><path d="${d}" stroke="${th.hi}" stroke-opacity=".85" stroke-width="${f(w*.42)}" stroke-dasharray="${f(w*.45)} ${f(w*.75)}" transform="translate(-.2 -.25)"/><path d="${c.d}" stroke="#241803" stroke-opacity=".85" stroke-width=".32"/></g>`;
+  }
+  const knot = (x,y,r,g='knotG') => `<circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" fill="url(#${g})"/>`;
+  const circlePts = (cx,cy,r,a0=0,a1=Math.PI*2,n=180) => Array.from({length:n+1},(_,i)=>{const a=a0+(a1-a0)*i/n;return [cx+Math.cos(a)*r, cy+Math.sin(a)*r];});
+  // Lettrage en satin, découpé dans la police du site
+  function text(txt, x, y, size, ls, th=GOLD, o={}){
+    const anchor=o.anchor||'middle', ang=o.ang??70, w=(txt.length*(size*.98+ls));
+    const x0 = anchor==='middle'? x-w/2 : anchor==='end'? x-w : x;
+    const t = `<text x="${x}" y="${y}" ${FONT} font-size="${size}" letter-spacing="${ls}" text-anchor="${anchor}">${txt}</text>`;
+    const st = hatch(x0-4, y-size*1.05, x0+w+4, y+size*.25, ang, o.sp??.7, o.segL??0);
+    return clip(t, st.out(th, o.w??.8)) + `<text x="${x}" y="${y}" ${FONT} font-size="${size}" letter-spacing="${ls}" text-anchor="${anchor}" fill="none" stroke="#000" stroke-opacity=".45" stroke-width=".35">${txt}</text>`;
+  }
+
+  // ---------- motifs (boîte 200 x 200) ----------
+  const M = {};
+  M.crest = () => {
+    R = rng(7);
+    let s = '';
+    // fond du disque : tatami noir
+    s += clip(`<circle cx="100" cy="100" r="79"/>`, hatch(20,20,180,180, 32, .85, 5).out(BLK, .9));
+    // sillons
+    let g = ''; for(let r=31; r<=75; r+=2.6) g += run(circlePts(100,100,r,R()*6,R()*6+Math.PI*2,Math.round(r*2.2)), 2.8, .5).out(BLK2, .45);
+    s += g;
+    // anneau rouge en satin
+    s += satin(circlePts(100,100,86.5,0,Math.PI*2,360), 13.5, {sp:.75, slant:.9}).out(RED, .95);
+    s += cord(circlePts(100,100,93.6,0,Math.PI*2,240), 1.6) + cord(circlePts(100,100,79.4,0,Math.PI*2,220), 1.4);
+    // lettrage circulaire
+    const id = uid('arc'), r = 61, L = (2*Math.PI*r).toFixed(1);
+    const tp = `<text ${FONT} font-size="15.5"><textPath href="#${id}" textLength="${L}" lengthAdjust="spacing">CLUB BIZARRE · CLUB BIZARRE ·</textPath></text>`;
+    s += `<path id="${id}" d="M100,100 m-${r},0 a${r},${r} 0 1,1 ${2*r},0 a${r},${r} 0 1,1 -${2*r},0" fill="none"/>`;
+    s += clip(tp, hatch(20,20,180,180, 64, .52).out(GOLD, .8));
+    // étiquette or + rayons + centre rouge
+    s += satin(circlePts(100,100,19,0,Math.PI*2,200), 14, {sp:.7, slant:.4}).out(GOLD, .8);
+    let rays=''; for(let i=0;i<14;i++){ const a=i/14*Math.PI*2+.1, w=i%2?1.6:2.6; rays += satin([[100+Math.cos(a)*13,100+Math.sin(a)*13],[100+Math.cos(a)*26,100+Math.sin(a)*26]], t=>w*(1-t*.6), {sp:.55, slant:.1}).out(i%3===1?RED:GOLDL, .55); }
+    s += rays;
+    s += cord(circlePts(100,100,26.5,0,Math.PI*2,120), 1.1, GOLDD) + cord(circlePts(100,100,12.6,0,Math.PI*2,80), .9, GOLDD);
+    s += clip(`<circle cx="100" cy="100" r="11.5"/>`, hatch(86,86,114,114, -40, .6).out(RED, .7));
+    s += `<circle cx="100" cy="100" r="2.2" fill="#050505"/>`;
+    return s;
+  };
+
+  M.wave = () => {
+    R = rng(21);
+    const curve = (A, yo, ph, j, n, tw) => Array.from({length:171},(_,i)=>{ const x=15+i; const t=(x-100)/85; const env=Math.exp(-t*t*3); const twist=(j-(n-1)/2)*.95*Math.cos(x*.045+ph+tw);
+      return [x, 92+yo+Math.sin(x*.16+ph)*A*env*(.62+.38*Math.sin(x*.055+ph*2))+twist]; });
+    let s = '';
+    const echoes = [[22,-26,1.3,BLK2,4],[25,-19,1.0,RED,5],[30,-12,.7,RED,6],[34,-6,.35,GOLDD,7]];
+    for(const [A,yo,ph,th,n] of echoes) for(let j=0;j<n;j++) s += run(curve(A,yo,ph,j,n,0), 3.2, .5).out(th, .7);
+    for(let j=0;j<16;j++) s += run(curve(40,0,0,j,16,1.2), 4.2, .35).out(j%4===1?GOLDL:GOLD, .85);
+    // nœuds aux crêtes
+    for(const x of [62,81,100,119,138]){ const p=curve(40,0,0,7.5,16,1.2)[x-15]; s += knot(p[0],p[1],1.6); }
+    return s;
+  };
+
+  M.nebula = () => {
+    R = rng(33);
+    let s = '';
+    const cx=100, cy=92, rot=-.32, sq=.46;
+    const P = (r, th) => { const x=Math.cos(th)*r, y=Math.sin(th)*r*sq; return [cx+x*Math.cos(rot)-y*Math.sin(rot), cy+x*Math.sin(rot)+y*Math.cos(rot)]; };
+    // poussière : bras spiraux en nœuds
+    for(let i=0;i<1500;i++){
+      const arm = i%2, u = Math.pow(R(), .7), r = 6+u*86;
+      const th = arm*Math.PI + r*.055 + (R()-.5)*(.5+u*.6);
+      const [x,y] = P(r, th);
+      const dark = R()<.16 && r>25;
+      s += knot(x, y, (dark?.9:.55+R()*.75)*(1.15-u*.4), dark?'knotK':'knotG');
+    }
+    // halo du cœur
+    for(let i=0;i<220;i++){ const r=R()*14, th=R()*Math.PI*2; const [x,y]=P(r,th); s += knot(x,y,.6+R()*.6); }
+    // orbite en cordonnet
+    s += cord(Array.from({length:181},(_,i)=>P(92, i/180*Math.PI*2)), .9, GOLDD);
+    // Λ en cannetille
+    s += satin([[64,158],[100,36]], t=>9+t*3, {sp:.62, slant:1.4}).out(GOLD, .8);
+    s += satin([[100,36],[136,158]], t=>12-t*3, {sp:.62, slant:-1.4}).out(GOLDL, .8);
+    s += `<circle cx="140" cy="78" r="10" fill="url(#glowR)"/>` + knot(140,78,3.2,'knotR') + knot(100,34,2.6);
+    return s;
+  };
+
+  M.hepta = () => {
+    R = rng(44);
+    const rx=-.42, ry=.62;
+    const proj = ([x,y,z]) => { let X=x*Math.cos(ry)+z*Math.sin(ry), Z=-x*Math.sin(ry)+z*Math.cos(ry); let Y=y*Math.cos(rx)-Z*Math.sin(rx); return [100+X, 92+Y]; };
+    const prism=[], pyr=[];
+    for(let i=0;i<5;i++){ const a=i/5*Math.PI*2; prism.push([Math.cos(a)*34, -26, Math.sin(a)*34], [Math.cos(a)*34, 26, Math.sin(a)*34]); }
+    for(let i=0;i<6;i++){ const a=i/6*Math.PI*2+.3; pyr.push([Math.cos(a)*70, 52, Math.sin(a)*70]); }
+    pyr.push([0,-78,0]);
+    const E=[]; for(let i=0;i<5;i++){ const j=(i+1)%5; E.push(['a',2*i,2*j],['a',2*i+1,2*j+1],['a',2*i,2*i+1]); }
+    for(let i=0;i<6;i++){ E.push(['b',i,(i+1)%6],['b',i,6]); }
+    let s = '';
+    // faces : voile ton sur ton
+    const face = [0,2,4,6,8].map(i=>proj(prism[i]));
+    s += clip(`<polygon points="${face.map(p=>p.map(f).join(',')).join(' ')}"/>`, hatch(40,30,160,150, 20, .9, 4).out(BLK2, .8));
+    // glitch rouge décalé
+    for(const k of [9,10,11]){ const [w,a,b]=E[k]; const S=w==='a'?prism:pyr; const p=proj(S[a]), q=proj(S[b]); s += cord([[p[0]+3.2,p[1]-1.6],[q[0]+3.2,q[1]-1.6]], 1, RED); }
+    for(const [w,a,b] of E){ const S=w==='a'?prism:pyr; s += cord([proj(S[a]), proj(S[b])], w==='a'?1.6:2); }
+    for(const v of [...prism, ...pyr]){ const [x,y]=proj(v); s += knot(x,y,2.6); }
+    for(let i=0;i<7;i++){ const a=i/7*Math.PI*2; s += knot(100+Math.cos(a)*90, 92+Math.sin(a)*24, 2); }
+    s += text('VII', 100, 98, 11, 2, RED, {w:.6, sp:.55});
+    return s;
+  };
+
+  M.stone = () => {
+    R = rng(55);
+    const rad = a => 66 + Math.sin(a*3+.7)*7 + Math.sin(a*5+2)*3.5 + Math.cos(a*7)*2.2 + Math.sin(a*11+1)*1.2;
+    const outline = Array.from({length:241},(_,i)=>{ const a=i/240*Math.PI*2; return [100+Math.cos(a)*rad(a), 92+Math.sin(a)*rad(a)*.9]; });
+    const poly = `<polygon points="${outline.map(p=>p.map(f).join(',')).join(' ')}"/>`;
+    let s = '';
+    s += clip(poly, hatch(20,10,180,180, 15, .9, 3.5).out(BLK, .9));
+    // chenille : boucles serrées
+    let ch = '';
+    for(let i=0;i<1100;i++){ const a=R()*Math.PI*2, rr=Math.sqrt(R())*rad(a)*.96; const x=100+Math.cos(a)*rr, y=92+Math.sin(a)*rr*.9;
+      ch += `<circle cx="${f(x)}" cy="${f(y)}" r="${f(1.2+R()*1.1)}" fill="none" stroke="${R()<.5?'#262626':'#1a1a1a'}" stroke-width=".9"/>`; }
+    s += ch;
+    // braises
+    const cracks = [[[48,118],[62,112],[70,121],[84,116],[96,128],[110,124]],[[118,60],[126,72],[124,86],[134,98]],[[56,70],[68,78],[64,90]]];
+    for(const c of cracks){ s += `<polyline points="${c.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#ff2a10" stroke-opacity=".35" stroke-width="9" stroke-linejoin="round" filter="url(#blur6)"/>`; s += satin(c, t=>1.5+Math.sin(t*Math.PI)*3.4, {sp:.6, slant:.3}).out(RED, .7); }
+    // liseré or sur l'arête éclairée
+    s += cord(outline.slice(110, 205), 1.8);
+    s += text('Ø', 100, 126, 76, 0, GOLD, {w:.85, ang:60, sp:.7});
+    return s;
+  };
+
+  M.sunset = () => {
+    R = rng(66);
+    let s = '';
+    const cx=100, cy=96, r=64;
+    const bands = [[32,58],[61,80],[83,96],[99.5,109],[113,120],[124.5,129],[134,136.5]];
+    const lerp=(a,b,t)=>Math.round(a+(b-a)*t);
+    bands.forEach(([y0,y1],k)=>{
+      const t=k/(bands.length-1);
+      const col = `rgb(${lerp(226,165,t)},${lerp(186,12,t)},${lerp(84,10,t)})`;
+      const hi = `rgb(255,${lerp(240,120,t)},${lerp(190,100,t)})`;
+      const yc=(y0+y1)/2, half=Math.sqrt(Math.max(0, r*r-(yc-cy)*(yc-cy)));
+      s += clip(`<circle cx="${cx}" cy="${cy}" r="${r}"/>`, satin([[cx-half-2,yc],[cx+half+2,yc]], y1-y0, {sp:.7, slant:.35}).out({body:col, hi, ho:.55}, .78));
+    });
+    // lignes de balayage ton sur ton
+    let sc = new St(); for(let y=36;y<130;y+=3.4){ const half=Math.sqrt(Math.max(0,r*r-(y-cy)*(y-cy))); sc.seg(cx-half, y, cx+half, y); }
+    s += clip(`<circle cx="${cx}" cy="${cy}" r="${r}"/>`, sc.out(BLK, .35, .55));
+    // horizon et grille
+    s += cord([[10,140],[190,140]], 1.8);
+    let gr = '';
+    for(let i=-7;i<=7;i++) gr += run([[100+i*4,140],[100+i*24,196]], 2.4, .5).out(GOLD, .55);
+    for(const y of [144.5,150,157.5,167,180,196]) gr += run([[6,y],[194,y]], 2.4, .5).out(GOLDD, .55);
+    s += clip(`<rect x="4" y="140" width="192" height="58"/>`, gr);
+    return s;
+  };
+
+  M.beams = () => {
+    R = rng(77);
+    let s = '';
+    const lamps=[40,70,100,130,160], spread=[[2,30],[34,64],[82,118],[136,166],[170,198]];
+    // faisceaux en passé empiétant : clair près de la lampe, se fond dans le tissu
+    lamps.forEach((lx,k)=>{
+      const [b0,b1]=spread[k], top=44, bot=176;
+      const rows=12;
+      for(let r=0;r<rows;r++){
+        const t0=r/rows, t1=(r+1)/rows, st=new St();
+        const yA=top+(bot-top)*t0;
+        const wA=4+((b1-b0)-4)*t0;
+        for(let u=0;u<=1.0001;u+=1/Math.max(4,wA/1.05)){
+          const len=(bot-top)/rows*(.9+R()*.9);
+          const xa=lx+((b0+(b1-b0)*u)-lx)*t0, xb=lx+((b0+(b1-b0)*u)-lx)*Math.min(1,t1+.04);
+          const y1=Math.min(bot, yA+len);
+          st.seg(xa+(R()-.5)*.4, yA+(R()-.5)*2, xb, y1);
+        }
+        const th = k===3 ? RED : (t0<.3 ? GOLDL : t0<.65 ? GOLD : GOLDD);
+        s += st.out(th, .7, Math.max(.12, 1-t0*.95));
+      }
+    });
+    // lasers
+    for(const [a,b] of [[[8,120],[192,64]],[[14,70],[186,150]],[[30,186],[170,48]]]) s += run([a,b], 3, .5).out(GOLDL, .35);
+    // rampe (truss)
+    s += cord([[24,24],[176,24]], 2) + cord([[24,34],[176,34]], 2);
+    let z=[]; for(let x=24;x<=176;x+=8) z.push([x, ((x-24)/8)%2? 24:34]); s += cord(z, 1);
+    lamps.forEach((x,k)=>{ s += clip(`<circle cx="${x}" cy="42" r="7"/>`, hatch(x-8,34,x+8,50, 45, .6).out(k===3?RED:GOLD, .7)) + cord(circlePts(x,42,7.4,0,Math.PI*2,60), 1.1, GOLDD); });
+    return s;
+  };
+
+  M.edito = () => {
+    R = rng(88);
+    let s = '';
+    // cadre en point de chaînette
+    const frame=[[30,16],[170,16],[170,176],[30,176],[30,16]];
+    let ch=''; for(const p of resample(frame, 3.1)){ const a=Math.atan2(p.ty,p.tx)*180/Math.PI; ch += `<ellipse cx="${f(p.x)}" cy="${f(p.y)}" rx="1.9" ry="1" transform="rotate(${f(a)} ${f(p.x)} ${f(p.y)})" fill="none" stroke="url(#goldB)" stroke-width=".75"/>`; }
+    s += `<g>${ch}</g>`;
+    s += text('ÉDITO', 38, 31, 7, 2.2, GOLD, {anchor:'start', w:.5, sp:.5});
+    s += text('N°07', 162, 31, 7, 1.4, RED, {anchor:'end', w:.5, sp:.5});
+    s += cord([[38,37],[162,37]], 1.2);
+    // grand m
+    s += text('m', 100, 128, 104, 0, GOLD, {w:.85, ang:62, sp:.72});
+    // colonnes de texte
+    for(let c=0;c<2;c++) for(let l=0;l<5;l++){ const x0=40+c*64, w=l===4?32:56; s += run([[x0,140+l*6.2],[x0+w,140+l*6.2]], 1.6, .9).out(BLK2, .55); }
+    s += cord([[38,170],[100,170]], .9, RED);
+    return s;
+  };
+
+  M.trails = () => {
+    R = rng(99);
+    let s = '';
+    const bez = (p0,p1,p2,p3,n=160) => Array.from({length:n+1},(_,i)=>{ const t=i/n, m=1-t; return [m*m*m*p0[0]+3*m*m*t*p1[0]+3*m*t*t*p2[0]+t*t*t*p3[0], m*m*m*p0[1]+3*m*m*t*p1[1]+3*m*t*t*p2[1]+t*t*t*p3[1]]; });
+    // éclair de flash ton sur ton
+    let fl = new St(); for(let i=0;i<60;i++){ const a=i/60*Math.PI*2, r0=8+R()*6, r1=40+R()*40; fl.seg(150+Math.cos(a)*r0, 52+Math.sin(a)*r0, 150+Math.cos(a)*r1, 52+Math.sin(a)*r1); }
+    s += fl.out(BLK2, .5, .9);
+    const T = [
+      [bez([8,168],[60,160],[70,70],[120,56]).concat(bez([120,56],[150,48],[170,70],[188,42]).slice(1)), GOLD, 11, [188,42]],
+      [bez([14,184],[70,182],[86,104],[132,96]).concat(bez([132,96],[160,92],[176,108],[186,88]).slice(1)), GOLDL, 7, [186,88]],
+      [bez([20,142],[50,128],[62,50],[104,34]).concat(bez([104,34],[132,24],[150,30],[168,14]).slice(1)), RED, 6.5, [168,14]],
+    ];
+    for(const [pts, th, w, head] of T){
+      // fil par fil, la traînée s'épaissit et s'éclaire vers la tête
+      const n=Math.round(w/1.1);
+      for(let j=0;j<n;j++){
+        const off=(j-(n-1)/2)*1.05;
+        const P = resample(pts, 1).map(p=>{ const k=Math.pow(p.t,1.4); return [p.x-p.ty*off*k, p.y+p.tx*off*k, p.t]; });
+        for(let q=0;q<5;q++){ const a=Math.floor(P.length*q/5), b=Math.floor(P.length*(q+1)/5); const seg=P.slice(a,b+1).map(p=>[p[0],p[1]]); if(seg.length>1) s += run(seg, 3.4, .4).out(th, .72, .15+q*.2); }
+      }
+      s += `<circle cx="${head[0]}" cy="${head[1]}" r="12" fill="${th===RED?'url(#glowR)':'rgba(255,220,140,.22)'}" filter="url(#blur6)"/>` + knot(head[0], head[1], 4.2, th===RED?'knotR':'knotG');
+    }
+    return s;
+  };
+
+  // ---------- bibliothèque ----------
+  const MEMBERS = [
+    {slug:'jerem_wav', name:'jerem.wav', label:'JEREM.WAV', role:'DJ', m:'wave', idea:"Sa scène est une onde audio dorée suivie d'échos. Ici, l'onde est faite de seize fils d'or qui se tordent comme un ruban, avec des nœuds sur les crêtes, et quatre échos en point fendu qui passent de l'or au rouge puis au noir.", tech:'Point fendu or · nœuds · échos rouge et noir'},
+    {slug:'helanova', name:'HELΛNOVA', label:'HELΛNOVA', role:'DJ', m:'nebula', idea:"Une galaxie spirale de 1 700 nœuds d'or, des bandes de poussière en nœuds noirs, une orbite en cordonnet et, au centre, le Λ en cannetille. Une seule étoile rouge.", tech:'Nœuds français · cannetille · cordonnet'},
+    {slug:'datseven', name:'Datseven', label:'DATSEVEN', role:'DJ', m:'hepta', idea:"Un prisme pentagonal dans une pyramide hexagonale, les deux à sept faces, en cordonnet d'or couché. Un nœud à chaque sommet, sept points en orbite et un glitch rouge décalé.", tech:'Cordonnet couché · nœuds · voile ton sur ton'},
+    {slug:'forn', name:'FØRN', label:'FØRN', role:'DJ', m:'stone', idea:"Une roche volcanique en chenille noire bouclée, des braises rouges qui rougeoient dans les fissures, un liseré d'or sur l'arête éclairée et le Ø en satin or.", tech:'Chenille · satin rouge · cordonnet or'},
+    {slug:'90cynomen', name:'90cynomen', label:'90CYNOMEN', role:'DJ', m:'sunset', idea:"Le soleil couchant 90s de sa scène : sept bandes de satin qui passent de l'or au rouge, des lignes de balayage d'écran ton sur ton et une grille en perspective en point de piqûre.", tech:'Satin dégradé · piqûre · cordonnet'},
+    {slug:'bastoune_bellon', name:'bastoune bellon', label:'BASTOUNE BELLON', role:'Light + DJ', m:'beams', idea:"L'éclairagiste : une rampe en cordonnet, cinq projecteurs, et des faisceaux en passé empiétant qui se fondent dans le tissu. Un faisceau rouge et trois lasers fins.", tech:'Passé empiétant · cordonnet · satin'},
+    {slug:'mariam', name:'mariam', label:'MARIAM', role:'Community Manager', m:'edito', idea:"Une couverture de magazine brodée : cadre en point de chaînette, filet de titre, ÉDITO et N°07, un grand m en satin or et des colonnes de texte en piqûre noire.", tech:'Chaînette · satin · piqûre ton sur ton'},
+    {slug:'capolami', name:'CAPOLAMI', label:'CAPOLAMI', role:'DJ', m:'trails', idea:"Des traînées de lumière en pose longue : chaque traînée est faite de fils qui s'éclairent et s'élargissent vers une tête en nœud, sur un éclair de flash noir ton sur ton.", tech:'Piqûre dégradée · nœuds · satin'},
+  ];
+  const lib = document.getElementById('motifs');
+  let defs = `<g id="m-crest">${M.crest()}</g>`;
+  for(const p of MEMBERS){ defs += `<g id="m-${p.slug}">${M[p.m]()}</g>`; R=rng(p.slug.length*13); defs += `<g id="n-${p.slug}">${text(p.label, 100, 16, p.label.length>11?8.6:10.5, p.label.length>11?3.2:4.4, GOLD, {w:.55, sp:.5})}</g>`; }
+  R=rng(3);
+  defs += `<g id="w-club">${text('CLUB', 100, 40, 34, 9, GOLD, {w:.8, sp:.62, ang:66})}${text('BIZARRE', 100, 80, 34, 9, GOLD, {w:.8, sp:.62, ang:66})}${cord([[22,92],[178,92]], 1.4)}${text('BIZARRE IS THE NEW STANDARD', 100, 106, 6.6, 2.2, RED, {w:.45, sp:.45})}</g>`;
+  defs += `<g id="t-nice">${text('NICE', 0, 10, 10, 4, BLK2, {anchor:'start', w:.55, sp:.5})}</g>`;
+  for(const p of MEMBERS){ defs += `<g id="s-${p.slug}">${text(p.label, 0, 10, 7.5, 3, BLK2, {anchor:'start', w:.5, sp:.48})}</g>`; }
+  defs += `<g id="t-club-small">${text('CLUB BIZARRE', 100, 16, 9, 4, BLK2, {w:.5, sp:.5})}</g>`;
+  lib.innerHTML = defs;
+
+  // ---------- vêtements ----------
+  const TEE_F="M162 34 Q200 66 238 34 L286 45 Q334 62 376 104 L340 162 Q316 150 296 138 Q292 270 300 414 Q200 426 100 414 Q108 270 104 138 Q84 150 60 162 L24 104 Q66 62 114 45 Z";
+  const TEE_B="M162 34 Q200 46 238 34 L286 45 Q334 62 376 104 L340 162 Q316 150 296 138 Q292 270 300 414 Q200 426 100 414 Q108 270 104 138 Q84 150 60 162 L24 104 Q66 62 114 45 Z";
+  const HOOD_F="M146 54 L116 64 Q80 80 66 140 L40 372 L76 384 L102 196 L102 394 Q200 402 298 394 L298 196 L324 384 L360 372 L334 140 Q320 80 284 64 L254 54 Q228 76 200 76 Q172 76 146 54 Z";
+  const HOOD_B="M146 54 L116 64 Q80 80 66 140 L40 372 L76 384 L102 196 L102 394 Q200 402 298 394 L298 196 L324 384 L360 372 L334 140 Q320 80 284 64 L254 54 Q228 62 200 62 Q172 62 146 54 Z";
+  const cloth = d => `<g filter="url(#cloth)"><path d="${d}" fill="var(--fabric)"/></g><path d="${d}" fill="url(#shadeX)"/><path d="${d}" fill="url(#shadeY)"/><path d="${d}" fill="none" stroke="#fff" stroke-opacity=".1" stroke-width=".8"/>`;
+  const seam = d => `<path d="${d}" fill="none" stroke="#000" stroke-opacity=".5" stroke-width=".8" stroke-dasharray="2.2 1.4"/><path d="${d}" fill="none" stroke="#fff" stroke-opacity=".05" stroke-width=".6" stroke-dasharray="2.2 1.4" transform="translate(-.6 -.6)"/>`;
+  const fold = (d,o=.2,w=6) => `<path d="${d}" fill="none" stroke="#000" stroke-opacity="${o}" stroke-width="${w}" filter="url(#soft)"/>`;
+  const lit = (d,o=.05,w=4) => `<path d="${d}" fill="none" stroke="#fff" stroke-opacity="${o}" stroke-width="${w}" filter="url(#soft)"/>`;
+  const floor = `<ellipse cx="200" cy="424" rx="160" ry="9" fill="#000" opacity=".6" filter="url(#soft)"/>`;
+  const place = (id, cx, cy, s) => `<g filter="url(#raiseG)"><use href="#${id}" transform="translate(${f(cx-100*s)} ${f(cy-100*s)}) scale(${s})"/></g>`;
+  const placeAt = (id, x, y, s) => `<g filter="url(#raiseG)"><use href="#${id}" transform="translate(${x} ${y}) scale(${s})"/></g>`;
+  const svgWrap = (inner, aria) => `<svg viewBox="-10 -34 420 470" role="img" aria-label="${aria}">${floor}${inner}</svg>`;
+
+  function tee(side, art, aria){
+    const front = side==='face'; let s = cloth(front?TEE_F:TEE_B);
+    if(front){ s += `<path d="M162 34 Q200 46 238 34 Q200 66 162 34Z" fill="#000" opacity=".6"/><path d="M159 33 Q200 74 241 33" fill="none" stroke="#000" stroke-opacity=".4" stroke-width="8"/><path d="M160 33 Q200 74 240 33" fill="none" stroke="url(#rib)" stroke-width="7"/><path d="M165 36 Q200 66 235 36" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="1"/>`; }
+    else { s += `<path d="M159 33 Q200 51 241 33" fill="none" stroke="#000" stroke-opacity=".4" stroke-width="8"/><path d="M160 33 Q200 51 240 33" fill="none" stroke="url(#rib)" stroke-width="7"/>`; }
+    s += seam('M32 99 L67 155')+seam('M368 99 L333 155')+seam('M101 404 Q200 416 299 404')+seam('M104 138 Q108 82 116 47')+seam('M296 138 Q292 82 284 47');
+    s += fold('M150 170 Q166 280 140 400',.24,8)+fold('M254 190 Q236 300 266 404',.2,7)+fold('M110 142 Q140 160 152 176',.25)+fold('M292 150 Q262 168 250 186',.22)+lit('M176 150 Q186 260 172 380',.05,10)+lit('M228 170 Q222 280 236 390',.04,8);
+    s += fold('M120 300 Q200 318 284 296',.12,10);
+    return svgWrap(s+art, aria);
+  }
+  function hoodie(side, art, aria){
+    const front = side==='face'; let s = '';
+    if(front){
+      s += cloth("M146 56 C132 6 168 -22 200 -22 C232 -22 268 6 254 56 Q228 78 200 78 Q172 78 146 56Z");
+      s += `<path d="M160 54 C156 16 178 -6 200 -6 C222 -6 244 16 240 54 Q222 70 200 72 Q178 70 160 54 Z" fill="#3c0404"/><path d="M160 54 C156 16 178 -6 200 -6 C222 -6 244 16 240 54 Q222 70 200 72 Q178 70 160 54 Z" fill="url(#shadeY)"/><path d="M166 50 C164 20 182 2 200 2 C218 2 236 20 234 50 Q200 30 166 50Z" fill="#000" opacity=".6" filter="url(#soft)"/>`;
+      s += cloth(HOOD_F);
+    } else {
+      s += cloth(HOOD_B);
+      s += cloth("M146 56 C140 120 172 150 200 152 C228 150 260 120 254 56 Q228 66 200 66 Q172 66 146 56Z");
+      s += `<path d="M146 56 C140 120 172 150 200 152 C228 150 260 120 254 56" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="3" filter="url(#soft)"/>` + seam('M200 66 L200 150');
+    }
+    s += `<path d="M102 374 Q200 382 298 374 L298 394 Q200 402 102 394Z" fill="url(#rib)"/><path d="M102 374 Q200 382 298 374" fill="none" stroke="#000" stroke-opacity=".55" stroke-width="1.4"/>`;
+    s += `<path d="M44 352 L78 362 L76 384 L40 372Z" fill="url(#rib)"/><path d="M356 352 L322 362 L324 384 L360 372Z" fill="url(#rib)"/>`;
+    s += fold('M90 160 Q80 260 70 350',.28,8)+fold('M310 160 Q320 260 330 350',.28,8)+fold('M140 200 Q152 290 136 370',.16)+fold('M262 210 Q248 290 266 370',.14)+lit('M84 180 Q76 260 66 340',.05,5)+lit('M170 220 Q178 300 168 360',.04,10);
+    s += fold('M66 140 Q84 170 102 196',.3,7)+fold('M334 140 Q316 170 298 196',.3,7);
+    s += seam('M116 64 Q104 120 102 196')+seam('M284 64 Q296 120 298 196');
+    if(front){
+      s += seam('M196 300 Q150 298 128 300 Q120 340 116 372')+seam('M204 300 Q250 298 272 300 Q280 340 284 372');
+      s += `<path d="M196 300 Q150 298 128 300 Q120 340 116 372" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="3" filter="url(#soft)"/><path d="M204 300 Q250 298 272 300 Q280 340 284 372" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="3" filter="url(#soft)"/>`;
+      s += `<path d="M200 76 V394" stroke="#050505" stroke-width="7"/><path d="M200 78 V392" stroke="url(#brass)" stroke-width="3" stroke-dasharray="1 1.2"/>`;
+      s += `<path d="M184 74 Q182 110 181 142 M216 74 Q218 110 219 142" stroke="#050505" stroke-width="2.8" fill="none"/><path d="M184 74 Q182 110 181 142 M216 74 Q218 110 219 142" stroke="#fff" stroke-opacity=".08" stroke-width=".8" fill="none"/><rect x="178.8" y="140" width="4.4" height="11" rx="1.2" fill="url(#brass)"/><rect x="216.8" y="140" width="4.4" height="11" rx="1.2" fill="url(#brass)"/>`;
+      s += `<rect x="195" y="80" width="10" height="19" rx="2.8" fill="url(#brass)"/><rect x="197.9" y="86.5" width="4.2" height="8" rx="1.6" fill="#2a1f06"/>`;
+    }
+    return svgWrap(s+art, aria);
+  }
+  function macro(id, aria, extra=''){
+    return `<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${aria}"><g filter="url(#clothM)"><rect x="-150" y="-150" width="500" height="500" fill="var(--fabric)"/></g><rect x="-150" y="-150" width="500" height="500" fill="url(#knitV)"/>
+      <g filter="url(#raiseM)"><use href="#${id}" transform="translate(14 12) scale(.86)"/>${extra}</g><rect x="-150" y="-150" width="500" height="500" fill="url(#vign)"/></svg>`;
+  }
+
+  // ---------- pièce maison ----------
+  const fig = (svg, kind, cap, cls='') => `<figure class="piece ${cls}"><div class="art">${svg}</div><figcaption><span><b>${kind}</b></span><span>${cap}</span></figcaption></figure>`;
+  document.getElementById('house').innerHTML =
+    fig(macro('m-crest','Gros plan du blason brodé'), 'Gros plan', 'blason 9 cm · satin, cordonnet, tatami', 'macro') +
+    fig(tee('face', place('m-crest',252,114,.24), 'T-shirt Club Bizarre, face'), 'T-shirt · face', 'blason sur le cœur') +
+    fig(tee('dos', place('m-crest',200,172,.62), 'T-shirt Club Bizarre, dos'), 'T-shirt · dos', 'blason 24 cm') +
+    fig(hoodie('face', place('m-crest',254,150,.23)+placeAt('t-nice',112,377,.62), 'Pull zippé Club Bizarre, face'), 'Pull zippé · face', 'blason + NICE ton sur ton') +
+    fig(hoodie('dos', place('w-club',200,236,.78)+place('m-crest',200,330,.2), 'Pull zippé Club Bizarre, dos'), 'Pull zippé · dos', 'CLUB BIZARRE en cannetille');
+
+  // ---------- membres ----------
+  const flipFig = (kind, a, b, capA, capB, id, startBack) => `<figure class="piece" data-flip="${id}">
+      <div class="art v-a"${startBack?' hidden':''}>${a}</div><div class="art v-b"${startBack?'':' hidden'}>${b}</div>
+      <figcaption><span><b>${kind}</b> · <span class="cap-a"${startBack?' hidden':''}>${capA}</span><span class="cap-b"${startBack?'':' hidden'}>${capB}</span></span><button class="flip" type="button" id="flip-${id}">Voir le dos</button></figcaption></figure>`;
+  document.getElementById('members').innerHTML = MEMBERS.map(p => {
+    const teeF = tee('face', place('m-'+p.slug,252,116,.25), `T-shirt ${p.name}, face`);
+    const teeB = tee('dos', place('m-crest',200,74,.1)+place('n-'+p.slug,200,92,.42), `T-shirt ${p.name}, dos`);
+    const hoF = hoodie('face', place('m-crest',254,150,.23)+placeAt('s-'+p.slug,110,378,.62), `Pull zippé ${p.name}, face`);
+    const hoB = hoodie('dos', place('t-club-small',200,168,.42)+place('m-'+p.slug,200,252,.8)+place('n-'+p.slug,200,334,.86), `Pull zippé ${p.name}, dos`);
+    return `<article class="member" id="membre-${p.slug}">
+      <div class="head"><div><span class="role">${p.role}</span><h3>${p.name}</h3></div><p class="idea">${p.idea}</p></div>
+      <div class="row">
+        ${fig(macro('m-'+p.slug, `Gros plan de la broderie de ${p.name}`), 'Gros plan', p.tech, 'macro')}
+        ${flipFig('T-shirt', teeF, teeB, 'motif 8 cm sur le cœur', 'nom sous le col', 't-'+p.slug, false)}
+        ${flipFig('Pull zippé', hoF, hoB, 'blason du club', 'motif 26 cm au dos', 'h-'+p.slug, true)}
+      </div></article>`;
+  }).join('');
+
+  document.querySelectorAll('.flip').forEach(btn => {
+    const fg = btn.closest('figure');
+    const sync = () => { btn.textContent = fg.querySelector('.v-a').hidden ? 'Voir la face' : 'Voir le dos'; };
+    sync();
+    btn.addEventListener('click', () => { for(const c of ['.v-a','.v-b','.cap-a','.cap-b']){ const el=fg.querySelector(c); el.hidden=!el.hidden; } sync(); });
+  });
+  document.querySelectorAll('.swatch').forEach(b => b.addEventListener('click', () => {
+    document.documentElement.style.setProperty('--fabric', b.dataset.fabric);
+    document.querySelectorAll('.swatch').forEach(x => x.setAttribute('aria-pressed', x===b ? 'true' : 'false'));
+  }));
+})();
+</script>
+</body>
+</html>
