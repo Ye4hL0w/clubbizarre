@@ -220,6 +220,71 @@
     }
 }
 
+/* ── Team : carrousel qu'on fait glisser (doigt, souris, molette) ──
+   pan-y : le scroll vertical de la page reste natif, le geste horizontal
+   est pris par le carrousel (js/legacy/script.js). */
+.team-marquee-container {
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.team-marquee-container.is-dragging {
+    cursor: grabbing;
+}
+
+.team-marquee-container img {
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+/* Pendant le glisser : pas d'effet de survol qui saute sous le doigt */
+.team-marquee-container.is-dragging .team-bubble {
+    pointer-events: none;
+}
+
+/* Mobile : 3 artistes visibles à l'écran */
+@media (max-width: 768px) {
+    .team-marquee-container {
+        --team-gap: 1rem;
+        --team-size: calc((100vw - 4 * var(--team-gap)) / 3);
+        padding: 2rem 0;
+        mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    }
+
+    .team-marquee {
+        gap: var(--team-gap);
+        padding-left: var(--team-gap);
+    }
+
+    .team-bubble {
+        min-width: 0;
+        width: var(--team-size);
+        gap: 0.6rem;
+    }
+
+    .bubble-img {
+        width: var(--team-size);
+        height: var(--team-size);
+        border-width: 2px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+    }
+
+    .bubble-name {
+        font-size: clamp(0.68rem, 3.2vw, 0.9rem);
+        letter-spacing: 1px;
+        white-space: nowrap;
+    }
+
+    .bubble-role {
+        font-size: clamp(0.55rem, 2.4vw, 0.7rem);
+        letter-spacing: 1.5px;
+        white-space: nowrap;
+    }
+}
+
 /* ── Contact ────────────────────────────────────────────────
    Même langage que les pages artistes : titre immense aligné à gauche,
    filet doré qui se dessine, gros lien e-mail, mot-clé fantôme en fond.

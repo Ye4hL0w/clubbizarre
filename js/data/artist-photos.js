@@ -36,9 +36,9 @@ export const PHOTOS = {
     ],
     "forn": [
         {
-            "src": "forn.png",
-            "w": 256,
-            "h": 256
+            "src": "forn.webp",
+            "w": 960,
+            "h": 1280
         }
     ],
     "helanova": [

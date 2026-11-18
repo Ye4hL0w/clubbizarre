@@ -163,18 +163,20 @@ export const MOTION = {
             revealDuration: 2.2,
         },
         forn: {
-            // Intensité de la déformation (0 = sphère lisse).
-            deformation: 0.32,
-            // Échelle des formes : plus haut = reliefs plus petits et nombreux.
-            scale: 1.3,
-            // Vitesse de transformation de la matière.
+            // Vitesse de vibration des cordes (1 = naturel, plus bas = plus lent).
             speed: 1,
-            // Grain de surface (0 = lisse).
-            grain: 0.05,
-            // Gonflement de la matière vers le curseur (0 = aucun).
-            mouseStrength: 0.12,
-            // Durée de formation à l'arrivée (s).
-            revealDuration: 2.8,
+            // Tension max quand on tire une corde au curseur (unités de la scène).
+            pull: 0.13,
+            // Amortissement : plus haut = les cordes s'arrêtent plus vite.
+            sustain: 0.9,
+            // Éclat des cordes et du halo de vibration.
+            glow: 1,
+            // Éclat des frettes et du liseré doré du manche (0 = invisibles).
+            frets: 0.22,
+            // Intervalle moyen entre deux strums automatiques au repos (s).
+            autoStrum: 5,
+            // Durée de mise en tension à l'arrivée (s).
+            revealDuration: 2.4,
         },
         '90cynomen': {
             // Vitesse de défilement de la grille.
